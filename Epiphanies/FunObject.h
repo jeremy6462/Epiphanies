@@ -13,8 +13,8 @@
 
 @property (nullable, nonatomic, strong) CKRecordID *recordId;
 
--(CKRecord *) asRecord;
+-(nonnull CKRecord *) asRecord;
 
--(CKRecord *) asRecordWithChanges:(NSDictionary *)dictionaryOfChanges;
+-(nonnull CKRecord *) asRecordWithChanges:(nonnull NSDictionary *)dictionaryOfChanges;
 
 @end

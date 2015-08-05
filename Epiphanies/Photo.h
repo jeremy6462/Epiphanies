@@ -14,10 +14,9 @@
 @class Thought;
 
 @interface Photo : NSObject <FunObject, Child> // could do this in a category, but making my own app is enough to take on, lets cut ourseleves some slack here
+/*Saved on Database*/   @property (nonnull, nonatomic, strong) NSString *objectId;
 
                         @property (nonnull, nonatomic, strong) CKRecordID *recordId; // keep this reference in order to know which record to delete
-
-/*Saved on Database*/   @property (nonnull, nonatomic, strong) NSString *objectId;
 
 /*Saved on Database*/   @property (nullable, nonatomic, strong) Thought *parentThought; // the thought model object that created this image (save as CKReference to parentThought's recordID property
 

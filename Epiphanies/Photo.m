@@ -17,6 +17,7 @@
     if (self) {
         _objectId = [IdentifierCreator createId];
         
+        
         _recordId = [[CKRecord alloc] initWithRecordType:PHOTO_RECORD_TYPE].recordID;
         
         _image = image;

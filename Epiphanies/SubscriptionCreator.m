@@ -10,7 +10,7 @@
 
 @implementation SubscriptionCreator
 
--(void)addSubscriptionsToDatabase:(CKDatabase *)database withCompletionHandler:(void (^)(BOOL, NSError *))block {
++(void)addSubscriptionsToDatabase:(CKDatabase *)database withCompletionHandler:(void (^)(BOOL, NSError *))block {
     
     // check that the user hasn't already subscribed to CloudKit
     if (![self isSubscribed]) {
@@ -55,11 +55,11 @@
     
 }
 
-- (BOOL)isSubscribed {
++(BOOL)isSubscribed {
     return [[NSUserDefaults standardUserDefaults] objectForKey:SUBSCRIPTION_KEY] != nil;
 }
 
--(void)subscribeInDefaults {
++(void)subscribeInDefaults {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setBool:YES forKey:SUBSCRIPTION_KEY];
 }

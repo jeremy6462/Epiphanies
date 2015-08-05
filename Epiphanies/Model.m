@@ -25,6 +25,8 @@
     return self;
 }
 
+#pragma mark - Savers
+
 - (void) createZoneAssignZoneID {
     [ZoneCreator createCustomZoneForDatabase:_database withCompletionHandler:^(NSArray *zoneSaves, NSArray *zoneDeletes, NSError *error) {
         if (error) {
@@ -32,9 +34,19 @@
         } else {
             CKRecordZone *zoneCreated = zoneSaves[0];
             _zoneId = zoneCreated.zoneID;
+            [SubscriptionCreator addSubscriptionsToDatabase:_database withCompletionHandler:^(BOOL success, NSError *error) {
+                NSLog(@"Error saving subscription to database: %@", error.description);
+            }];
         }
     }];
 
+}
+
+-(void) saveObjectsToCloudKit: (nonnull NSArray<id<FunObject>> *) objects
+   withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
+ withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
+          withCompletionBlock: (nonnull void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock {
+    [_saver saveObjects:objects withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
 }
 
 #pragma mark - Fetchers
@@ -153,7 +165,7 @@
         [child removeFromParent];
     }
     
-    // delete the object from the database
+    // delete the object from the database - because of the way CKReferences are set up, the child objects in the database will be deleted as well
     [_deleter deleteRecord:object.recordId onDatabase:_database withCompletionHandler:^(CKRecordID *deletedId, NSError *error) {
         block(error);
     }];

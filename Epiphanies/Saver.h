@@ -13,7 +13,7 @@
 
 @interface Saver : NSObject
 
-// ATTENTION - did not write a flattenCollections: because once edits happen to one collection, they will be saved and then more edits can occur
+// ATTENTION - Once edits happen to one collection, they will be saved and then more edits can occur. Don't need to flatten Collections and save their thoughts because collection chages happen irrespecitivly of notes
 
 /*!
  @abstract use to save any fun object to CloudKit
