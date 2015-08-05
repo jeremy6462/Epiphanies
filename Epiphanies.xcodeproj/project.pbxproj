@@ -1,0 +1,660 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7384DB6D1B6EC25F00108BDC /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DB6C1B6EC25F00108BDC /* Model.m */; };
+		7384DB6E1B6EC25F00108BDC /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DB6C1B6EC25F00108BDC /* Model.m */; };
+		7384DB791B6EC29400108BDC /* Collection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DB741B6EC29400108BDC /* Collection.m */; };
+		7384DB7A1B6EC29400108BDC /* Collection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DB741B6EC29400108BDC /* Collection.m */; };
+		7384DB7B1B6EC29400108BDC /* Thought.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DB761B6EC29400108BDC /* Thought.m */; };
+		7384DB7C1B6EC29400108BDC /* Thought.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DB761B6EC29400108BDC /* Thought.m */; };
+		7384DB7D1B6EC29400108BDC /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DB781B6EC29400108BDC /* Photo.m */; };
+		7384DB7E1B6EC29400108BDC /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DB781B6EC29400108BDC /* Photo.m */; };
+		7384DB811B6EC2A400108BDC /* IdentifierCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DB801B6EC2A400108BDC /* IdentifierCreator.m */; };
+		7384DB821B6EC2A400108BDC /* IdentifierCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DB801B6EC2A400108BDC /* IdentifierCreator.m */; };
+		7384DB851B6EC2AD00108BDC /* CloudKitErrorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DB841B6EC2AD00108BDC /* CloudKitErrorHandler.m */; };
+		7384DB861B6EC2AD00108BDC /* CloudKitErrorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DB841B6EC2AD00108BDC /* CloudKitErrorHandler.m */; };
+		7384DB9E1B6EC5CA00108BDC /* Fetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DB9B1B6EC5CA00108BDC /* Fetcher.m */; };
+		7384DBA41B6ED2BB00108BDC /* Saver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DBA31B6ED2BB00108BDC /* Saver.m */; };
+		7384DBA51B6ED2BB00108BDC /* Saver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DBA31B6ED2BB00108BDC /* Saver.m */; };
+		7384DBA91B701DB600108BDC /* ZoneCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DBA81B701DB600108BDC /* ZoneCreator.m */; };
+		7384DBAA1B701DB600108BDC /* ZoneCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DBA81B701DB600108BDC /* ZoneCreator.m */; };
+		7384DBAE1B702E2200108BDC /* SubscriptionCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DBAD1B702E2200108BDC /* SubscriptionCreator.m */; };
+		7384DBAF1B702E2200108BDC /* SubscriptionCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DBAD1B702E2200108BDC /* SubscriptionCreator.m */; };
+		7384DBB31B716D1100108BDC /* Deleter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DBB21B716D1100108BDC /* Deleter.m */; };
+		7384DBB41B716D1100108BDC /* Deleter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DBB21B716D1100108BDC /* Deleter.m */; };
+		73949D3A1B6560A7001512EE /* SecondVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 73949D391B6560A7001512EE /* SecondVC.m */; };
+		73D999071B61B159001A7D8A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 73D999061B61B159001A7D8A /* main.m */; };
+		73D9990A1B61B159001A7D8A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 73D999091B61B159001A7D8A /* AppDelegate.m */; };
+		73D9990D1B61B159001A7D8A /* Epiphanies.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 73D9990B1B61B159001A7D8A /* Epiphanies.xcdatamodeld */; };
+		73D999101B61B159001A7D8A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 73D9990F1B61B159001A7D8A /* ViewController.m */; };
+		73D999131B61B159001A7D8A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 73D999111B61B159001A7D8A /* Main.storyboard */; };
+		73D999151B61B159001A7D8A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 73D999141B61B159001A7D8A /* Images.xcassets */; };
+		73D999181B61B159001A7D8A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 73D999161B61B159001A7D8A /* LaunchScreen.xib */; };
+		73D999241B61B159001A7D8A /* EpiphaniesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 73D999231B61B159001A7D8A /* EpiphaniesTests.m */; };
+		73D9992F1B61B299001A7D8A /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73D9992E1B61B299001A7D8A /* CloudKit.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		73D9991E1B61B159001A7D8A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 73D998F91B61B159001A7D8A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 73D999001B61B159001A7D8A;
+			remoteInfo = Epiphanies;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		7384DB6B1B6EC25F00108BDC /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
+		7384DB6C1B6EC25F00108BDC /* Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Model.m; sourceTree = "<group>"; };
+		7384DB6F1B6EC28800108BDC /* Frameworks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Frameworks.h; sourceTree = "<group>"; };
+		7384DB701B6EC28800108BDC /* FundementalObjectHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FundementalObjectHeaders.h; sourceTree = "<group>"; };
+		7384DB711B6EC28800108BDC /* CloudAccessors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudAccessors.h; sourceTree = "<group>"; };
+		7384DB721B6EC28800108BDC /* ForFundamentals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForFundamentals.h; sourceTree = "<group>"; };
+		7384DB731B6EC29400108BDC /* Collection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Collection.h; sourceTree = "<group>"; };
+		7384DB741B6EC29400108BDC /* Collection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Collection.m; sourceTree = "<group>"; };
+		7384DB751B6EC29400108BDC /* Thought.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Thought.h; sourceTree = "<group>"; };
+		7384DB761B6EC29400108BDC /* Thought.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Thought.m; sourceTree = "<group>"; };
+		7384DB771B6EC29400108BDC /* Photo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photo.h; sourceTree = "<group>"; };
+		7384DB781B6EC29400108BDC /* Photo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Photo.m; sourceTree = "<group>"; };
+		7384DB7F1B6EC2A400108BDC /* IdentifierCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentifierCreator.h; sourceTree = "<group>"; };
+		7384DB801B6EC2A400108BDC /* IdentifierCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentifierCreator.m; sourceTree = "<group>"; };
+		7384DB831B6EC2AD00108BDC /* CloudKitErrorHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudKitErrorHandler.h; sourceTree = "<group>"; };
+		7384DB841B6EC2AD00108BDC /* CloudKitErrorHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudKitErrorHandler.m; sourceTree = "<group>"; };
+		7384DB9A1B6EC5CA00108BDC /* Fetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fetcher.h; sourceTree = "<group>"; };
+		7384DB9B1B6EC5CA00108BDC /* Fetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Fetcher.m; sourceTree = "<group>"; };
+		7384DBA21B6ED2BB00108BDC /* Saver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Saver.h; sourceTree = "<group>"; };
+		7384DBA31B6ED2BB00108BDC /* Saver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Saver.m; sourceTree = "<group>"; };
+		7384DBA61B6ED7EA00108BDC /* FunObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FunObject.h; sourceTree = "<group>"; };
+		7384DBA71B701DB600108BDC /* ZoneCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoneCreator.h; sourceTree = "<group>"; };
+		7384DBA81B701DB600108BDC /* ZoneCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoneCreator.m; sourceTree = "<group>"; };
+		7384DBAC1B702E2200108BDC /* SubscriptionCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubscriptionCreator.h; sourceTree = "<group>"; };
+		7384DBAD1B702E2200108BDC /* SubscriptionCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubscriptionCreator.m; sourceTree = "<group>"; };
+		7384DBB11B716D1100108BDC /* Deleter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deleter.h; sourceTree = "<group>"; };
+		7384DBB21B716D1100108BDC /* Deleter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Deleter.m; sourceTree = "<group>"; };
+		73949D381B6560A7001512EE /* SecondVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondVC.h; sourceTree = "<group>"; };
+		73949D391B6560A7001512EE /* SecondVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondVC.m; sourceTree = "<group>"; };
+		73D999011B61B159001A7D8A /* Epiphanies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Epiphanies.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		73D999051B61B159001A7D8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		73D999061B61B159001A7D8A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		73D999081B61B159001A7D8A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		73D999091B61B159001A7D8A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		73D9990C1B61B159001A7D8A /* Epiphanies.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Epiphanies.xcdatamodel; sourceTree = "<group>"; };
+		73D9990E1B61B159001A7D8A /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		73D9990F1B61B159001A7D8A /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		73D999121B61B159001A7D8A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		73D999141B61B159001A7D8A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		73D999171B61B159001A7D8A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		73D9991D1B61B159001A7D8A /* EpiphaniesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EpiphaniesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		73D999221B61B159001A7D8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		73D999231B61B159001A7D8A /* EpiphaniesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EpiphaniesTests.m; sourceTree = "<group>"; };
+		73D9992D1B61B295001A7D8A /* Epiphanies.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Epiphanies.entitlements; sourceTree = "<group>"; };
+		73D9992E1B61B299001A7D8A /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		73D998FE1B61B159001A7D8A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				73D9992F1B61B299001A7D8A /* CloudKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		73D9991A1B61B159001A7D8A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7384DB871B6EC2B200108BDC /* Error Handling */ = {
+			isa = PBXGroup;
+			children = (
+				7384DB831B6EC2AD00108BDC /* CloudKitErrorHandler.h */,
+				7384DB841B6EC2AD00108BDC /* CloudKitErrorHandler.m */,
+			);
+			name = "Error Handling";
+			sourceTree = "<group>";
+		};
+		7384DB881B6EC2C000108BDC /* Identifier Creator */ = {
+			isa = PBXGroup;
+			children = (
+				7384DB7F1B6EC2A400108BDC /* IdentifierCreator.h */,
+				7384DB801B6EC2A400108BDC /* IdentifierCreator.m */,
+			);
+			name = "Identifier Creator";
+			sourceTree = "<group>";
+		};
+		7384DB891B6EC2CC00108BDC /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				7384DB881B6EC2C000108BDC /* Identifier Creator */,
+				7384DB871B6EC2B200108BDC /* Error Handling */,
+				7384DBAB1B7021C700108BDC /* Zone Creator */,
+				7384DBB01B716AD000108BDC /* Subscritpion Creator */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
+		7384DB8A1B6EC2D600108BDC /* Fundamental Objects */ = {
+			isa = PBXGroup;
+			children = (
+				7384DB731B6EC29400108BDC /* Collection.h */,
+				7384DB741B6EC29400108BDC /* Collection.m */,
+				7384DB751B6EC29400108BDC /* Thought.h */,
+				7384DB761B6EC29400108BDC /* Thought.m */,
+				7384DB771B6EC29400108BDC /* Photo.h */,
+				7384DB781B6EC29400108BDC /* Photo.m */,
+				7384DBA61B6ED7EA00108BDC /* FunObject.h */,
+			);
+			name = "Fundamental Objects";
+			sourceTree = "<group>";
+		};
+		7384DB8B1B6EC2E500108BDC /* Model Object */ = {
+			isa = PBXGroup;
+			children = (
+				7384DB6B1B6EC25F00108BDC /* Model.h */,
+				7384DB6C1B6EC25F00108BDC /* Model.m */,
+			);
+			name = "Model Object";
+			sourceTree = "<group>";
+		};
+		7384DB8C1B6EC2EE00108BDC /* Model Classes */ = {
+			isa = PBXGroup;
+			children = (
+				7384DB8B1B6EC2E500108BDC /* Model Object */,
+				7384DB951B6EC34F00108BDC /* Operation Creators */,
+				7384DB8A1B6EC2D600108BDC /* Fundamental Objects */,
+				7384DB891B6EC2CC00108BDC /* Utilities */,
+			);
+			name = "Model Classes";
+			sourceTree = "<group>";
+		};
+		7384DB951B6EC34F00108BDC /* Operation Creators */ = {
+			isa = PBXGroup;
+			children = (
+				7384DB9A1B6EC5CA00108BDC /* Fetcher.h */,
+				7384DB9B1B6EC5CA00108BDC /* Fetcher.m */,
+				7384DBA21B6ED2BB00108BDC /* Saver.h */,
+				7384DBA31B6ED2BB00108BDC /* Saver.m */,
+				7384DBB11B716D1100108BDC /* Deleter.h */,
+				7384DBB21B716D1100108BDC /* Deleter.m */,
+			);
+			name = "Operation Creators";
+			sourceTree = "<group>";
+		};
+		7384DB9F1B6EC61100108BDC /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				7384DB6F1B6EC28800108BDC /* Frameworks.h */,
+				7384DB711B6EC28800108BDC /* CloudAccessors.h */,
+				7384DB701B6EC28800108BDC /* FundementalObjectHeaders.h */,
+				7384DB721B6EC28800108BDC /* ForFundamentals.h */,
+			);
+			name = Headers;
+			sourceTree = "<group>";
+		};
+		7384DBA01B6EC63900108BDC /* App Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				73D999081B61B159001A7D8A /* AppDelegate.h */,
+				73D999091B61B159001A7D8A /* AppDelegate.m */,
+			);
+			name = "App Delegate";
+			sourceTree = "<group>";
+		};
+		7384DBAB1B7021C700108BDC /* Zone Creator */ = {
+			isa = PBXGroup;
+			children = (
+				7384DBA71B701DB600108BDC /* ZoneCreator.h */,
+				7384DBA81B701DB600108BDC /* ZoneCreator.m */,
+			);
+			name = "Zone Creator";
+			sourceTree = "<group>";
+		};
+		7384DBB01B716AD000108BDC /* Subscritpion Creator */ = {
+			isa = PBXGroup;
+			children = (
+				7384DBAC1B702E2200108BDC /* SubscriptionCreator.h */,
+				7384DBAD1B702E2200108BDC /* SubscriptionCreator.m */,
+			);
+			name = "Subscritpion Creator";
+			sourceTree = "<group>";
+		};
+		73D998F81B61B159001A7D8A = {
+			isa = PBXGroup;
+			children = (
+				73D9992E1B61B299001A7D8A /* CloudKit.framework */,
+				73D999031B61B159001A7D8A /* Epiphanies */,
+				73D999201B61B159001A7D8A /* EpiphaniesTests */,
+				73D999021B61B159001A7D8A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		73D999021B61B159001A7D8A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				73D999011B61B159001A7D8A /* Epiphanies.app */,
+				73D9991D1B61B159001A7D8A /* EpiphaniesTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		73D999031B61B159001A7D8A /* Epiphanies */ = {
+			isa = PBXGroup;
+			children = (
+				73D9992D1B61B295001A7D8A /* Epiphanies.entitlements */,
+				7384DBA01B6EC63900108BDC /* App Delegate */,
+				7384DB9F1B6EC61100108BDC /* Headers */,
+				7384DB8C1B6EC2EE00108BDC /* Model Classes */,
+				73D9990E1B61B159001A7D8A /* ViewController.h */,
+				73D9990F1B61B159001A7D8A /* ViewController.m */,
+				73949D381B6560A7001512EE /* SecondVC.h */,
+				73949D391B6560A7001512EE /* SecondVC.m */,
+				73D999111B61B159001A7D8A /* Main.storyboard */,
+				73D999141B61B159001A7D8A /* Images.xcassets */,
+				73D999161B61B159001A7D8A /* LaunchScreen.xib */,
+				73D9990B1B61B159001A7D8A /* Epiphanies.xcdatamodeld */,
+				73D999041B61B159001A7D8A /* Supporting Files */,
+			);
+			path = Epiphanies;
+			sourceTree = "<group>";
+		};
+		73D999041B61B159001A7D8A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				73D999051B61B159001A7D8A /* Info.plist */,
+				73D999061B61B159001A7D8A /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		73D999201B61B159001A7D8A /* EpiphaniesTests */ = {
+			isa = PBXGroup;
+			children = (
+				73D999231B61B159001A7D8A /* EpiphaniesTests.m */,
+				73D999211B61B159001A7D8A /* Supporting Files */,
+			);
+			path = EpiphaniesTests;
+			sourceTree = "<group>";
+		};
+		73D999211B61B159001A7D8A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				73D999221B61B159001A7D8A /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		73D999001B61B159001A7D8A /* Epiphanies */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 73D999271B61B159001A7D8A /* Build configuration list for PBXNativeTarget "Epiphanies" */;
+			buildPhases = (
+				73D998FD1B61B159001A7D8A /* Sources */,
+				73D998FE1B61B159001A7D8A /* Frameworks */,
+				73D998FF1B61B159001A7D8A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Epiphanies;
+			productName = Epiphanies;
+			productReference = 73D999011B61B159001A7D8A /* Epiphanies.app */;
+			productType = "com.apple.product-type.application";
+		};
+		73D9991C1B61B159001A7D8A /* EpiphaniesTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 73D9992A1B61B159001A7D8A /* Build configuration list for PBXNativeTarget "EpiphaniesTests" */;
+			buildPhases = (
+				73D999191B61B159001A7D8A /* Sources */,
+				73D9991A1B61B159001A7D8A /* Frameworks */,
+				73D9991B1B61B159001A7D8A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				73D9991F1B61B159001A7D8A /* PBXTargetDependency */,
+			);
+			name = EpiphaniesTests;
+			productName = EpiphaniesTests;
+			productReference = 73D9991D1B61B159001A7D8A /* EpiphaniesTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		73D998F91B61B159001A7D8A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0640;
+				ORGANIZATIONNAME = JKProductions;
+				TargetAttributes = {
+					73D999001B61B159001A7D8A = {
+						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = DHY5YM53QB;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
+					};
+					73D9991C1B61B159001A7D8A = {
+						CreatedOnToolsVersion = 6.4;
+						TestTargetID = 73D999001B61B159001A7D8A;
+					};
+				};
+			};
+			buildConfigurationList = 73D998FC1B61B159001A7D8A /* Build configuration list for PBXProject "Epiphanies" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 73D998F81B61B159001A7D8A;
+			productRefGroup = 73D999021B61B159001A7D8A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				73D999001B61B159001A7D8A /* Epiphanies */,
+				73D9991C1B61B159001A7D8A /* EpiphaniesTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		73D998FF1B61B159001A7D8A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				73D999131B61B159001A7D8A /* Main.storyboard in Resources */,
+				73D999181B61B159001A7D8A /* LaunchScreen.xib in Resources */,
+				73D999151B61B159001A7D8A /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		73D9991B1B61B159001A7D8A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		73D998FD1B61B159001A7D8A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				73D9990A1B61B159001A7D8A /* AppDelegate.m in Sources */,
+				7384DB851B6EC2AD00108BDC /* CloudKitErrorHandler.m in Sources */,
+				73949D3A1B6560A7001512EE /* SecondVC.m in Sources */,
+				73D9990D1B61B159001A7D8A /* Epiphanies.xcdatamodeld in Sources */,
+				7384DBA91B701DB600108BDC /* ZoneCreator.m in Sources */,
+				7384DB7D1B6EC29400108BDC /* Photo.m in Sources */,
+				7384DB6D1B6EC25F00108BDC /* Model.m in Sources */,
+				7384DBA41B6ED2BB00108BDC /* Saver.m in Sources */,
+				7384DB791B6EC29400108BDC /* Collection.m in Sources */,
+				7384DBB31B716D1100108BDC /* Deleter.m in Sources */,
+				73D999101B61B159001A7D8A /* ViewController.m in Sources */,
+				73D999071B61B159001A7D8A /* main.m in Sources */,
+				7384DB7B1B6EC29400108BDC /* Thought.m in Sources */,
+				7384DB9E1B6EC5CA00108BDC /* Fetcher.m in Sources */,
+				7384DB811B6EC2A400108BDC /* IdentifierCreator.m in Sources */,
+				7384DBAE1B702E2200108BDC /* SubscriptionCreator.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		73D999191B61B159001A7D8A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				73D999241B61B159001A7D8A /* EpiphaniesTests.m in Sources */,
+				7384DB6E1B6EC25F00108BDC /* Model.m in Sources */,
+				7384DB861B6EC2AD00108BDC /* CloudKitErrorHandler.m in Sources */,
+				7384DBB41B716D1100108BDC /* Deleter.m in Sources */,
+				7384DBA51B6ED2BB00108BDC /* Saver.m in Sources */,
+				7384DB7A1B6EC29400108BDC /* Collection.m in Sources */,
+				7384DBAF1B702E2200108BDC /* SubscriptionCreator.m in Sources */,
+				7384DB821B6EC2A400108BDC /* IdentifierCreator.m in Sources */,
+				7384DBAA1B701DB600108BDC /* ZoneCreator.m in Sources */,
+				7384DB7E1B6EC29400108BDC /* Photo.m in Sources */,
+				7384DB7C1B6EC29400108BDC /* Thought.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		73D9991F1B61B159001A7D8A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 73D999001B61B159001A7D8A /* Epiphanies */;
+			targetProxy = 73D9991E1B61B159001A7D8A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		73D999111B61B159001A7D8A /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				73D999121B61B159001A7D8A /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		73D999161B61B159001A7D8A /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				73D999171B61B159001A7D8A /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		73D999251B61B159001A7D8A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		73D999261B61B159001A7D8A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		73D999281B61B159001A7D8A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Epiphanies/Epiphanies.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = Epiphanies/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+			};
+			name = Debug;
+		};
+		73D999291B61B159001A7D8A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Epiphanies/Epiphanies.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = Epiphanies/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+			};
+			name = Release;
+		};
+		73D9992B1B61B159001A7D8A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = EpiphaniesTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Epiphanies.app/Epiphanies";
+			};
+			name = Debug;
+		};
+		73D9992C1B61B159001A7D8A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = EpiphaniesTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Epiphanies.app/Epiphanies";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		73D998FC1B61B159001A7D8A /* Build configuration list for PBXProject "Epiphanies" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				73D999251B61B159001A7D8A /* Debug */,
+				73D999261B61B159001A7D8A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		73D999271B61B159001A7D8A /* Build configuration list for PBXNativeTarget "Epiphanies" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				73D999281B61B159001A7D8A /* Debug */,
+				73D999291B61B159001A7D8A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		73D9992A1B61B159001A7D8A /* Build configuration list for PBXNativeTarget "EpiphaniesTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				73D9992B1B61B159001A7D8A /* Debug */,
+				73D9992C1B61B159001A7D8A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		73D9990B1B61B159001A7D8A /* Epiphanies.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				73D9990C1B61B159001A7D8A /* Epiphanies.xcdatamodel */,
+			);
+			currentVersion = 73D9990C1B61B159001A7D8A /* Epiphanies.xcdatamodel */;
+			path = Epiphanies.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 73D998F91B61B159001A7D8A /* Project object */;
+}
