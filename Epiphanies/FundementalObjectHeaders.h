@@ -17,6 +17,8 @@
 #import "CloudKitErrorHandler.h"
 
 #import "FunObject.h"
+#import "Child.h"
+
 #import "Thought.h"
 #import "Collection.h"
 #import "Photo.h"

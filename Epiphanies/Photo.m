@@ -26,6 +26,22 @@
     return self;
 }
 
+-(instancetype) initWithRecord:(nonnull CKRecord *)record {
+    self = [super init];
+    if (self) {
+        _objectId = [record objectForKey:OBJECT_ID_KEY];
+        
+        _recordId = [record recordID];
+        
+        CKAsset *asset = [record objectForKey:IMAGE_KEY];
+        UIImage *image = [UIImage imageWithContentsOfFile:asset.fileURL.path];
+        _image = image;
+        
+        _placement = [record objectForKey:PLACEMENT_KEY];
+    }
+    return self;
+}
+
 -(instancetype) initWithRecord:(nonnull CKRecord *)record parent:(nonnull Thought *)thought {
     self = [super init];
     if (self) {
@@ -73,7 +89,7 @@
     return recordToReturn;
 }
 
--(CKRecord *) asRecordWithPlacement: (NSNumber *) placement {
+-(CKRecord *) asRecordWithChanges:(NSDictionary *)dictionaryOfChanges {
     CKRecord *recordToReturn;
     
     // if there is a record id (ie. there is already a record of this object
@@ -84,12 +100,42 @@
         _recordId = recordToReturn.recordID;
     }
     
-    [recordToReturn setObject:placement forKey:PLACEMENT_KEY];
+    if ([dictionaryOfChanges objectForKey:PLACEMENT_KEY] != nil) {
+        [recordToReturn setObject:dictionaryOfChanges[PLACEMENT_KEY] forKey:PLACEMENT_KEY];
+    }
     
     return recordToReturn;
 }
 
-#pragma mark - Utilities
+#pragma mark - Delete Self from Parent
+
+-(void) removeFromParent {
+    
+    // only attempt to remove from parent if a parent exists
+    if (_parentThought) {
+        
+        // an array of this photo's peers
+        NSArray *brothers = _parentThought.photos;
+        
+        // only attempt to remove if there are peer photos
+        if (brothers) {
+            
+            NSMutableArray *mutableBrothers = [NSMutableArray arrayWithArray:brothers];
+            for (Photo *peer in mutableBrothers) {
+                
+                // disconnect self in the _parentThought.photos array
+                if ([peer.objectId isEqualToString:_objectId]) {
+                    [mutableBrothers removeObject:peer];
+                }
+                
+            }
+            _parentThought.photos = [NSArray arrayWithArray:mutableBrothers];
+        }
+    }
+    
+}
+
+#pragma mark - On Device Image Accessors
 
 -(NSURL *) saveToTemp {
     NSURL *tmpDirURL = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];

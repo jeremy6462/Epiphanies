@@ -10,6 +10,10 @@
 
 @implementation Deleter
 
+-(void) removeFromParentsChildren: (id<Child>) child {
+    [child removeFromParent];
+}
+
 -(void) deleteRecord:(CKRecordID *)recordId onDatabase:(CKDatabase *)database withCompletionHandler:(void (^)(CKRecordID *, NSError *))block {
     [database deleteRecordWithID:recordId completionHandler:^(CKRecordID *recordID, NSError *error) {
         if (error) {

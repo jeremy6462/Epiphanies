@@ -12,6 +12,12 @@
 
 @interface SubscriptionCreator : NSObject
 
--(void)addSubscriptionsToDatabase: (CKDatabase *) database withCompletionHandler:(void(^)(BOOL success, NSError *error))block
+#define SUBSCRIPTION_KEY @"subscribed"
+
+/*!
+ @abstract register this device for a subscription to CloudKit
+ @discussion after first subscription, the fact that the user subscribed is noted in user defaults. If this method is called again (after subscription), the user will not subscribe again. Success will be NO and error will be nil.
+ */
+-(void)addSubscriptionsToDatabase: (CKDatabase *) database withCompletionHandler:(void(^)(BOOL success, NSError *error))block;
 
 @end

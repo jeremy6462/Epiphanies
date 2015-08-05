@@ -19,7 +19,7 @@
         
         _fetcher = [[Fetcher alloc] init];
         _saver = [[Saver alloc] init];
-        
+        _deleter = [[Deleter alloc] init];
         
     }
     return self;
@@ -36,6 +36,8 @@
     }];
 
 }
+
+#pragma mark - Fetchers
 
 -(void) reloadWithCompletion:(void (^)(NSArray<Collection *> *, NSError *))block {
     
@@ -139,6 +141,22 @@
     [_database addOperation:operationFetchCollections];
     [_database addOperation:operationFetchThoughts];
     [_database addOperation:operationFetchPhotos];
+}
+
+#pragma mark - Deletion
+
+-(void) deleteObject: (id<FunObject>) object completionHandler:(void(^)(NSError *error))block {
+    
+    // if the object is a child, remove it from it's parent's array of children
+    if ([object respondsToSelector:@selector(removeFromParent)]) {
+        id<Child> child = (id<Child>) object;
+        [child removeFromParent];
+    }
+    
+    // delete the object from the database
+    [_deleter deleteRecord:object.recordId onDatabase:_database withCompletionHandler:^(CKRecordID *deletedId, NSError *error) {
+        block(error);
+    }];
 }
 
 @end

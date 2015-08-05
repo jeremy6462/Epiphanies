@@ -54,6 +54,34 @@
     return self;
 }
 
+#pragma mark - Delete Self from Parent
+
+-(void) removeFromParent {
+    
+    // only attempt to remove from parent if a parent exists
+    if (_parentCollection) {
+        
+        // an array of this photo's peers
+        NSArray *sisters = _parentCollection.thoughts;
+        
+        // only attempt to remove if there are peer photos
+        if (sisters) {
+            
+            NSMutableArray *mutableSisters = [NSMutableArray arrayWithArray:sisters];
+            for (Thought *peer in mutableSisters) {
+                
+                // disconnect self in the _parentThought.photos array
+                if ([peer.objectId isEqualToString:_objectId]) {
+                    [mutableSisters removeObject:peer];
+                }
+                
+            }
+            _parentCollection.thoughts = [NSArray arrayWithArray:mutableSisters];
+        }
+    }
+    
+}
+
 #pragma mark - Record Returns
 
 - (CKRecord *) asRecord {
@@ -96,6 +124,9 @@
     if ([[dictionaryOfChanges objectForKey:TEXT_KEY] isEqualToString:@""]) {
         [record setObject:nil forKey:TEXT_KEY];
         _text = nil;
+    }
+    if ([dictionaryOfChanges objectForKey:TEXT_KEY] != nil) {
+        [record setObject:dictionaryOfChanges[TEXT_KEY] forKey:TEXT_KEY];
     }
     if ([dictionaryOfChanges objectForKey:LOCATION_KEY] != nil) { // TODO - how to handle deleting a location
         [record setObject:dictionaryOfChanges[LOCATION_KEY] forKey:LOCATION_KEY];

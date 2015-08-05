@@ -11,9 +11,10 @@
 
 @protocol FunObject <NSObject>
 
+@property (nullable, nonatomic, strong) CKRecordID *recordId;
+
 -(CKRecord *) asRecord;
 
-@optional
 -(CKRecord *) asRecordWithChanges:(NSDictionary *)dictionaryOfChanges;
 
 @end

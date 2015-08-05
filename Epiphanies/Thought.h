@@ -14,7 +14,7 @@
 #import "Photo.h"
 @class Photo;
 
-@interface Thought : NSObject <FunObject>
+@interface Thought : NSObject <FunObject, Child>
 
 /*Saved on Database*/   @property (nonnull, nonatomic, strong) NSString *objectId;
 
@@ -27,6 +27,8 @@
                         @property (nullable, nonatomic, strong) NSArray<Photo *> *photos; // photos are saved on their own with a record of this thought
 
 /*Saved on Database*/   @property (nonnull, nonatomic, strong) NSNumber *placement; // used for ordering thoughts based on a user's preference (save as NSNumber)
+
+#pragma mark - Initializers
 
 /*!
  @abstract this method converts a CKRecord into a Thought object
@@ -45,6 +47,8 @@
  */
 -(nullable instancetype) initWithText: (nullable NSString *) text location: (nullable CLLocation *) location photos: (nullable NSArray<Photo *> *) photos collection: (nonnull Collection *) collection placement: (nonnull NSNumber *) placement;
 
+#pragma mark - Record Returners
+
 /*!
  @abstract takes all property values that will be saved to the database and adds them as attributes to a record for this object
  @discussion if property _recordId is nil, then a new CKRecord will be created. Make sure that this object has a parentCollection reference first before this method is called
@@ -57,5 +61,12 @@
  TODO - how to handle deleting location
  */
 -(nonnull CKRecord *) asRecordWithChanges: (nonnull NSDictionary *) dictionaryOfChanges; // TODO - fix generic of dictionary with protocol acceptor
+
+#pragma mark - Delete Self from Parent
+
+/*!
+ @abstract - this method removes this Thought from it's parent's thoughts array
+ */
+-(void) removeFromParent;
 
 @end

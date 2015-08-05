@@ -13,14 +13,17 @@
 
 @interface Saver : NSObject
 
+// ATTENTION - did not write a flattenCollections: because once edits happen to one collection, they will be saved and then more edits can occur
+
 /*!
+ @abstract use to save any fun object to CloudKit
  @param arrayOfObjects that only holds Fundamental Objects (have an asRecord method). Each object is converted into a record using it's asRecord method and added to an array of objects that will be saved through the CKOperation
  @param perRecordProgressBlock a block that will pass through the current progress of the bulk save operation
  @param perRecordCompletionBlock a block that will be executed after each record is saved
  @param modifyRecordsCompletionBlock a block that will be run after the entire operation is completed
  @return a CKOperation that (when executed - added to a queue) will save an arrayOfObjects to CloudKit
  */
--(nonnull CKModifyRecordsOperation *) saveCollections: (nonnull NSArray<id<FunObject>> *) arrayOfObjects
+-(nonnull CKModifyRecordsOperation *) saveObjects: (nonnull NSArray<id<FunObject>> *) arrayOfObjects
       withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
     withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
              withCompletionBlock: (nonnull void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;

@@ -11,13 +11,19 @@
 
 @interface Fetcher : NSObject
 
+/*!
+ @abstract fetches all of the Thought objects that reference a given parentId in CloudKit
+ */
 -(nullable CKQueryOperation *)fetchAllThoughtsWithParentID:(nonnull CKRecordID*) parentID
                            withRecordFetchedBlock:(void (^)(CKRecord *))recordFetchedBlock
-                                  withQueryCompletionBlock:(void (^)(CKQueryCursor * nullable cursor, NSError nullable * error))queryCompletionBlock;
+                                  withQueryCompletionBlock:(void (^)(CKQueryCursor* cursor, NSError* error))queryCompletionBlock;
 
+/*!
+ @abstract fetches all of the Photo objects that reference a given parentId in CloudKit
+ */
 -(nullable CKQueryOperation *)fetchAllPhotosWithParentID:(nonnull CKRecordID*) parentID
                                   withRecordFetchedBlock:(void (^)(CKRecord *))recordFetchedBlock
-                                withQueryCompletionBlock:(void (^)(CKQueryCursor * nullable cursor, NSError nullable * error))queryCompletionBlock;
+                                withQueryCompletionBlock:(void (^)(CKQueryCursor* cursor, NSError* error))queryCompletionBlock;
 
 /*!
  @discussion calls fetchRecordsOfType: predicate: withRecordFetchedBlock: withQueryCompletionBlock: with a predicate of TRUEPREDICATE

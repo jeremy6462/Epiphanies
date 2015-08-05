@@ -18,6 +18,17 @@
 
 @property (nonatomic, strong) Fetcher *fetcher;
 @property (nonatomic, strong) Saver *saver;
+@property (nonatomic, strong) Deleter *deleter;
+
+#pragma mark - Saving
+
+-(void) saveThought: (Thought *) thought withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
+                                       withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
+                                                withCompletionBlock: (nonnull void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
+
+
+
+#pragma mark - Fetching
 
 /*!
  @abstract loads in all of the current user's collections (fully populated) so the view controller can use updated data

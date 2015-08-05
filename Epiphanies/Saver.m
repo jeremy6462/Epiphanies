@@ -10,7 +10,7 @@
 
 @implementation Saver
 
--(CKModifyRecordsOperation *) saveCollections: (NSArray<id<FunObject>> *) arrayOfObjects
+-(CKModifyRecordsOperation *) saveObjects: (NSArray<id<FunObject>> *) arrayOfObjects
       withPerRecordProgressBlock: (void(^)(CKRecord *record, double progress)) perRecordProgressBlock
     withPerRecordCompletionBlock: (void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
              withCompletionBlock: (void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock {

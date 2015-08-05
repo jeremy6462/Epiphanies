@@ -17,7 +17,7 @@
 
 /*Saved on Database*/   @property (nonnull, nonatomic, strong) NSString *objectId;
 
-                        @property (nullable, nonatomic, strong) CKRecordID *recordId; // keep this reference in order to know which record to delete
+                        @property (nonnull, nonatomic, strong) CKRecordID *recordId; // keep this reference in order to know which record to delete
 
 /*Saved on Database*/   @property (nonnull, nonatomic, strong) NSString *name;
                         @property (nullable, nonatomic, strong) NSArray<Thought *> *thoughts;

@@ -78,6 +78,7 @@
 		7384DBAD1B702E2200108BDC /* SubscriptionCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubscriptionCreator.m; sourceTree = "<group>"; };
 		7384DBB11B716D1100108BDC /* Deleter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deleter.h; sourceTree = "<group>"; };
 		7384DBB21B716D1100108BDC /* Deleter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Deleter.m; sourceTree = "<group>"; };
+		7384DBB51B71ADF400108BDC /* Child.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Child.h; sourceTree = "<group>"; };
 		73949D381B6560A7001512EE /* SecondVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondVC.h; sourceTree = "<group>"; };
 		73949D391B6560A7001512EE /* SecondVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondVC.m; sourceTree = "<group>"; };
 		73D999011B61B159001A7D8A /* Epiphanies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Epiphanies.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -156,6 +157,7 @@
 				7384DB771B6EC29400108BDC /* Photo.h */,
 				7384DB781B6EC29400108BDC /* Photo.m */,
 				7384DBA61B6ED7EA00108BDC /* FunObject.h */,
+				7384DBB51B71ADF400108BDC /* Child.h */,
 			);
 			name = "Fundamental Objects";
 			sourceTree = "<group>";

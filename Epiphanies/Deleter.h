@@ -14,6 +14,11 @@
 @interface Deleter : NSObject
 
 /*!
+ @abstract removes a child from it's parent's array of childer (ie. Photo from parent Thought's photos array)
+ */
+-(void) removeFromParentsChildren: (id<Child>) child;
+
+/*!
  @abstract deletes a record present on a database
  @param recordId the identifier of the record to delete
  @param database the databse to delete the from
