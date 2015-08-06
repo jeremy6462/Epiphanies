@@ -12,7 +12,7 @@
 
 #pragma mark - Initializers
 
--(instancetype) initWithText: (NSString *) text location: (CLLocation *) location photos: (NSArray<Photo *> *) photos collection: (Collection *) collection placement: (NSNumber *) placement {
+-(nullable instancetype) initWithText: (nullable NSString *) text location: (nullable CLLocation *) location photos: (nullable NSArray<Photo *> *) photos webURL: (nullable NSString *) web telURL: (nullable NSString *) tel emailURL: (nullable NSString *) email collection: (nonnull Collection *) collection placement: (nonnull NSNumber *) placement {
     self = [super init];
     if (self) {
         _objectId = [IdentifierCreator createId];
@@ -24,6 +24,12 @@
         _text = text;
         _location = location;
         _photos = photos;
+        
+        _webURL = web;
+        _telURL = tel;
+        _emailURL = email;
+        
+        
         
         _placement = placement;
     }
@@ -145,8 +151,40 @@
     return record;
 }
     
-    
+#pragma mark - URL Utilities
 
+-(void) addURLsToLinksArray {
+    if (_webURL != nil) {
+        NSString *prefixedWebURL = [_webURL addPrefix:Web];
+        _links = [_links arrayByAddingObject:prefixedWebURL];
+    }
+    if (_telURL != nil) {
+        NSString *prefixedTelURL = [_telURL addPrefix:Tel];
+        _links = [_links arrayByAddingObject:prefixedTelURL];
+    }
+    if (_emailURL != nil) {
+        NSString *prefixedEmailURL = [_emailURL addPrefix:Email];
+        _links = [_links arrayByAddingObject:prefixedEmailURL];
+    }
+}
 
+-(void) parseURLsToProperties {
+    for (NSString *link in _links) {
+        Prefix prefix = [link URLTypeForPrefixedLink];
+        switch (prefix) {
+            case Web:
+                _webURL = [link deprefixLink];
+                break;
+            case Tel:
+                _telURL = [link deprefixLink];
+                break;
+            case Email:
+                _emailURL = [link deprefixLink];
+                break;
+            default:
+                break;
+        }
+    }
+}
 
 @end

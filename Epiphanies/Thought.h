@@ -25,6 +25,12 @@
 /*Saved on Database*/   @property (nullable, nonatomic, strong) NSString *text;
 /*Saved on Database*/   @property (nullable, nonatomic, strong) CLLocation *location;
                         @property (nullable, nonatomic, strong) NSArray<Photo *> *photos; // photos are saved on their own with a record of this thought
+/*Saved on Database*/   @property (nullable, nonatomic, strong) NSArray<NSString *> *links; // holds all links that the user decides to save (telephone, web, email, etc.) each String will be prefaced by the type of link (using String category)
+
+                        // keep track of which URLs are used
+                        @property (nullable, nonatomic, strong) NSString *webURL;
+                        @property (nullable, nonatomic, strong) NSString *telURL;
+                        @property (nullable, nonatomic, strong) NSString *emailURL;
 
 /*Saved on Database*/   @property (nonnull, nonatomic, strong) NSNumber *placement; // used for ordering thoughts based on a user's preference (save as NSNumber)
 
@@ -45,7 +51,7 @@
  @abstract this method creates a new Thought object with the specified information. It will create a recordId for this object
  @param photos is an array of already created Photo objects
  */
--(nullable instancetype) initWithText: (nullable NSString *) text location: (nullable CLLocation *) location photos: (nullable NSArray<Photo *> *) photos collection: (nonnull Collection *) collection placement: (nonnull NSNumber *) placement;
+-(nullable instancetype) initWithText: (nullable NSString *) text location: (nullable CLLocation *) location photos: (nullable NSArray<Photo *> *) photos webURL: (nullable NSString *) web telURL: (nullable NSString *) tel emailURL: (nullable NSString *) email collection: (nonnull Collection *) collection placement: (nonnull NSNumber *) placement;
 
 #pragma mark - Record Returners
 
@@ -68,5 +74,17 @@
  @abstract - this method removes this Thought from it's parent's thoughts array
  */
 -(void) removeFromParent;
+
+#pragma mark - URL Utilities
+
+/*!
+ @abstract takes the URLs that are stored in properties, adds prefixes to them, and adds them to the links array
+ */
+-(void) addURLsToLinksArray;
+
+/*!
+ @abstract takes the URLs with prefixes and adds them to their specific properties
+ */
+-(void) parseURLsToProperties;
 
 @end

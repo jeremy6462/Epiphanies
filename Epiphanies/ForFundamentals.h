@@ -28,5 +28,6 @@
 #import "IdentifierCreator.h"
 #import "FunObject.h"
 #import "Child.h"
+#import "NSString+NSString_AddLinkPrefix.h"
 
 #endif
