@@ -23,7 +23,6 @@
 #define TEXT_KEY @"text"
 #define PARENT_COLLECTION_KEY @"parentCollection"
 #define LOCATION_KEY @"location"
-#define LINKS_KEY @"links"
 #define WEB_KEY @"webURL"
 #define TEL_KEY @"telURL"
 #define EMAIL_KEY @"emailURL"

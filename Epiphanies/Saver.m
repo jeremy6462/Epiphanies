@@ -37,6 +37,25 @@
     return operationSaveObjects;
 }
 
+-(CKModifyRecordsOperation *) saveObject:(id<FunObject>)object withChanges:(NSDictionary *)dictionaryOfChanges withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nonnull void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
+    
+    // create a record that only contains the values that were changed (as detailed in dictionaryOfChanges)
+    CKRecord *recordToSave = [object asRecordWithChanges:dictionaryOfChanges];
+    
+    CKModifyRecordsOperation *operationSaveObject = [[CKModifyRecordsOperation alloc] initWithRecordsToSave:@[recordToSave] recordIDsToDelete:nil];
+    
+    // set the qualityOfService (priority of this operation)
+    operationSaveObject.qualityOfService = NSOperationQualityOfServiceUserInitiated;
+    
+    // handle the user's blocks
+    operationSaveObject.perRecordProgressBlock = perRecordProgressBlock;
+    operationSaveObject.perRecordCompletionBlock = perRecordCompletionBlock;
+    operationSaveObject.modifyRecordsCompletionBlock = modifyRecordsCompletionBlock;
+    
+    return operationSaveObject;
+    
+}
+
 -(NSArray<id<FunObject>> *) flattenThoughtsAndPhotos: (NSArray<Thought *> *) arrayOfThoughts {
     
     // an array to hold the original thoughts and photos seperated

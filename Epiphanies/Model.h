@@ -20,23 +20,36 @@
 @property (nonnull, nonatomic, strong) Saver *saver;
 @property (nonnull, nonatomic, strong) Deleter *deleter;
 
-#pragma mark - Saving
+#pragma mark - Zone Saver
+
+/*!
+ @abstract creates a custom zone for this current user
+ */
+- (void) createZoneAssignZoneID;
+
+#pragma mark - Entire Record Savers
 
 // Althought we save arrays of objects, these arrays could just hold one object
 
 /*!
  @abstract saves an array of Collection objects and no Thought or Photo Children 
  TODO - is there a time when we should save a collection and all of it's Thoughts??
+ @param perRecordProgressBlock a block that will pass through the current progress of the bulk save operation
+ @param perRecordCompletionBlock a block that will be executed after each record is saved
+ @param modifyRecordsCompletionBlock a block that will be run after the entire operation is completed
  */
--(void) saveCollectionsToCloudKit: (nonnull NSArray<id<FunObject>> *) collections
+-(void) saveCollectionsToCloudKit: (nonnull NSArray<Collection *> *) collections
    withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
  withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
           withCompletionBlock: (nonnull void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
 
 /*!
- @abstract saves an array of Thought objects and Photo children to CloudKit (used when we move a couple thoughts from one array to another
+ @abstract saves an array of Thought objects and Photo children to CloudKit (used this also when we move a couple thoughts from one collection to another)
+ @param perRecordProgressBlock a block that will pass through the current progress of the bulk save operation
+ @param perRecordCompletionBlock a block that will be executed after each record is saved
+ @param modifyRecordsCompletionBlock a block that will be run after the entire operation is completed
  */
--(void) saveThoughtsToCloudKit: (nonnull NSArray<id<FunObject>> *) thoughts
+-(void) saveThoughtsToCloudKit: (nonnull NSArray<Thought *> *) thoughts
    withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
  withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
           withCompletionBlock: (nonnull void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
@@ -44,8 +57,11 @@
 /*!
  @abstract saves an array of Photo objects to CloudKit
  TODO - will this be used? Is there an analytics package that will track when each method is used?
+ @param perRecordProgressBlock a block that will pass through the current progress of the bulk save operation
+ @param perRecordCompletionBlock a block that will be executed after each record is saved
+ @param modifyRecordsCompletionBlock a block that will be run after the entire operation is completed
  */
--(void) savePhotosToCloudKit: (nonnull NSArray<id<FunObject>> *) photos
+-(void) savePhotosToCloudKit: (nonnull NSArray<Photo *> *) photos
    withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
  withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
           withCompletionBlock: (nonnull void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
@@ -53,16 +69,36 @@
 /*!
  @abstract saves an array of objects to CloudKit
  @discussion only saves the objects included in the array, NO CHILDREN
+ @param perRecordProgressBlock a block that will pass through the current progress of the bulk save operation
+ @param perRecordCompletionBlock a block that will be executed after each record is saved
+ @param modifyRecordsCompletionBlock a block that will be run after the entire operation is completed
  */
 -(void) saveObjectsToCloudKit: (nonnull NSArray<id<FunObject>> *) objects
    withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
  withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
           withCompletionBlock: (nonnull void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
 
+#pragma mark - Portion of Record Saver
+
 /*!
- @abstract creates a custom zone for this current user
+ 
  */
-- (void) createZoneAssignZoneID;
+-(void) saveObjectToCloudKit: (nonnull id<FunObject>) object withChanges:(nonnull NSDictionary *) dictionaryOfChanges
+      withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
+    withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
+             withCompletionBlock: (nonnull void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
+
+#pragma mark - Order of Record Savers
+
+/*!
+ @abstract saves the order of each object to CloudKit by changing each object's _placement value and saving the new placements to the databse
+ @param objectsOfSameType should be an array of all Collection, Thought, or Photo objects. Do not mix and match object types. All objects should be of the same type. If not, unexpected behavior will occur.
+ */
+-(void) saveOrderOfObjects: (nonnull id<FunObject>) objectsOfSameType
+withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
+withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
+       withCompletionBlock: (nonnull void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
+
 
 #pragma mark - Fetching
 

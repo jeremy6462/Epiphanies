@@ -29,8 +29,6 @@
         _telURL = tel;
         _emailURL = email;
         
-        [self addURLsToLinksArray];
-        
         _placement = placement;
     }
     return self;
@@ -46,9 +44,9 @@
         _text = [record objectForKey:TEXT_KEY];
         _location = [record objectForKey:LOCATION_KEY];
         
-        _links = [record objectForKey:LINKS_KEY];
-        
-        [self parseURLsToProperties];
+        _emailURL = [record objectForKey:EMAIL_KEY];
+        _telURL = [record objectForKey:TEL_KEY];
+        _webURL = [record objectForKey:WEB_KEY];
         
         _placement = [record objectForKey:PLACEMENT_KEY]; // TODO - make sure NSNumber is returned so that it can be casted to an int
     }
@@ -59,7 +57,7 @@
     self = [super init];
     if (self) {
         self = [self initWithRecord:record];
-        _parentCollection = collection;
+        self.parentCollection = collection;
     }
     return self;
 }
@@ -78,7 +76,7 @@
         if (sisters) {
             
             NSMutableArray *mutableSisters = [NSMutableArray arrayWithArray:sisters];
-            for (Thought *peer in mutableSisters) {
+            for (Thought *peer in sisters) {
                 
                 // disconnect self in the _parentThought.photos array
                 if ([peer.objectId isEqualToString:_objectId]) {
@@ -113,8 +111,9 @@
     record[TEXT_KEY] = _text;
     record[LOCATION_KEY] = _location;
     
-    [self addURLsToLinksArray];
-    record[LINKS_KEY] = _links;
+    record[WEB_KEY] = _webURL;
+    record[TEL_KEY] = _telURL;
+    record[EMAIL_KEY] = _emailURL;
     
     record[PLACEMENT_KEY] = _placement;
     
@@ -150,7 +149,7 @@
         }
         _location = record[LOCATION_KEY];
     }
-    if ([dictionaryOfChanges objectForKey:PARENT_COLLECTION_KEY] != nil) {
+    if ([dictionaryOfChanges objectForKey:PARENT_COLLECTION_KEY] != nil) { // should not == Remove
         Collection *parent = dictionaryOfChanges[PARENT_COLLECTION_KEY];
         CKReference *reference = [[CKReference alloc] initWithRecordID:parent.recordId action:CKReferenceActionDeleteSelf];
         [record setObject:reference forKey:PARENT_COLLECTION_KEY];
@@ -158,33 +157,27 @@
     }
     if ([dictionaryOfChanges objectForKey:WEB_KEY] != nil) {
         if ([dictionaryOfChanges objectForKey:WEB_KEY] == Remove) {
-            _webURL = nil;
+            [record setObject:nil forKey:WEB_KEY];
         } else {
-            _webURL = [dictionaryOfChanges objectForKey:WEB_KEY];
+            [record setObject:dictionaryOfChanges[WEB_KEY] forKey:WEB_KEY];
         }
         _webURL = record[WEB_KEY];
-        [self addURLsToLinksArray];
-        [record setObject:_links forKey:LINKS_KEY];
     }
     if ([dictionaryOfChanges objectForKey:TEL_KEY] != nil) {
         if ([dictionaryOfChanges objectForKey:TEL_KEY] == Remove) {
-            _telURL = nil;
+            [record setObject:nil forKey:TEL_KEY];
         } else {
-            _telURL = [dictionaryOfChanges objectForKey:TEL_KEY];
+            [record setObject:dictionaryOfChanges[TEL_KEY] forKey:TEL_KEY];
         }
         _telURL = record[TEL_KEY];
-        [self addURLsToLinksArray];
-        [record setObject:_links forKey:LINKS_KEY];
     }
     if ([dictionaryOfChanges objectForKey:EMAIL_KEY] != nil) {
         if ([dictionaryOfChanges objectForKey:EMAIL_KEY] == Remove) {
-            _emailURL = nil;
+            [record setObject:nil forKey:EMAIL_KEY];
         } else {
-            _emailURL = [dictionaryOfChanges objectForKey:EMAIL_KEY];
+            [record setObject:dictionaryOfChanges[EMAIL_KEY] forKey:EMAIL_KEY];
         }
         _emailURL = record[EMAIL_KEY];
-        [self addURLsToLinksArray];
-        [record setObject:_links forKey:LINKS_KEY];
     }
     if ([dictionaryOfChanges objectForKey:PLACEMENT_KEY] != nil) {
         [record setObject:dictionaryOfChanges[PLACEMENT_KEY] forKey:PLACEMENT_KEY];
@@ -192,43 +185,6 @@
     }
     
     return record;
-}
-    
-#pragma mark - URL Utilities
-
--(void) addURLsToLinksArray {
-    _links = [NSArray new];
-    if (_webURL != nil) {
-        NSString *prefixedWebURL = [_webURL addPrefix:Web];
-        _links = [_links arrayByAddingObject:prefixedWebURL];
-    }
-    if (_telURL != nil) {
-        NSString *prefixedTelURL = [_telURL addPrefix:Tel];
-        _links = [_links arrayByAddingObject:prefixedTelURL];
-    }
-    if (_emailURL != nil) {
-        NSString *prefixedEmailURL = [_emailURL addPrefix:Email];
-        _links = [_links arrayByAddingObject:prefixedEmailURL];
-    }
-}
-
--(void) parseURLsToProperties {
-    for (NSString *link in _links) {
-        Prefix prefix = [link URLTypeForPrefixedLink];
-        switch (prefix) {
-            case Web:
-                _webURL = [link deprefixLink];
-                break;
-            case Tel:
-                _telURL = [link deprefixLink];
-                break;
-            case Email:
-                _emailURL = [link deprefixLink];
-                break;
-            default:
-                break;
-        }
-    }
 }
 
 @end

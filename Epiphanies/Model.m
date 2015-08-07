@@ -25,7 +25,7 @@
     return self;
 }
 
-#pragma mark - Savers
+#pragma mark - Zone Saver
 
 - (void) createZoneAssignZoneID {
     [ZoneCreator createCustomZoneForDatabase:_database withCompletionHandler:^(NSArray *zoneSaves, NSArray *zoneDeletes, NSError *error) {
@@ -42,12 +42,56 @@
 
 }
 
--(void) saveObjectsToCloudKit: (nonnull NSArray<id<FunObject>> *) objects
+#pragma mark - Entire Record Savers
+
+-(void) saveCollectionsToCloudKit: (nonnull NSArray<Collection *> *) collections
    withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
  withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
           withCompletionBlock: (nonnull void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock {
-    [_saver saveObjects:objects withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
+    
+    CKModifyRecordsOperation *operationSaveRecords = [_saver saveObjects:collections withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
+    
+    [_database addOperation:operationSaveRecords];
+    
 }
+
+-(void) saveThoughtsToCloudKit:(nonnull NSArray<Thought *> *)thoughts withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nonnull void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
+    
+    NSArray<id<FunObject>> *thoughtsAndPhotos = [_saver flattenThoughtsAndPhotos:thoughts];
+    
+    CKModifyRecordsOperation *operationSaveRecords = [_saver saveObjects:thoughtsAndPhotos withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
+    
+    [_database addOperation:operationSaveRecords];
+    
+}
+
+-(void) savePhotosToCloudKit:(nonnull NSArray<Photo *> *)photos withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nonnull void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
+    
+    CKModifyRecordsOperation *operationSaveRecords = [_saver saveObjects:photos withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
+    
+    [_database addOperation:operationSaveRecords];
+    
+}
+
+-(void)saveObjectsToCloudKit:(nonnull NSArray<id<FunObject>> *)objects withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nonnull void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
+    
+    CKModifyRecordsOperation *operationSaveRecords = [_saver saveObjects:objects withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
+    
+    [_database addOperation:operationSaveRecords];
+}
+
+#pragma mark - Portion of Record Saver
+
+-(void) saveObjectToCloudKit:(nonnull id<FunObject>)object withChanges:(nonnull NSDictionary *)dictionaryOfChanges withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nonnull void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
+    
+    CKModifyRecordsOperation *operationSavePartialRecord = [_saver saveObject:object withChanges:dictionaryOfChanges withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
+    
+    [_database addOperation:operationSavePartialRecord];
+}
+
+#pragma mark - Order of Record Savers
+
+-(void) saveO
 
 #pragma mark - Fetchers
 
