@@ -17,11 +17,17 @@
 // Key's in the CloudKit database
 #define OBJECT_ID_KEY @"objectId"
 #define RECORD_ID_KEY @"recordId"
+#define PLACEMENT_KEY @"placement"
 #define NAME_KEY @"name"
+
 #define TEXT_KEY @"text"
 #define PARENT_COLLECTION_KEY @"parentCollection"
 #define LOCATION_KEY @"location"
-#define PLACEMENT_KEY @"placement"
+#define LINKS_KEY @"links"
+#define WEB_KEY @"webURL"
+#define TEL_KEY @"telURL"
+#define EMAIL_KEY @"emailURL"
+
 #define PARENT_THOUGHT_KEY @"parentThought"
 #define IMAGE_KEY @"image"
 

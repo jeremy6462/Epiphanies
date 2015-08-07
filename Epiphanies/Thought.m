@@ -29,7 +29,7 @@
         _telURL = tel;
         _emailURL = email;
         
-        
+        [self addURLsToLinksArray];
         
         _placement = placement;
     }
@@ -45,6 +45,10 @@
         
         _text = [record objectForKey:TEXT_KEY];
         _location = [record objectForKey:LOCATION_KEY];
+        
+        _links = [record objectForKey:LINKS_KEY];
+        
+        [self parseURLsToProperties];
         
         _placement = [record objectForKey:PLACEMENT_KEY]; // TODO - make sure NSNumber is returned so that it can be casted to an int
     }
@@ -102,14 +106,17 @@
     }
     
     // set all of the fields of the record = to the the current fields of self
-    record[@"objectId"] = _objectId;
+    record[OBJECT_ID_KEY] = _objectId;
 
-    record[@"parentRecord"] = [[CKReference alloc] initWithRecordID:_parentCollection.recordId action:CKReferenceActionDeleteSelf];
+    record[PARENT_COLLECTION_KEY] = [[CKReference alloc] initWithRecordID:_parentCollection.recordId action:CKReferenceActionDeleteSelf];
     
-    record[@"text"] = _text;
-    record[@"location"] = _location;
+    record[TEXT_KEY] = _text;
+    record[LOCATION_KEY] = _location;
     
-    record[@"placement"] = _placement;
+    [self addURLsToLinksArray];
+    record[LINKS_KEY] = _links;
+    
+    record[PLACEMENT_KEY] = _placement;
     
     return record;
     
@@ -127,16 +134,21 @@
     }
     
     // if there exists a key in this dictionary for any of the properties, those properties have changed, so add those properies to a new record that will be saved to CloudKit
-    if ([[dictionaryOfChanges objectForKey:TEXT_KEY] isEqualToString:@""]) {
-        [record setObject:nil forKey:TEXT_KEY];
-        _text = nil;
-    }
     if ([dictionaryOfChanges objectForKey:TEXT_KEY] != nil) {
-        [record setObject:dictionaryOfChanges[TEXT_KEY] forKey:TEXT_KEY];
+        if ([dictionaryOfChanges objectForKey:TEXT_KEY] == Remove) {
+            [record setObject:nil forKey:TEXT_KEY];
+        } else {
+            [record setObject:dictionaryOfChanges[TEXT_KEY] forKey:TEXT_KEY];
+        }
+        _text = record[TEXT_KEY];
     }
     if ([dictionaryOfChanges objectForKey:LOCATION_KEY] != nil) { // TODO - how to handle deleting a location
-        [record setObject:dictionaryOfChanges[LOCATION_KEY] forKey:LOCATION_KEY];
-        _location = dictionaryOfChanges[LOCATION_KEY];
+        if ([dictionaryOfChanges objectForKey:LOCATION_KEY] == Remove) {
+            [record setObject:nil forKey:LOCATION_KEY];
+        } else {
+            [record setObject:dictionaryOfChanges[LOCATION_KEY] forKey:LOCATION_KEY];
+        }
+        _location = record[LOCATION_KEY];
     }
     if ([dictionaryOfChanges objectForKey:PARENT_COLLECTION_KEY] != nil) {
         Collection *parent = dictionaryOfChanges[PARENT_COLLECTION_KEY];
@@ -144,8 +156,39 @@
         [record setObject:reference forKey:PARENT_COLLECTION_KEY];
         _parentCollection = dictionaryOfChanges[PARENT_COLLECTION_KEY];
     }
+    if ([dictionaryOfChanges objectForKey:WEB_KEY] != nil) {
+        if ([dictionaryOfChanges objectForKey:WEB_KEY] == Remove) {
+            _webURL = nil;
+        } else {
+            _webURL = [dictionaryOfChanges objectForKey:WEB_KEY];
+        }
+        _webURL = record[WEB_KEY];
+        [self addURLsToLinksArray];
+        [record setObject:_links forKey:LINKS_KEY];
+    }
+    if ([dictionaryOfChanges objectForKey:TEL_KEY] != nil) {
+        if ([dictionaryOfChanges objectForKey:TEL_KEY] == Remove) {
+            _telURL = nil;
+        } else {
+            _telURL = [dictionaryOfChanges objectForKey:TEL_KEY];
+        }
+        _telURL = record[TEL_KEY];
+        [self addURLsToLinksArray];
+        [record setObject:_links forKey:LINKS_KEY];
+    }
+    if ([dictionaryOfChanges objectForKey:EMAIL_KEY] != nil) {
+        if ([dictionaryOfChanges objectForKey:EMAIL_KEY] == Remove) {
+            _emailURL = nil;
+        } else {
+            _emailURL = [dictionaryOfChanges objectForKey:EMAIL_KEY];
+        }
+        _emailURL = record[EMAIL_KEY];
+        [self addURLsToLinksArray];
+        [record setObject:_links forKey:LINKS_KEY];
+    }
     if ([dictionaryOfChanges objectForKey:PLACEMENT_KEY] != nil) {
         [record setObject:dictionaryOfChanges[PLACEMENT_KEY] forKey:PLACEMENT_KEY];
+        _placement = dictionaryOfChanges[PLACEMENT_KEY];
     }
     
     return record;
@@ -154,6 +197,7 @@
 #pragma mark - URL Utilities
 
 -(void) addURLsToLinksArray {
+    _links = [NSArray new];
     if (_webURL != nil) {
         NSString *prefixedWebURL = [_webURL addPrefix:Web];
         _links = [_links arrayByAddingObject:prefixedWebURL];

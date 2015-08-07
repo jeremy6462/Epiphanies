@@ -70,9 +70,11 @@
     // if there exists a key in this dictionary for any of the properties, those properties have changed, so add those properies to a new record that will be saved to CloudKit
     if ([dictionaryOfChanges objectForKey:NAME_KEY] != nil) {
         [recordToReturn setObject:dictionaryOfChanges[NAME_KEY] forKey:NAME_KEY];
+        _name = recordToReturn[NAME_KEY];
     }
     if ([dictionaryOfChanges objectForKey:PLACEMENT_KEY] != nil) {
         [recordToReturn setObject:dictionaryOfChanges[PLACEMENT_KEY] forKey:PLACEMENT_KEY];
+        _placement = recordToReturn[PLACEMENT_KEY];
     }
     return recordToReturn;
 }

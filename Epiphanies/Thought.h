@@ -63,8 +63,7 @@
 
 /*!
  @abstract this method will return a record that represent the sending Collection object, however only contains the attributes for values that have changed
- @param dictionaryOfChanges is a dictionary with keys of property names (macro's found in ForFundamentals.h) that were changed since object creation and values of the change object value. The only keys that are present are those represent properties that are actually saved on the database. PARENT_COLLECTION_KEY should hold a Collection object, TEXT_KEY should hold @"" if deleting the text
- TODO - how to handle deleting location
+ @param dictionaryOfChanges is a dictionary with keys of property names (macro's found in ForFundamentals.h) that were changed since object creation and values of the change object value. The only keys that are present are those represent properties that are actually saved on the database. PARENT_COLLECTION_KEY should hold a Collection object
  */
 -(nonnull CKRecord *) asRecordWithChanges: (nonnull NSDictionary *) dictionaryOfChanges; // TODO - fix generic of dictionary with protocol acceptor
 
