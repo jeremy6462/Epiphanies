@@ -91,7 +91,32 @@
 
 #pragma mark - Order of Record Savers
 
--(void) saveO
+-(void) saveOrderOfObjects:(nonnull NSArray<id<FunObject, Orderable>> *)objectsOfSameType withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nonnull void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
+    
+    // order the objects based on relative placement
+    NSArray *orderedObjects = [Orderer orderObjectsBasedOnPlacementInArray:objectsOfSameType];
+    
+    // get record references for each object with only the new change of placement
+    NSMutableArray *records = [NSMutableArray new];
+    for (id<FunObject, Orderable> object in orderedObjects) {
+        CKRecord *record = [object asRecordWithChanges:@{PLACEMENT_KEY : object.placement}];
+        [records addObject:record];
+    }
+    
+    // save those records
+    CKModifyRecordsOperation *operationSaveObjects = [[CKModifyRecordsOperation alloc] initWithRecordsToSave:records recordIDsToDelete:nil];
+    
+    // set the qualityOfService (priority of this operation)
+    operationSaveObjects.qualityOfService = NSOperationQualityOfServiceUserInitiated;
+    
+    // handle the user's blocks
+    operationSaveObjects.perRecordProgressBlock = perRecordProgressBlock;
+    operationSaveObjects.perRecordCompletionBlock = perRecordCompletionBlock;
+    operationSaveObjects.modifyRecordsCompletionBlock = modifyRecordsCompletionBlock;
+    
+    [_database addOperation:operationSaveObjects];
+
+}
 
 #pragma mark - Fetchers
 

@@ -13,7 +13,7 @@
 #import "Thought.h"
 @class Thought;
 
-@interface Collection : NSObject <FunObject>
+@interface Collection : NSObject <FunObject, Orderable>
 
 /*Saved on Database*/   @property (nonnull, nonatomic, strong) NSString *objectId;
 

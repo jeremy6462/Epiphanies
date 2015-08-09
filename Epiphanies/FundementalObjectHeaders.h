@@ -18,6 +18,8 @@
 
 #import "FunObject.h"
 #import "Child.h"
+#import "Orderable.h"
+#import "Orderer.h"
 
 #import "Thought.h"
 #import "Collection.h"

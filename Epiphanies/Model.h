@@ -81,7 +81,8 @@
 #pragma mark - Portion of Record Saver
 
 /*!
- 
+ @param object the objects (including recordId) whose to be saved to CloudKit
+ @param dictionaryOfChanges a dictionary with NSString keys of which properties to include in the partial record to save and values that are the new values. To delete a key, use the Remove enum. Only use property strings that detail actual properties the object has (eg. don't use emailURL for a Photo object because Photo's don't have a emailURL property)
  */
 -(void) saveObjectToCloudKit: (nonnull id<FunObject>) object withChanges:(nonnull NSDictionary *) dictionaryOfChanges
       withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
@@ -91,10 +92,10 @@
 #pragma mark - Order of Record Savers
 
 /*!
- @abstract saves the order of each object to CloudKit by changing each object's _placement value and saving the new placements to the databse
+ @abstract saves the order of each object to CloudKit by changing each object's _placement value according to their location in the array and saving the new placements to the databse
  @param objectsOfSameType should be an array of all Collection, Thought, or Photo objects. Do not mix and match object types. All objects should be of the same type. If not, unexpected behavior will occur.
  */
--(void) saveOrderOfObjects: (nonnull id<FunObject>) objectsOfSameType
+-(void) saveOrderOfObjects: (nonnull NSArray<id<FunObject>> *) objectsOfSameType
 withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
 withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
        withCompletionBlock: (nonnull void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
@@ -108,6 +109,6 @@ withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NS
 - (void) reloadWithCompletion:(void(^)(NSArray<Collection *> *populatedCollections, NSError *error))block;
 
 
-// add notification creator for a general object and save
+// TODO - add notification creator for a general object and save
 
 @end

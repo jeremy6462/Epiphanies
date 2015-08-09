@@ -14,7 +14,7 @@
 #import "Photo.h"
 @class Photo;
 
-@interface Thought : NSObject <FunObject, Child>
+@interface Thought : NSObject <FunObject, Child, Orderable>
 
 /*Saved on Database*/   @property (nonnull, nonatomic, strong) NSString *objectId;
 
