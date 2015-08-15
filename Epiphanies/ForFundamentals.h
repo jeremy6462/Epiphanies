@@ -15,6 +15,7 @@
 #define PHOTO_RECORD_TYPE @"Photo"
 
 // Key's in the CloudKit database
+#define TYPE_KEY @"type"
 #define OBJECT_ID_KEY @"objectId"
 #define RECORD_ID_KEY @"recordId"
 #define PLACEMENT_KEY @"placement"

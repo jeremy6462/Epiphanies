@@ -140,20 +140,18 @@
         CKReference *parentCollectionReference = [record objectForKey:PARENT_COLLECTION_KEY];
         CKRecordID *parentCollectionId = parentCollectionReference.recordID;
         
-        Collection *parent;
-        
         // find the Collection in the collectionsFetched array that has that recordId
         for (Collection *collection in collectionsFetched) {
             CKRecordID *collectionRecordId = collection.recordId;
             if ([collectionRecordId isEqual:parentCollectionId]) {
-                parent = collection;
+                Thought *thought = [[Thought alloc] initWithRecord:record collection:collection];
+                [thoughtsFetched addObject:thought];
                 break;
             }
             // TODO - handle if no parent was found
         }
         
-        Thought *thought = [[Thought alloc] initWithRecord:record collection:parent];
-        [thoughtsFetched addObject:thought];
+        
     };
     
     // the block executed after each thought is fetched -- due to dependancy, called after the thought operation has completed
@@ -185,7 +183,7 @@
     };
     
     // the block executed after the Photo operation has completed (all operations completed)
-    void (^finalyBlock)(CKQueryCursor *operationPhotoCursor, NSError *operationPhotoError) = ^void(CKQueryCursor *operationPhotoCursor, NSError *operationPhotoError) {
+    void (^finallyBlock)(CKQueryCursor *operationPhotoCursor, NSError *operationPhotoError) = ^void(CKQueryCursor *operationPhotoCursor, NSError *operationPhotoError) {
         if (operationPhotoCursor) NSLog(@"Handle cursor: %@", operationPhotoCursor.description);
         if (operationPhotoError) NSLog(@"Error fetching: %@", operationPhotoError.description);
         
@@ -212,7 +210,7 @@
                                                    withQueryCompletionBlock:queryCompletionBlock];
     CKQueryOperation *operationFetchPhotos = [_fetcher fetchAllRecordType:PHOTO_RECORD_TYPE
                                                    withRecordFetchedBlock:photoRecordFetchedBlock
-                                                 withQueryCompletionBlock:finalyBlock];
+                                                 withQueryCompletionBlock:finallyBlock];
     
     // add dependancies to make sure that Collections are fetched first, then Thoughts, then Photos
     [operationFetchThoughts addDependency:operationFetchCollections];
@@ -222,6 +220,16 @@
     [_database addOperation:operationFetchCollections];
     [_database addOperation:operationFetchThoughts];
     [_database addOperation:operationFetchPhotos];
+}
+
+-(void) fetchRecordWithId:(nonnull CKRecordID *)recordId withRecordType:(NSString *)type withRecordFetchedBlock:(void (^)(CKRecord *))recordFetchedBlock withQueryCompletionBlock:(void (^)(CKQueryCursor * _Nullable, NSError * _Nullable))queryCompletionBlock {
+    
+    // NSPredicate to request a record with that Id
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"recordId == %@",recordId]; // TODO - make sure recordId is the correct key
+    
+    CKQueryOperation *operationFetchRecord = [_fetcher fetchRecordsOfType:type predicate:predicate withRecordFetchedBlock:recordFetchedBlock withQueryCompletionBlock:queryCompletionBlock];
+    
+    [_database addOperation:operationFetchRecord];
 }
 
 #pragma mark - Deletion

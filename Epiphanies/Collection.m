@@ -15,6 +15,7 @@
 -(instancetype) initWithName:(NSString *)name {
     self = [super init];
     if (self) {
+        
         _name = (name != nil) ? name : [Collection randomCollectionName];
         _thoughts = [NSArray new];
         _objectId = [IdentifierCreator createId];
@@ -28,6 +29,7 @@
 -(instancetype) initWithRecord:(CKRecord *)record {
     self = [super init];
     if (self) {
+        
         _name = [record objectForKey:NAME_KEY];
         _objectId = [record objectForKey:RECORD_ID_KEY];
         _placement = [record objectForKey:PLACEMENT_KEY];
@@ -50,6 +52,7 @@
         _recordId = recordToReturn.recordID;
     }
     
+    [recordToReturn setObject:COLLECTION_RECORD_TYPE forKey:TYPE_KEY]; // used to get the type of this record back when a change occurs and a push notification is sent
     [recordToReturn setObject:_objectId forKey:OBJECT_ID_KEY];
     [recordToReturn setObject:_name forKey:NAME_KEY];
     [recordToReturn setObject:_placement forKey:PLACEMENT_KEY];
@@ -76,6 +79,9 @@
         [recordToReturn setObject:dictionaryOfChanges[PLACEMENT_KEY] forKey:PLACEMENT_KEY];
         _placement = recordToReturn[PLACEMENT_KEY];
     }
+    
+    [recordToReturn setObject:COLLECTION_RECORD_TYPE forKey:TYPE_KEY]; // used to get the type of this record back when a change occurs and a push notification is sent
+    
     return recordToReturn;
 }
 

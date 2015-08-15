@@ -28,7 +28,7 @@
         // a notifiation object to detail the type of notification to relay to the client upon subscription finding new data
         CKNotificationInfo *notification = [CKNotificationInfo new];
         notification.shouldSendContentAvailable = YES;
-        // TODO - play around with the desiredKeys to pass keys to add
+        notification.desiredKeys = @[TYPE_KEY]; // include the type of record that was pushed so that we can determine how to query for it
         
         // add the notification to the subscriptions
         collectionSubscription.notificationInfo = notification;

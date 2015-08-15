@@ -103,6 +103,8 @@
         _recordId = record.recordID;
     }
     
+    [record setObject:THOUGHT_RECORD_TYPE forKey:TYPE_KEY]; // used to get the type of this record back when a change occurs and a push notification is sent
+    
     // set all of the fields of the record = to the the current fields of self
     record[OBJECT_ID_KEY] = _objectId;
 
@@ -183,6 +185,8 @@
         [record setObject:dictionaryOfChanges[PLACEMENT_KEY] forKey:PLACEMENT_KEY];
         _placement = dictionaryOfChanges[PLACEMENT_KEY];
     }
+    
+    [record setObject:THOUGHT_RECORD_TYPE forKey:TYPE_KEY]; // used to get the type of this record back when a change occurs and a push notification is sent
     
     return record;
 }

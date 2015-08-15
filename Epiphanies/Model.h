@@ -109,6 +109,18 @@ withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NS
 - (void) reloadWithCompletion:(void(^)(NSArray<Collection *> *populatedCollections, NSError *error))block;
 
 
+/*!
+ @abstract - fetches a single record (used when a CKQueryNotification comes in) 
+ @param recordFetchedBlock handle the utilization of the record in this block 
+ @param queryCompletionBlock handle errors with this block
+ TODO - should we have one convience completion handler or the per record completion handler? Populate array and pass back
+ */
+-(void) fetchRecordWithId: (nonnull CKRecordID *) recordId withRecordType: (NSString *) type
+   withRecordFetchedBlock: (void(^)(CKRecord *record))recordFetchedBlock
+ withQueryCompletionBlock: (void(^)(CKQueryCursor * __nullable cursor, NSError * __nullable operationError))queryCompletionBlock;
+
+
+
 // TODO - add notification creator for a general object and save
 
 @end

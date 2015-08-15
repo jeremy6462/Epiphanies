@@ -73,7 +73,9 @@
 
 }
 
--(CKQueryOperation *) fetchRecordsOfType: (NSString *) recordType predicate: (NSPredicate *) predicate
+#pragma mark - Fetch Records that Match a Predicate
+
+-(nullable CKQueryOperation *) fetchRecordsOfType: (nonnull NSString *) recordType predicate: (nonnull NSPredicate *) predicate
                   withRecordFetchedBlock: (void(^)(CKRecord *record))recordFetchedBlock
                 withQueryCompletionBlock: (void(^)(CKQueryCursor * __nullable cursor, NSError * __nullable operationError))queryCompletionBlock {
     // if recordType is not one of the record types saved to CloudKit, return a nil CKQueryOperation

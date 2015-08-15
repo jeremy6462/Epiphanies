@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "Frameworks.h"
+#import "ForFundamentals.h"
 
 @interface AppDelegate ()
 
@@ -32,7 +33,11 @@
     
     // if it was CKQueryNotification, process the record that has been changed
     if (cloudKitNotification.notificationType == CKNotificationTypeQuery) {
-        CKRecordID *initialRecordID = [(CKQueryNotification *)cloudKitNotification recordID];
+        CKQueryNotification *ckQueryNotification = (CKQueryNotification *)cloudKitNotification;
+        CKRecordID *fetchedRecordId = [ckQueryNotification recordID];
+        NSString *recordType = ckQueryNotification.recordFields[TYPE_KEY];
+        // TODO - call model to fetch the record with these parameters
+        
         // TODO - Handle this recordID though Delegation
         
         // fetch any possibly missed notifications
@@ -46,24 +51,24 @@
         
         // handle the operation's completion or early return based on a serverChangeToken
         operationFetchMissing.fetchNotificationChangesCompletionBlock =^void(CKServerChangeToken *serverChangeToken, NSError *operationError) {
-            if (operationError) {
-                NSLog(@"fetchNotificationsCompletionBlock's error in didRecieveRemoteNotification: %@", operationError.description);
-            } else {
-                
-                // if there is more on the server to fetch
-                if (operationFetchMissing.moreComing) { // TODO - figure out how to reference the current operation and utilize it's moreComing and not operationFetchMissing
-                    
-                    // create a new operation that will fetch the rest of the contents
-                    CKFetchNotificationChangesOperation *operationFetchAfterChangeToken = [[CKFetchNotificationChangesOperation alloc] initWithPreviousServerChangeToken:serverChangeToken];
-                    
-                    // fetch the extra notifications
-                    operationFetchAfterChangeToken.notificationChangedBlock = operationFetchMissing.notificationChangedBlock;
-                    
-                    // handle the completion of this operation
-                    operationFetchAfterChangeToken.fetchNotificationChangesCompletionBlock = operationFetchMissing.fetchNotificationChangesCompletionBlock;
-
-                }
-            }
+//            if (operationError) {
+//                NSLog(@"fetchNotificationsCompletionBlock's error in didRecieveRemoteNotification: %@", operationError.description);
+//            } else {
+//                
+//                // if there is more on the server to fetch
+//                if (operationFetchMissing.moreComing) { // TODO - figure out how to reference the current operation and utilize it's moreComing and not operationFetchMissing
+//                    
+//                    // create a new operation that will fetch the rest of the contents
+//                    CKFetchNotificationChangesOperation *operationFetchAfterChangeToken = [[CKFetchNotificationChangesOperation alloc] initWithPreviousServerChangeToken:serverChangeToken];
+//                    
+//                    // fetch the extra notifications
+//                    operationFetchAfterChangeToken.notificationChangedBlock = operationFetchMissing.notificationChangedBlock;
+//                    
+//                    // handle the completion of this operation
+//                    operationFetchAfterChangeToken.fetchNotificationChangesCompletionBlock = operationFetchMissing.fetchNotificationChangesCompletionBlock;
+//
+//                }
+//            }
         };
     }
 }

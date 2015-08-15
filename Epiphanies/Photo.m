@@ -87,6 +87,8 @@
     CKReference *reference = [[CKReference alloc] initWithRecordID:_parentThought.recordId action:CKReferenceActionDeleteSelf];
     [recordToReturn setObject:reference forKey:PARENT_THOUGHT_KEY];
     
+    [recordToReturn setObject:PHOTO_RECORD_TYPE forKey:TYPE_KEY]; // used to get the type of this record back when a change occurs and a push notification is sent
+    
     return recordToReturn;
 }
 
@@ -104,6 +106,8 @@
     if ([dictionaryOfChanges objectForKey:PLACEMENT_KEY] != nil) {
         [recordToReturn setObject:dictionaryOfChanges[PLACEMENT_KEY] forKey:PLACEMENT_KEY];
     }
+    
+    [recordToReturn setObject:PHOTO_RECORD_TYPE forKey:TYPE_KEY]; // used to get the type of this record back when a change occurs and a push notification is sent
     
     return recordToReturn;
 }
