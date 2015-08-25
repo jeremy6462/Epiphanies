@@ -20,8 +20,9 @@
         _thoughts = [NSArray new];
         _objectId = [IdentifierCreator createId];
         
-        _recordId = [[CKRecord alloc] initWithRecordType:COLLECTION_RECORD_TYPE].recordID;
-        // TODO - handle placement
+        _recordId = [[CKRecord alloc] initWithRecordType:COLLECTION_RECORD_TYPE zoneID:[[CKRecordZone alloc] initWithZoneName:ZONE_NAME].zoneID].recordID;
+        
+        _placement = [NSNumber numberWithInt:0];
     }
     return self;
 }
@@ -31,8 +32,10 @@
     if (self) {
         
         _name = [record objectForKey:NAME_KEY];
-        _objectId = [record objectForKey:RECORD_ID_KEY];
+        _objectId = [record objectForKey:OBJECT_ID_KEY];
         _placement = [record objectForKey:PLACEMENT_KEY];
+        
+        _thoughts = [NSArray new];
         
         _recordId = record.recordID;
     }

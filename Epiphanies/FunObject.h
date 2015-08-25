@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Frameworks.h"
 
-typedef NS_ENUM(NSInteger, RemovePropertyKey) {
+typedef NS_ENUM(NSInteger, RemovePropertyKey) { // TODO - change to NSNull object. I believe that is the standard
     /*!
      @abstract if this value is stored under a key as a value, the associated property should be nil in the record (as to delete the value stored in the record
      */

@@ -19,9 +19,10 @@
         if (error) {
             // In your app, handle this error. Please.
             NSLog(@"An error occured in %@: %@", NSStringFromSelector(_cmd), error);
-            abort();
+            block(recordId, error);
         } else {
             NSLog(@"Successfully deleted record");
+            block(recordId, error);
         }
     }];
 }

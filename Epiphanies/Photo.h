@@ -13,6 +13,7 @@
 #import "Thought.h"
 @class Thought;
 
+
 @interface Photo : NSObject <FunObject, Child, Orderable> // could do this in a category, but making my own app is enough to take on, lets cut ourseleves some slack here
 
 /*Saved on Database*/   @property (nonnull, nonatomic, strong) NSString *objectId;
@@ -33,7 +34,10 @@
  */
 -(nullable instancetype) initWithRecord: (nonnull CKRecord *) record;
 -(nullable instancetype) initWithRecord: (nonnull CKRecord *) record parent: (nonnull Thought *) thought;
--(nullable instancetype) initWithImage: (nonnull UIImage *) image parent: (nonnull Thought *) thought placement: (nonnull NSNumber *) placement;
+/*!
+ @abstract intializes a Photo object with generic placement, objectId, and recordId and an image asset
+ */
+-(nullable instancetype) initWithImage: (nonnull UIImage *) image;
 
 #pragma mark - Record Returners
 

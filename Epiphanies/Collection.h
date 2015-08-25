@@ -23,6 +23,10 @@
                         @property (nullable, nonatomic, strong) NSArray<Thought *> *thoughts;
 /*Saved on Database*/   @property (nullable, nonatomic, strong) NSNumber *placement; // the placement of this Collection within the user's list of collections
 
+/*!
+ @abstract initializes a new Collection with a given Name
+ @discussion objectId, recordId, placement, and thoughts will generic values
+ */
 -(nullable instancetype) initWithName: (nonnull NSString *) name;
 /*!
  @discussion this method returns a Collection object according to the CKRecord provided, however because an array of Thought objects is not passed (an one will not come with the record), the thoughts property must be filled after this initialization

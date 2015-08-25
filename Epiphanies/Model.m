@@ -10,6 +10,8 @@
 
 @implementation Model
 
+#pragma mark - Initializer
+
 - (instancetype)init
 {
     self = [super init];
@@ -21,21 +23,34 @@
         _saver = [[Saver alloc] init];
         _deleter = [[Deleter alloc] init];
         
+        [self createZoneAssignZoneID];
+        
     }
     return self;
 }
 
 #pragma mark - Zone Saver
 
+// TESTED
 - (void) createZoneAssignZoneID {
-    [ZoneCreator createCustomZoneForDatabase:_database withCompletionHandler:^(NSArray *zoneSaves, NSArray *zoneDeletes, NSError *error) {
-        if (error) {
-            NSLog(@"Better error handling than this %@", error.description);
-        } else {
+    NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
+    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
+    [ZoneCreator createCustomZoneForDatabase:_database withCompletionHandler:^(NSArray *zoneSaves, NSArray *zoneDeletes, NSError *errorZone) {
+        if (zoneSaves == nil && zoneDeletes == nil && errorZone == nil) { // zone already created
+            return;
+        } else if (errorZone) {
+            NSLog(@"Better error handling than this %@", errorZone.description);
+        }
+        else {
             CKRecordZone *zoneCreated = zoneSaves[0];
             _zoneId = zoneCreated.zoneID;
-            [SubscriptionCreator addSubscriptionsToDatabase:_database withCompletionHandler:^(BOOL success, NSError *error) {
-                NSLog(@"Error saving subscription to database: %@", error.description);
+            [SubscriptionCreator addSubscriptionsToDatabase:_database withCompletionHandler:^(BOOL success, NSError *errorSubscription) {
+                // if success == no and error = nil, the subscription was already saved for this device
+                if (!success && !errorSubscription) {
+                    NSLog(@"The subscription was already saved");
+                } else if (errorSubscription) {
+                    NSLog(@"better error handling than this subscription error: %@", errorSubscription.description);
+                }
             }];
         }
     }];
@@ -47,7 +62,7 @@
 -(void) saveCollectionsToCloudKit: (nonnull NSArray<Collection *> *) collections
    withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
  withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
-          withCompletionBlock: (nonnull void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock {
+          withCompletionBlock: (nullable void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock {
     
     CKModifyRecordsOperation *operationSaveRecords = [_saver saveObjects:collections withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
     
@@ -55,7 +70,7 @@
     
 }
 
--(void) saveThoughtsToCloudKit:(nonnull NSArray<Thought *> *)thoughts withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nonnull void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
+-(void) saveThoughtsToCloudKit:(nonnull NSArray<Thought *> *)thoughts withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nullable void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
     
     NSArray<id<FunObject>> *thoughtsAndPhotos = [_saver flattenThoughtsAndPhotos:thoughts];
     
@@ -65,7 +80,7 @@
     
 }
 
--(void) savePhotosToCloudKit:(nonnull NSArray<Photo *> *)photos withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nonnull void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
+-(void) savePhotosToCloudKit:(nonnull NSArray<Photo *> *)photos withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nullable void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
     
     CKModifyRecordsOperation *operationSaveRecords = [_saver saveObjects:photos withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
     
@@ -73,7 +88,8 @@
     
 }
 
--(void)saveObjectsToCloudKit:(nonnull NSArray<id<FunObject>> *)objects withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nonnull void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
+// TESTED
+-(void)saveObjectsToCloudKit:(nonnull NSArray<id<FunObject>> *)objects withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nullable void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
     
     CKModifyRecordsOperation *operationSaveRecords = [_saver saveObjects:objects withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
     
@@ -82,7 +98,7 @@
 
 #pragma mark - Portion of Record Saver
 
--(void) saveObjectToCloudKit:(nonnull id<FunObject>)object withChanges:(nonnull NSDictionary *)dictionaryOfChanges withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nonnull void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
+-(void) saveObjectToCloudKit:(nonnull id<FunObject>)object withChanges:(nonnull NSDictionary *)dictionaryOfChanges withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nullable void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
     
     CKModifyRecordsOperation *operationSavePartialRecord = [_saver saveObject:object withChanges:dictionaryOfChanges withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
     
@@ -91,7 +107,7 @@
 
 #pragma mark - Order of Record Savers
 
--(void) saveOrderOfObjects:(nonnull NSArray<id<FunObject, Orderable>> *)objectsOfSameType withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nonnull void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
+-(void) saveOrderOfObjects:(nonnull NSArray<id<FunObject, Orderable>> *)objectsOfSameType withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nullable void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
     
     // order the objects based on relative placement
     NSArray *orderedObjects = [Orderer orderObjectsBasedOnPlacementInArray:objectsOfSameType];
@@ -120,12 +136,15 @@
 
 #pragma mark - Fetchers
 
+// THIS CODE ACTUALLY WORKS!!! All of the block arrays will keep their values and we actually pass back a collection array through the block. TODO - test taking out the block
+// TESTED
+
+// QUESTION - will this fetch from the custom databse (or all of the databse?)
 -(void) reloadWithCompletion:(void (^)(NSArray<Collection *> *, NSError *))block {
     
     // the arrays to fill with fetched objects
-    NSMutableArray<Collection *> *collectionsFetched = [NSMutableArray new];
-    NSMutableArray<Thought *> *thoughtsFetched = [NSMutableArray new];
-    NSMutableArray<Photo *> *photosFetched = [NSMutableArray new];
+    __block NSMutableArray<Collection *> *collectionsFetched = [NSMutableArray new];
+    __block NSMutableArray<Thought *> *thoughtsFetched = [NSMutableArray new];
     
     // the block executed after each collection is fetched
     void (^collectionRecordFetchedBlock)(CKRecord *record) = ^void(CKRecord *record) {
@@ -141,39 +160,38 @@
         CKRecordID *parentCollectionId = parentCollectionReference.recordID;
         
         // find the Collection in the collectionsFetched array that has that recordId
-        for (Collection *collection in collectionsFetched) {
+        for (Collection *collection in collectionsFetched) { // b/c of operation dependancies and block variables, collectionsFetched still has contents!!!!
             CKRecordID *collectionRecordId = collection.recordId;
             if ([collectionRecordId isEqual:parentCollectionId]) {
                 Thought *thought = [[Thought alloc] initWithRecord:record collection:collection];
                 [thoughtsFetched addObject:thought];
+                collection.thoughts = [collection.thoughts arrayByAddingObject:thought];
+                break;
+            }
+            // TODO - handle if no parent was found
+        }
+    };
+    
+    // the block executed after each Photo is fetched -- due to dependancy, called after the thought operation has completed
+    void (^photoRecordFetchedBlock)(CKRecord *record) = ^void(CKRecord *record) {
+        
+        // get this thought's parent recordId
+        CKReference *parentThoughtReference = [record objectForKey:PARENT_THOUGHT_KEY];
+        CKRecordID *parentThoughtId = parentThoughtReference.recordID;
+        
+        Photo *photo = [[Photo alloc] initWithRecord:record];
+        
+        // find the Thought in the thoughtsFetched array that has that recordId
+        for (Thought *thought in thoughtsFetched) {
+            CKRecordID *thoughtRecordId = thought.recordId;
+            if ([thoughtRecordId isEqual:parentThoughtId]) {
+                photo.parentThought = thought;
+                thought.photos = [thought.photos arrayByAddingObject:photo]; // populate the thought.photos array with the current photo (save a step by not having to go back up the tree)
                 break;
             }
             // TODO - handle if no parent was found
         }
         
-        
-    };
-    
-    // the block executed after each thought is fetched -- due to dependancy, called after the thought operation has completed
-    void (^photoRecordFetchedBlock)(CKRecord *record) = ^void(CKRecord *record) {
-        
-        // get this thought's parent recordId
-        CKReference *parentThoughtReference = [record objectForKey:PARENT_THOUGHT_KEY]; // TODO - check to see if parentThoughtReference is fully populated (fetched full tree (Thought + Collection hierary)) - if so, then only need to fetch photos and can take a part the tree from each fetch
-        CKRecordID *parentThoughtId = parentThoughtReference.recordID;
-        
-        Photo *photo = [[Photo alloc] initWithRecord:record];
-        
-        // find the Collection in the collectionsFetched array that has that recordId
-        for (Thought *thought in thoughtsFetched) {
-            CKRecordID *thoughtRecordId = thought.recordId;
-            if ([thoughtRecordId isEqual:parentThoughtId]) {
-                photo.parentThought = thought;
-                thought.photos = [thought.photos arrayByAddingObject:photo]; // populate the thought.photos array with the current photo (save a step
-            }
-            // TODO - handle if no parent was found
-        }
-        
-        [photosFetched addObject:photo];
     };
     
     // the block executed after the Collection & Thought operations has completed
@@ -186,16 +204,6 @@
     void (^finallyBlock)(CKQueryCursor *operationPhotoCursor, NSError *operationPhotoError) = ^void(CKQueryCursor *operationPhotoCursor, NSError *operationPhotoError) {
         if (operationPhotoCursor) NSLog(@"Handle cursor: %@", operationPhotoCursor.description);
         if (operationPhotoError) NSLog(@"Error fetching: %@", operationPhotoError.description);
-        
-        // create the hierarchy for each collection - organize each Thought (now all populated with Photos) into it's parent collection - didn't do this in thoughtRecordFetchedBlock because objective-c is pass-by-value and not reference. The Thought I would have added to the Collection found in collectionsFetched would have been a copy of the Thought used in thoughtsFetched so if I added a Photo to a Thought in thoughtsFetched the original Thought that was added to a Collection in collectionsFetched would not have an updated value (because it is not a reference to the newly updated Thought in thoughtsFetched)
-        for (Thought *thought in thoughtsFetched) {
-            for (Collection *collection in collectionsFetched) {
-                if ([thought.parentCollection /* == ?*/ isEqual:collection]){
-                    collection.thoughts = [collection.thoughts arrayByAddingObject:thought];
-                }
-            }
-            // TODO - handle if no parent was found
-        }
         
         // pass the results of the fetch into the populatedCollection array found in the block
         block(collectionsFetched, nil);

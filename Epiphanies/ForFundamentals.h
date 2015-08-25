@@ -22,11 +22,13 @@
 #define NAME_KEY @"name"
 
 #define TEXT_KEY @"text"
+#define EXTRA_TEXT_KEY @"extraText"
 #define PARENT_COLLECTION_KEY @"parentCollection"
 #define LOCATION_KEY @"location"
 #define WEB_KEY @"webURL"
 #define TEL_KEY @"telURL"
 #define EMAIL_KEY @"emailURL"
+#define TAGS_KEY @"tags"
 
 #define PARENT_THOUGHT_KEY @"parentThought"
 #define IMAGE_KEY @"image"

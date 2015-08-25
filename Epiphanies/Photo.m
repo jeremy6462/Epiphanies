@@ -12,17 +12,15 @@
 
 #pragma mark - Initializers
 
--(instancetype) initWithImage:(nonnull UIImage *)image parent:(nonnull Thought *)thought placement:(nonnull NSNumber *)placement {
+-(nullable instancetype) initWithImage: (nonnull UIImage *) image {
     self = [super init];
     if (self) {
         _objectId = [IdentifierCreator createId];
         
-        
-        _recordId = [[CKRecord alloc] initWithRecordType:PHOTO_RECORD_TYPE].recordID;
+        _recordId = [[CKRecord alloc] initWithRecordType:PHOTO_RECORD_TYPE zoneID:[[CKRecordZone alloc] initWithZoneName:ZONE_NAME].zoneID].recordID;
         
         _image = image;
-        _parentThought = thought;
-        _placement = placement;
+        _placement = [NSNumber numberWithInt:0];
     }
     return self;
 }
@@ -80,10 +78,6 @@
     CKAsset *asset = [[CKAsset alloc] initWithFileURL:[self saveToTemp]];
     [recordToReturn setObject:asset forKey:IMAGE_KEY];
     
-    // add a reference to the parent thought
-    if (_parentThought.recordId == nil) {
-        [_parentThought asRecord]; // this method will make sure that the Thought has a recordId
-    }
     CKReference *reference = [[CKReference alloc] initWithRecordID:_parentThought.recordId action:CKReferenceActionDeleteSelf];
     [recordToReturn setObject:reference forKey:PARENT_THOUGHT_KEY];
     

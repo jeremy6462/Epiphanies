@@ -10,6 +10,7 @@
 
 @implementation SubscriptionCreator
 
+// TODO - TEST THAT THIS ACTUALLY SAVES A SUBSCRIPTION test what happens when subscriptions are added twice
 +(void)addSubscriptionsToDatabase:(CKDatabase *)database withCompletionHandler:(void (^)(BOOL, NSError *))block {
     
     // check that the user hasn't already subscribed to CloudKit
@@ -28,6 +29,7 @@
         // a notifiation object to detail the type of notification to relay to the client upon subscription finding new data
         CKNotificationInfo *notification = [CKNotificationInfo new];
         notification.shouldSendContentAvailable = YES;
+        
         notification.desiredKeys = @[TYPE_KEY]; // include the type of record that was pushed so that we can determine how to query for it
         
         // add the notification to the subscriptions
@@ -54,6 +56,8 @@
     }
     
 }
+
+// ATTENTION - the reason why I make sure that not subscribe twice is that I'm worried about multiple subscriptions sending notifications twice. I don't do this for Zones because I belive that if I create the two zones with the same name, there will only be one saved
 
 +(BOOL)isSubscribed {
     return [[NSUserDefaults standardUserDefaults] objectForKey:SUBSCRIPTION_KEY] != nil;

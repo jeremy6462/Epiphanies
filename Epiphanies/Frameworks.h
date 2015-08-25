@@ -15,4 +15,7 @@
 #import <CoreFoundation/CoreFoundation.h>
 #import <CoreLocation/CoreLocation.h>
 
+#define ZONE_NAME @"User_Zone"
+#define ZONE_SAVED @"zone-saved"
+
 #endif

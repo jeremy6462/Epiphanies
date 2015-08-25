@@ -20,10 +20,17 @@
 @property (nonnull, nonatomic, strong) Saver *saver;
 @property (nonnull, nonatomic, strong) Deleter *deleter;
 
+#pragma mark - Initializer
+
+/*!
+ @abstract returns and instance of the Model class with properties initialized as well
+ */
+- (nullable instancetype)init;
+
 #pragma mark - Zone Saver
 
 /*!
- @abstract creates a custom zone for this current user
+ @abstract creates a custom zone for this current user and saves subscriptions for all record types (Collection, Thought, Photo)
  */
 - (void) createZoneAssignZoneID;
 
@@ -41,7 +48,7 @@
 -(void) saveCollectionsToCloudKit: (nonnull NSArray<Collection *> *) collections
    withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
  withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
-          withCompletionBlock: (nonnull void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
+          withCompletionBlock: (nullable void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
 
 /*!
  @abstract saves an array of Thought objects and Photo children to CloudKit (used this also when we move a couple thoughts from one collection to another)
@@ -52,7 +59,7 @@
 -(void) saveThoughtsToCloudKit: (nonnull NSArray<Thought *> *) thoughts
    withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
  withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
-          withCompletionBlock: (nonnull void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
+          withCompletionBlock: (nullable void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
 
 /*!
  @abstract saves an array of Photo objects to CloudKit
@@ -64,7 +71,7 @@
 -(void) savePhotosToCloudKit: (nonnull NSArray<Photo *> *) photos
    withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
  withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
-          withCompletionBlock: (nonnull void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
+          withCompletionBlock: (nullable void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
 
 /*!
  @abstract saves an array of objects to CloudKit
@@ -76,7 +83,7 @@
 -(void) saveObjectsToCloudKit: (nonnull NSArray<id<FunObject>> *) objects
    withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
  withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
-          withCompletionBlock: (nonnull void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
+          withCompletionBlock: (nullable void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
 
 #pragma mark - Portion of Record Saver
 
@@ -87,7 +94,7 @@
 -(void) saveObjectToCloudKit: (nonnull id<FunObject>) object withChanges:(nonnull NSDictionary *) dictionaryOfChanges
       withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
     withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
-             withCompletionBlock: (nonnull void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
+             withCompletionBlock: (nullable void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
 
 #pragma mark - Order of Record Savers
 
@@ -98,7 +105,7 @@
 -(void) saveOrderOfObjects: (nonnull NSArray<id<FunObject>> *) objectsOfSameType
 withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
 withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
-       withCompletionBlock: (nonnull void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
+       withCompletionBlock: (nullable void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
 
 
 #pragma mark - Fetching
@@ -119,8 +126,13 @@ withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NS
    withRecordFetchedBlock: (void(^)(CKRecord *record))recordFetchedBlock
  withQueryCompletionBlock: (void(^)(CKQueryCursor * __nullable cursor, NSError * __nullable operationError))queryCompletionBlock;
 
+#pragma mark - Deleting
 
-
-// TODO - add notification creator for a general object and save
+/*!
+ @abstract deletes an objcet from CloudKit's database
+ @param object the object that will be deleted from cloud kit
+ @param block the completion handler that will be run after object deletion
+ */
+-(void) deleteObject: (id<FunObject>) object completionHandler:(void(^)(NSError *error))block;
 
 @end

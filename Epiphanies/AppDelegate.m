@@ -23,7 +23,10 @@
 }
 
 -(void)application:(nonnull UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(nonnull NSError *)error {
-    NSLog(@"Error registering for Remote Notifications: %@", error.description);
+    /*
+     ATTENTION - commenting out line because the simulator can't handle remote notifications. To test this, use a connected device
+//    NSLog(@"Error registering for Remote Notifications: %@", error.description);
+     */
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
@@ -31,44 +34,57 @@
     // get a CKNotification out of the notification object
     CKNotification *cloudKitNotification = [CKNotification notificationFromRemoteNotificationDictionary:userInfo];
     
+    [self handleCloudKitNotification:cloudKitNotification];
+    
+}
+
+- (void) handleCloudKitNotification: (CKNotification *) cloudKitNotification {
+    
     // if it was CKQueryNotification, process the record that has been changed
     if (cloudKitNotification.notificationType == CKNotificationTypeQuery) {
         CKQueryNotification *ckQueryNotification = (CKQueryNotification *)cloudKitNotification;
         CKRecordID *fetchedRecordId = [ckQueryNotification recordID];
-        NSString *recordType = ckQueryNotification.recordFields[TYPE_KEY];
-        // TODO - call model to fetch the record with these parameters
+        if (ckQueryNotification.recordFields) {
+            NSString *recordType = ckQueryNotification.recordFields[TYPE_KEY];
+        }
         
-        // TODO - Handle this recordID though Delegation
+        /*
+         1. Find the object in persistant storage with recordId
+         2. If a record exists, fetch it's new values, then replace the old object with the newly fetched object
+         3. If the record does not exist on the persistant storage on device:
+         a. Fetch the new record and find it's parent similar to the reload
+         b. Create the object using it's parent and fetched CKRecord and add the object in place
+         */
         
         // fetch any possibly missed notifications
         CKFetchNotificationChangesOperation *operationFetchMissing = [[CKFetchNotificationChangesOperation alloc] init];
         operationFetchMissing.notificationChangedBlock = ^void(CKNotification *notification) {
             if (notification.notificationType == CKNotificationTypeQuery) {
                 CKRecordID *recordID = [(CKQueryNotification *)notification recordID];
-                // TODO - Handle this recordID though Delegation
+                // same steps as above
             }
         };
         
         // handle the operation's completion or early return based on a serverChangeToken
         operationFetchMissing.fetchNotificationChangesCompletionBlock =^void(CKServerChangeToken *serverChangeToken, NSError *operationError) {
-//            if (operationError) {
-//                NSLog(@"fetchNotificationsCompletionBlock's error in didRecieveRemoteNotification: %@", operationError.description);
-//            } else {
-//                
-//                // if there is more on the server to fetch
-//                if (operationFetchMissing.moreComing) { // TODO - figure out how to reference the current operation and utilize it's moreComing and not operationFetchMissing
-//                    
-//                    // create a new operation that will fetch the rest of the contents
-//                    CKFetchNotificationChangesOperation *operationFetchAfterChangeToken = [[CKFetchNotificationChangesOperation alloc] initWithPreviousServerChangeToken:serverChangeToken];
-//                    
-//                    // fetch the extra notifications
-//                    operationFetchAfterChangeToken.notificationChangedBlock = operationFetchMissing.notificationChangedBlock;
-//                    
-//                    // handle the completion of this operation
-//                    operationFetchAfterChangeToken.fetchNotificationChangesCompletionBlock = operationFetchMissing.fetchNotificationChangesCompletionBlock;
-//
-//                }
-//            }
+            //            if (operationError) {
+            //                NSLog(@"fetchNotificationsCompletionBlock's error in didRecieveRemoteNotification: %@", operationError.description);
+            //            } else {
+            //
+            //                // if there is more on the server to fetch
+            //                if (operationFetchMissing.moreComing) { // TODO - figure out how to reference the current operation and utilize it's moreComing and not operationFetchMissing
+            //
+            //                    // create a new operation that will fetch the rest of the contents
+            //                    CKFetchNotificationChangesOperation *operationFetchAfterChangeToken = [[CKFetchNotificationChangesOperation alloc] initWithPreviousServerChangeToken:serverChangeToken];
+            //
+            //                    // fetch the extra notifications
+            //                    operationFetchAfterChangeToken.notificationChangedBlock = operationFetchMissing.notificationChangedBlock;
+            //
+            //                    // handle the completion of this operation
+            //                    operationFetchAfterChangeToken.fetchNotificationChangesCompletionBlock = operationFetchMissing.fetchNotificationChangesCompletionBlock;
+            //
+            //                }
+            //            }
         };
     }
 }
@@ -77,7 +93,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    // Register for push notifications
+    // Register for push notifications TODO - don't ask for these? I don't need User notifications (should be silent from CK except for reminders)
     UIUserNotificationSettings *notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
     [application registerUserNotificationSettings:notificationSettings];
     [application registerForRemoteNotifications];
@@ -181,7 +197,7 @@
     if (managedObjectContext != nil) {
         NSError *error = nil;
         if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
-            // Replace this implementation with code to handle the error appropriately.
+            // TODO - Replace this implementation with code to handle the error appropriately.
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
