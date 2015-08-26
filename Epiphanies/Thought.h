@@ -14,7 +14,7 @@
 #import "Photo.h"
 @class Photo;
 
-@interface Thought : NSObject <FunObject, Child, Orderable>
+@interface Thought : NSManagedObject <FunObject, Child, Orderable>
 
 // ATTENTION - type as a key is just for records. When asRecord: is called, type will be set for the record and don't worry about keeping it on the in memory model objects
 

@@ -14,7 +14,7 @@
 @class Thought;
 
 
-@interface Photo : NSObject <FunObject, Child, Orderable> // could do this in a category, but making my own app is enough to take on, lets cut ourseleves some slack here
+@interface Photo : NSManagedObject <FunObject, Child, Orderable> // could do this in a category, but making my own app is enough to take on, lets cut ourseleves some slack here
 
 /*Saved on Database*/   @property (nonnull, nonatomic, strong) NSString *objectId;
 

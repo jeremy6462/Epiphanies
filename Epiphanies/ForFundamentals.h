@@ -9,6 +9,8 @@
 #ifndef EpiphaniesScratch_ForFundamentals_h
 #define EpiphaniesScratch_ForFundamentals_h
 
+#import <CoreData/CoreData.h>
+
 // Record types in CloudKit database
 #define COLLECTION_RECORD_TYPE @"Collection"
 #define THOUGHT_RECORD_TYPE @"Thought"

@@ -1,6 +1,6 @@
 //
 //  Collection.m
-//  EpiphaniesScratch
+//  Epiphanies
 //
 //  Created by Jeremy Kelleher on 7/15/15.
 //  Copyright (c) 2015 JKProductions. All rights reserved.
@@ -9,6 +9,12 @@
 #import "Collection.h"
 
 @implementation Collection
+
+@dynamic name;
+@dynamic thoughts;
+@dynamic objectId;
+@dynamic recordId;
+@dynamic placement;
 
 #pragma mark - Initializers
 

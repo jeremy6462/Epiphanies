@@ -8,7 +8,7 @@
 
 #import "Thought.h"
 
-@implementation Thought : NSObject
+@implementation Thought 
 
 #pragma mark - Initializers
 

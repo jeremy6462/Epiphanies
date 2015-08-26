@@ -13,15 +13,15 @@
 #import "Thought.h"
 @class Thought;
 
-@interface Collection : NSObject <FunObject, Orderable>
+@interface Collection : NSManagedObject <FunObject, Orderable>
 
-/*Saved on Database*/   @property (nonnull, nonatomic, strong) NSString *objectId;
+/*Saved on Database*/   @property (nonnull, nonatomic, retain) NSString *objectId;
 
-                        @property (nonnull, nonatomic, strong) CKRecordID *recordId; // keep this reference in order to know which record to delete
+                        @property (nonnull, nonatomic, retain) CKRecordID *recordId; // keep this reference in order to know which record to delete
 
-/*Saved on Database*/   @property (nonnull, nonatomic, strong) NSString *name;
-                        @property (nullable, nonatomic, strong) NSArray<Thought *> *thoughts;
-/*Saved on Database*/   @property (nullable, nonatomic, strong) NSNumber *placement; // the placement of this Collection within the user's list of collections
+/*Saved on Database*/   @property (nonnull, nonatomic, retain) NSString *name;
+                        @property (nullable, nonatomic, retain) NSArray<Thought *> *thoughts;
+/*Saved on Database*/   @property (nullable, nonatomic, retain) NSNumber *placement; // the placement of this Collection within the user's list of collections
 
 /*!
  @abstract initializes a new Collection with a given Name
