@@ -37,7 +37,10 @@
 }
 
 - (IBAction)save:(id)sender {
-    [_model saveObjectsToCloudKit:[self createFakeRecords] withPerRecordProgressBlock:nil withPerRecordCompletionBlock:nil withCompletionBlock:^(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError) {
+    
+    NSArray *objects = [self createFakeRecords];
+    
+    [_model saveObjectsToCloudKit:objects withPerRecordProgressBlock:nil withPerRecordCompletionBlock:nil withCompletionBlock:^(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError) {
         if (operationError) {
            NSLog(@"error saving: %@", operationError.description); 
         }
@@ -60,9 +63,7 @@
     // complicate the thought
     thought.text = @"Brilliant idea";
     thought.location = [[CLLocation alloc] initWithLatitude:42.3333 longitude:-71.333];
-    thought.webURL = @"http://www.jerms.work";
-    thought.emailURL = @"jkjak6@gmail.com";
-    thought.telURL = @"5087983282";
+    thought.extraText = @"some descritpion text";
     thought.tags = @[@"funny", @"love"];
     
     return [NSArray arrayWithObjects:collection, thought, photo, nil];

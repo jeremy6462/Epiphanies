@@ -64,28 +64,29 @@
 }
 
 -(CKRecord *) asRecordWithChanges: (NSDictionary *) dictionaryOfChanges {
-    CKRecord *recordToReturn;
+    CKRecord *record;
     
     // if there is a record id (ie. there is already a record of this object
     if (_recordId) {
-        recordToReturn = [[CKRecord alloc] initWithRecordType:COLLECTION_RECORD_TYPE recordID:_recordId];
+        record = [[CKRecord alloc] initWithRecordType:COLLECTION_RECORD_TYPE recordID:_recordId];
     } else {
-        recordToReturn = [[CKRecord alloc] initWithRecordType:COLLECTION_RECORD_TYPE];
+        record = [[CKRecord alloc] initWithRecordType:COLLECTION_RECORD_TYPE];
+        _recordId = record.recordID;
     }
     
-    // if there exists a key in this dictionary for any of the properties, those properties have changed, so add those properies to a new record that will be saved to CloudKit
-    if ([dictionaryOfChanges objectForKey:NAME_KEY] != nil) {
-        [recordToReturn setObject:dictionaryOfChanges[NAME_KEY] forKey:NAME_KEY];
-        _name = recordToReturn[NAME_KEY];
-    }
-    if ([dictionaryOfChanges objectForKey:PLACEMENT_KEY] != nil) {
-        [recordToReturn setObject:dictionaryOfChanges[PLACEMENT_KEY] forKey:PLACEMENT_KEY];
-        _placement = recordToReturn[PLACEMENT_KEY];
+    // loop through the keys in dictionaryOfChanges and build the record accordingly depending on the values stored behind those keys
+    for (NSString *key in dictionaryOfChanges) {
+        if (dictionaryOfChanges[key] != [NSNull null]) {
+            record[key] = dictionaryOfChanges[key];
+        } else {
+            record[key] = nil;
+        }
+        [self setValue:record[key] forKey:key];
     }
     
-    [recordToReturn setObject:COLLECTION_RECORD_TYPE forKey:TYPE_KEY]; // used to get the type of this record back when a change occurs and a push notification is sent
+    [record setObject:COLLECTION_RECORD_TYPE forKey:TYPE_KEY]; // used to get the type of this record back when a change occurs and a push notification is sent
     
-    return recordToReturn;
+    return record;
 }
 
 # pragma mark - Utilities

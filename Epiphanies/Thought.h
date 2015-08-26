@@ -24,16 +24,11 @@
 
 /*Saved on Database*/   @property (nonnull, nonatomic, strong) Collection *parentCollection; // save only the parent reference
 
-/*Saved on Database*/   @property (nullable, nonatomic, strong) NSString *text;
+/*Saved on Database*/   @property (nullable, nonatomic, strong) NSString *text; // could hold links and these will be detected at the VC level
 /*Saved on Database*/   @property (nullable, nonatomic, strong) CLLocation *location;
                         @property (nullable, nonatomic, strong) NSArray<Photo *> *photos; // photos are saved on their own with a record of this thought
 
 /*Saved on Database*/   @property (nullable, nonatomic, strong) NSString *extraText; // allows for extra description text to be set. Should be in smaller print than headline text and should only appear as an option in text != nil
-
-                        // keep track of which URLs are used
-/*Saved on Database*/   @property (nullable, nonatomic, strong) NSString *webURL;
-/*Saved on Database*/   @property (nullable, nonatomic, strong) NSString *telURL;
-/*Saved on Database*/   @property (nullable, nonatomic, strong) NSString *emailURL;
 
 /*Saved on Database*/   @property (nullable, nonatomic, strong) NSArray<NSString *> *tags;
 

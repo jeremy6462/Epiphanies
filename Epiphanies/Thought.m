@@ -39,10 +39,6 @@
         _extraText = [record objectForKey:EXTRA_TEXT_KEY];
         _location = [record objectForKey:LOCATION_KEY];
         
-        _emailURL = [record objectForKey:EMAIL_KEY];
-        _telURL = [record objectForKey:TEL_KEY];
-        _webURL = [record objectForKey:WEB_KEY];
-        
         _photos = [NSArray new];
         
         _tags = [record objectForKey:TAGS_KEY];
@@ -83,17 +79,12 @@
     record[PARENT_COLLECTION_KEY] = [[CKReference alloc] initWithRecordID:_parentCollection.recordId action:CKReferenceActionDeleteSelf];
     
     record[TEXT_KEY] = _text;
+    record[EXTRA_TEXT_KEY] = _extraText;
     record[LOCATION_KEY] = _location;
-    
-    record[WEB_KEY] = _webURL;
-    record[TEL_KEY] = _telURL;
-    record[EMAIL_KEY] = _emailURL;
     
     record[TAGS_KEY] = _tags;
     
     record[PLACEMENT_KEY] = _placement;
-    
-    record[EXTRA_TEXT_KEY] = _extraText;
     
     return record;
     
@@ -110,73 +101,24 @@
         _recordId = record.recordID;
     }
     
+    /* 
+     TODO
+     Summary - Can we confine the keys that can be placed in dictionaryOfChanges to a specific set of strings?
+     Questions - how to handle keys that are not properties? How to handle not putting keys that shouldn't be there (children shouldn't be added to the record).
+     Should this be an array and we should forget about the changes?
+     */
+    // loop through the keys in dictionaryOfChanges and build the record accordingly depending on the values stored behind those keys
     for (NSString *key in dictionaryOfChanges) {
-        if (dictionaryOfChanges[key] != nil) {
-            
+        if (dictionaryOfChanges[key] != [NSNull null]) {
+            record[key] = dictionaryOfChanges[key];
+        } else {
+            record[key] = nil;
         }
+        [self setValue:record[key] forKey:key];
     }
     
-    // if there exists a key in this dictionary for any of the properties, those properties have changed, so add those properies to a new record that will be saved to CloudKit
-    if ([dictionaryOfChanges objectForKey:TEXT_KEY] != nil) {
-        if ([dictionaryOfChanges objectForKey:TEXT_KEY] == Remove) {
-            [record setObject:nil forKey:TEXT_KEY];
-        } else {
-            [record setObject:dictionaryOfChanges[TEXT_KEY] forKey:TEXT_KEY];
-        }
-        _text = record[TEXT_KEY];
-    }
-    if ([dictionaryOfChanges objectForKey:LOCATION_KEY] != nil) {
-        if ([dictionaryOfChanges objectForKey:LOCATION_KEY] == Remove) {
-            [record setObject:nil forKey:LOCATION_KEY];
-        } else {
-            [record setObject:dictionaryOfChanges[LOCATION_KEY] forKey:LOCATION_KEY];
-        }
-        _location = record[LOCATION_KEY];
-    }
-    if ([dictionaryOfChanges objectForKey:PARENT_COLLECTION_KEY] != nil) { // should not == Remove
-        Collection *parent = dictionaryOfChanges[PARENT_COLLECTION_KEY];
-        CKReference *reference = [[CKReference alloc] initWithRecordID:parent.recordId action:CKReferenceActionDeleteSelf];
-        [record setObject:reference forKey:PARENT_COLLECTION_KEY];
-        _parentCollection = dictionaryOfChanges[PARENT_COLLECTION_KEY];
-    }
-    if ([dictionaryOfChanges objectForKey:WEB_KEY] != nil) {
-        if ([dictionaryOfChanges objectForKey:WEB_KEY] == Remove) {
-            [record setObject:nil forKey:WEB_KEY];
-        } else {
-            [record setObject:dictionaryOfChanges[WEB_KEY] forKey:WEB_KEY];
-        }
-        _webURL = record[WEB_KEY];
-    }
-    if ([dictionaryOfChanges objectForKey:TEL_KEY] != nil) {
-        if ([dictionaryOfChanges objectForKey:TEL_KEY] == Remove) {
-            [record setObject:nil forKey:TEL_KEY];
-        } else {
-            [record setObject:dictionaryOfChanges[TEL_KEY] forKey:TEL_KEY];
-        }
-        _telURL = record[TEL_KEY];
-    }
-    if ([dictionaryOfChanges objectForKey:EMAIL_KEY] != nil) {
-        if ([dictionaryOfChanges objectForKey:EMAIL_KEY] == Remove) {
-            [record setObject:nil forKey:EMAIL_KEY];
-        } else {
-            [record setObject:dictionaryOfChanges[EMAIL_KEY] forKey:EMAIL_KEY];
-        }
-        _emailURL = record[EMAIL_KEY];
-    }
-    if ([dictionaryOfChanges objectForKey:TAGS_KEY] != nil) {
-        if ([dictionaryOfChanges objectForKey:TAGS_KEY] == Remove) {
-            [record setObject:nil forKey:TAGS_KEY];
-        } else {
-            [record setObject:dictionaryOfChanges[TAGS_KEY] forKey:TAGS_KEY];
-        }
-        _telURL = record[TEL_KEY];
-    }
-    if ([dictionaryOfChanges objectForKey:PLACEMENT_KEY] != nil) {
-        [record setObject:dictionaryOfChanges[PLACEMENT_KEY] forKey:PLACEMENT_KEY];
-        _placement = dictionaryOfChanges[PLACEMENT_KEY];
-    }
     
-    [record setObject:THOUGHT_RECORD_TYPE forKey:TYPE_KEY]; // used to get the type of this record back when a change occurs and a push notification is sent
+    [record setObject:THOUGHT_RECORD_TYPE forKey:TYPE_KEY]; // used in order to get the type of this record back when a change occurs and a push notification is sent
     
     return record;
 }

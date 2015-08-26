@@ -230,6 +230,7 @@
     [_database addOperation:operationFetchPhotos];
 }
 
+// TODO - if fetching just a parent, will still have to feth all children
 -(void) fetchRecordWithId:(nonnull CKRecordID *)recordId withRecordType:(NSString *)type withRecordFetchedBlock:(void (^)(CKRecord *))recordFetchedBlock withQueryCompletionBlock:(void (^)(CKQueryCursor * _Nullable, NSError * _Nullable))queryCompletionBlock {
     
     // NSPredicate to request a record with that Id

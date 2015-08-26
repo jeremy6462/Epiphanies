@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Frameworks.h"
 #import "CloudAccessors.h"
+#import "ForFundamentals.h"
 
 @interface Model : NSObject
 
@@ -21,6 +22,8 @@
 @property (nonnull, nonatomic, strong) Deleter *deleter;
 
 #pragma mark - Initializer
+
+// TODO - Singleton didn't work because I was importing the Model inside the model object classes and there was a loop?
 
 /*!
  @abstract returns and instance of the Model class with properties initialized as well

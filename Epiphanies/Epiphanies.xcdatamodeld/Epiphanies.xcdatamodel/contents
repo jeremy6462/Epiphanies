@@ -1,7 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="8166.2" systemVersion="14F27" minimumToolsVersion="Automatic">
-    <entity name="Collection" syncable="YES"/>
+    <entity name="Collection" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="objectId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="placement" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="recordId" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <relationship name="thoughts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Thought" inverseName="parentCollection" inverseEntity="Thought" syncable="YES"/>
+    </entity>
+    <entity name="Photo" syncable="YES">
+        <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="objectId" optional="YES" attributeType="String" spotlightIndexingEnabled="YES" syncable="YES"/>
+        <attribute name="placement" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="recordId" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <relationship name="parentThought" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Thought" inverseName="photos" inverseEntity="Thought" syncable="YES"/>
+    </entity>
+    <entity name="Thought" syncable="YES">
+        <attribute name="creationDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="extraText" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="location" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="objectId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="placement" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="recordId" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="tags" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="parentCollection" maxCount="1" deletionRule="Cascade" destinationEntity="Collection" inverseName="thoughts" inverseEntity="Collection" syncable="YES"/>
+        <relationship name="photos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Photo" inverseName="parentThought" inverseEntity="Photo" syncable="YES"/>
+    </entity>
     <elements>
-        <element name="Collection" positionX="-63" positionY="-18" width="128" height="45"/>
+        <element name="Collection" positionX="-540" positionY="260" width="128" height="118"/>
+        <element name="Thought" positionX="-362" positionY="302" width="128" height="193"/>
+        <element name="Photo" positionX="-173" positionY="270" width="128" height="118"/>
     </elements>
 </model>
