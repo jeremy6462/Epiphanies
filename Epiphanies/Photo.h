@@ -1,43 +1,48 @@
 //
 //  Photo.h
-//  EpiphaniesScratch
+//  Epiphanies
 //
-//  Created by Jeremy Kelleher on 7/19/15.
-//  Copyright (c) 2015 JKProductions. All rights reserved.
+//  Created by Jeremy Kelleher on 8/27/15.
+//  Copyright © 2015 JKProductions. All rights reserved.
 //
-
-@import CloudKit;
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
+#import "Frameworks.h"
 #import "ForFundamentals.h"
-#import "Thought.h"
+
 @class Thought;
 
+NS_ASSUME_NONNULL_BEGIN
 
-@interface Photo : NSManagedObject <FunObject, Child, Orderable> // could do this in a category, but making my own app is enough to take on, lets cut ourseleves some slack here
-
-/*Saved on Database*/   @property (nonnull, nonatomic, strong) NSString *objectId;
-
-                        @property (nonnull, nonatomic, strong) CKRecordID *recordId; // keep this reference in order to know which record to delete
-
-/*Saved on Database*/   @property (nullable, nonatomic, strong) Thought *parentThought; // the thought model object that created this image (save as CKReference to parentThought's recordID property
-
-/*Save on Database*/    @property (nonnull, nonatomic, strong) UIImage *image; // save as CKAsset
-
-/*Save on Database*/    @property (nonnull, nonatomic, strong) NSNumber *placement;
+@interface Photo : NSManagedObject <FunObject, Child, Orderable>
 
 #pragma mark - Initalizers
 
 /*!
- @abstract initializes a Photo object based on a record
- @discussion parentThought will still be nil
+ @abstract Creates a new Photo object that is inserted into the managed object context
+ @discussion A factory method that wraps object initialization in order for core data to do it's thing. Once core data returns our object, we can set its properties based on the parameters
+ @param context The NSManagedObjectContext to insert the object into. Is nonnull because there must be a context to insert this object into
+ @param image The UIImage that this photo object represents. Is nonnull because there is no reason for a Photo object without an image
+ @param thought The parent Thought object of this Photo that holds this photo. If nil, parentThought will be nil
+ @return A populated Photo object that is not based on previously created data (new)
  */
--(nullable instancetype) initWithRecord: (nonnull CKRecord *) record;
--(nullable instancetype) initWithRecord: (nonnull CKRecord *) record parent: (nonnull Thought *) thought;
++ (nullable instancetype) newPhotoInManagedObjectContext: (nonnull NSManagedObjectContext *) context image: (nonnull UIImage *) image parentThought: (nullable Thought *) thought;
+
 /*!
- @abstract intializes a Photo object with generic placement, objectId, and recordId and an image asset
+ @abstract Creates a new Photo based off a CKRecord object
  */
--(nullable instancetype) initWithImage: (nonnull UIImage *) image;
++ (nullable instancetype) newManagedObjectInContext: (nonnull NSManagedObjectContext *) context basedOnCKRecord: (nonnull CKRecord *) record;
+
+/*!
+ @abstract Creates a new Photo object that is inserted into the managed object context
+ @discussion A factory method that wraps object initialization in order for core data to do it's thing. Once core data returns our object, we can set its properties based on the parameters
+ @param context The NSManagedObjectContext to insert the object into. Is nonnull because there must be a context to insert this object into
+ @param record The CKRecord that was fetched that contains the data to back this photo
+ @param thought The parent Thought object of this Photo that holds this photo. If nil, parentThought will be nil
+ @return A populated photo object that is based off of a fetched CKRecord (existing)
+ */
++ (nullable instancetype) newPhotoInManagedObjectContext: (nonnull NSManagedObjectContext *) context basedOnCKRecord: (nonnull CKRecord *) record parentThought: (nullable Thought *) thought;
 
 #pragma mark - Record Returners
 
@@ -50,14 +55,21 @@
 /*!
  @abstract this method will return a record that represent the sending Collection object, however only contains the attributes for values that have changed. ATTENTION - use this method for handling placement changes
  @param dictionaryOfChanges is a dictionary with keys of property names (macro's found in ForFundamentals.h) that were changed since object creation and values of the change object value. The only keys that are present are those represent properties that are actually saved on the database.
- TODO - how to handle deleting location
  */
 -(nonnull CKRecord *) asRecordWithChanges: (nonnull NSDictionary *) dictionaryOfChanges; // TODO - fix generic of dictionary with protocol acceptor
+
+#pragma mark - Update
+
+/*!
+ @abstract updates properties based on the properties fetched from CloudKit
+ */
+
+-(void) updateBasedOnCKRecord: (nonnull CKRecord *) record;
 
 #pragma mark - Delete Self from Parent
 
 /*!
- @abstract - this method removes this photo from it's parent's photos array
+ @abstract - Removes this Photo from it's parent's photos array
  */
 -(void) removeFromParent;
 
@@ -70,9 +82,14 @@
 -(nullable NSURL *) saveToTemp;
 
 /*!
- @abstract attemps to find an image stored at a URL
- @return image that was found from the URL. If no image could be found, returns nil;
+ @abstract attempts to find an image stored at a URL
+ @return image that was found from the URL. If no image could be found, returns nil
  */
--(nullable UIImage *) imageFromURL: (nonnull NSString *) filePath;
++ (nullable UIImage *) imageFromURL: (nonnull NSString *) filePath;
+
 
 @end
+
+NS_ASSUME_NONNULL_END
+
+#import "Photo+CoreDataProperties.h"

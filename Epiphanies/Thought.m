@@ -1,62 +1,92 @@
 //
 //  Thought.m
-//  EpiphaniesScratch
+//  Epiphanies
 //
-//  Created by Jeremy Kelleher on 7/15/15.
-//  Copyright (c) 2015 JKProductions. All rights reserved.
+//  Created by Jeremy Kelleher on 8/27/15.
+//  Copyright © 2015 JKProductions. All rights reserved.
 //
 
 #import "Thought.h"
+#import "Collection.h"
+#import "Photo.h"
 
-@implementation Thought 
+@implementation Thought
 
 #pragma mark - Initializers
 
--(nullable instancetype) init {
-    self = [super init];
-    if (self) {
-        _objectId = [IdentifierCreator createId];
++ (nullable instancetype) newThoughtInManagedObjectContext: (NSManagedObjectContext *) context collection: (nullable Collection *) collection {
+
+    // create a Thought object in the managed object context
+    Thought *thoughtToReturn = [Thought createManagedObject:context];
+    if (thoughtToReturn) {
         
-        _recordId = [[CKRecord alloc] initWithRecordType:THOUGHT_RECORD_TYPE zoneID:[[CKRecordZone alloc] initWithZoneName:ZONE_NAME].zoneID].recordID;
+        // objectId
+        thoughtToReturn.objectId = [IdentifierCreator createId];
         
-        _photos = [NSArray new];
+        // placement
+        thoughtToReturn.placement = [NSNumber numberWithInt:0];
         
-        _placement = [NSNumber numberWithInt:0];
+        // recordId
+        // fabricate the record zone for it's id (it will match the record zone already created TODO - maybe we should just refact the record zone creator to call some method that will make the record zone if it hasn't already been made and return the id
+        CKRecordZone *zone = [[CKRecordZone alloc] initWithZoneName:ZONE_NAME];
+        CKRecord *record = [[CKRecord alloc] initWithRecordType:THOUGHT_RECORD_TYPE zoneID:zone.zoneID];
+        thoughtToReturn.recordId = record.recordID;
         
-        _creationDate = [NSDate date];
+        // parentCollection
+        thoughtToReturn.parentCollection = collection;
+        
+        // creation date
+        thoughtToReturn.creationDate = [NSDate date];
+        
+        // photos set should be handled by core data
+        
+        // rest of the properties are initalized by the utilizer of this Thought
     }
-    return self;
+    return thoughtToReturn;
 }
 
--(instancetype) initWithRecord:(nonnull CKRecord *)record {
-    self = [super init];
-    if (self) {
-        _objectId = [record objectForKey:OBJECT_ID_KEY];
++ (nullable instancetype) newManagedObjectInContext: (nonnull NSManagedObjectContext *) context basedOnCKRecord: (nonnull CKRecord *) record {
+    // create a Thought object in the managed object context
+    Thought *thoughtToReturn = [Thought createManagedObject:context];
+    if (thoughtToReturn) {
         
-        _recordId = [record recordID];
+        // objectId
+        thoughtToReturn.objectId = [record objectForKey:OBJECT_ID_KEY];
         
-        _text = [record objectForKey:TEXT_KEY];
-        _extraText = [record objectForKey:EXTRA_TEXT_KEY];
-        _location = [record objectForKey:LOCATION_KEY];
+        // placement
+        thoughtToReturn.placement = [record objectForKey:PLACEMENT_KEY];
         
-        _photos = [NSArray new];
+        // recordId
+        thoughtToReturn.recordId = [record recordID];
         
-        _tags = [record objectForKey:TAGS_KEY];
+        // extra aspects of a Thought
+        thoughtToReturn.text = [record objectForKey:TEXT_KEY];
+        thoughtToReturn.location = [record objectForKey:LOCATION_KEY];
+        thoughtToReturn.extraText = [record objectForKey:EXTRA_TEXT_KEY];
+        thoughtToReturn.tags = [record objectForKey:TAGS_KEY];
         
-        _placement = [record objectForKey:PLACEMENT_KEY]; // TODO - make sure NSNumber is returned so that it can be casted to an int
-        
-        _creationDate = record.creationDate;
+        // relevant dates
+        thoughtToReturn.reminderDate = [record objectForKey:REMINDER_DATE_KEY];
+        thoughtToReturn.creationDate = record.creationDate;
     }
-    return self;
+    return thoughtToReturn;
+
 }
 
--(instancetype) initWithRecord:(CKRecord *)record collection:(Collection *)collection {
-    self = [self initWithRecord:record];
-    self.parentCollection = collection;
-    return self;
++ (nullable instancetype) newThoughtInManagedObjectContext: (NSManagedObjectContext *) context basedOnCKRecord: (CKRecord *) record collection: (nullable Collection *) collection {
+    
+    Thought *thoughtToReturn = [Thought newManagedObjectInContext:context basedOnCKRecord:record];
+    
+    // parentCollection
+    thoughtToReturn.parentCollection = collection;
+    
+    return thoughtToReturn;
 }
 
-
++ (nullable instancetype) createManagedObject: (nonnull NSManagedObjectContext *) context {
+    Thought *thought = (Thought *) [NSEntityDescription insertNewObjectForEntityForName:THOUGHT_RECORD_TYPE inManagedObjectContext:context];
+    return thought;
+}
 
 #pragma mark - Record Returns
 
@@ -64,27 +94,28 @@
     
     // get a reference to self's record object. if there is none, create one
     CKRecord *record;
-    if (_recordId) {
-        record = [[CKRecord alloc] initWithRecordType:THOUGHT_RECORD_TYPE recordID:_recordId];
+    if (self.recordId) {
+        record = [[CKRecord alloc] initWithRecordType:THOUGHT_RECORD_TYPE recordID:self.recordId];
     } else {
         record = [[CKRecord alloc] initWithRecordType:THOUGHT_RECORD_TYPE];
-        _recordId = record.recordID;
+        self.recordId = record.recordID;
     }
     
-    [record setObject:THOUGHT_RECORD_TYPE forKey:TYPE_KEY]; // used to get the type of this record back when a change occurs and a push notification is sent
-    
     // set all of the fields of the record = to the the current fields of self
-    record[OBJECT_ID_KEY] = _objectId;
-
-    record[PARENT_COLLECTION_KEY] = [[CKReference alloc] initWithRecordID:_parentCollection.recordId action:CKReferenceActionDeleteSelf];
+    record[OBJECT_ID_KEY] = self.objectId;
     
-    record[TEXT_KEY] = _text;
-    record[EXTRA_TEXT_KEY] = _extraText;
-    record[LOCATION_KEY] = _location;
+    record[PLACEMENT_KEY] = self.placement;
     
-    record[TAGS_KEY] = _tags;
+    record[PARENT_COLLECTION_KEY] = [[CKReference alloc] initWithRecordID:self.parentCollection.recordId action:CKReferenceActionDeleteSelf];
     
-    record[PLACEMENT_KEY] = _placement;
+    record[TEXT_KEY] = self.text;
+    record[LOCATION_KEY] = self.location;
+    record[EXTRA_TEXT_KEY] = self.extraText;
+    record[TAGS_KEY] = self.tags;
+    
+    record[REMINDER_DATE_KEY] = self.reminderDate;
+    
+    [record setObject:THOUGHT_RECORD_TYPE forKey:TYPE_KEY]; // used to get the type of this record back when a change occurs and a push notification is sent
     
     return record;
     
@@ -94,14 +125,14 @@
     
     // get a reference to self's record object. if there is none, create one
     CKRecord *record;
-    if (_recordId) {
-        record = [[CKRecord alloc] initWithRecordType:THOUGHT_RECORD_TYPE recordID:_recordId];
+    if (self.recordId) {
+        record = [[CKRecord alloc] initWithRecordType:THOUGHT_RECORD_TYPE recordID:self.recordId];
     } else {
         record = [[CKRecord alloc] initWithRecordType:THOUGHT_RECORD_TYPE];
-        _recordId = record.recordID;
+        self.recordId = record.recordID;
     }
     
-    /* 
+    /*
      TODO
      Summary - Can we confine the keys that can be placed in dictionaryOfChanges to a specific set of strings?
      Questions - how to handle keys that are not properties? How to handle not putting keys that shouldn't be there (children shouldn't be added to the record).
@@ -123,32 +154,39 @@
     return record;
 }
 
+#pragma mark - Update
+
+-(void) updateBasedOnCKRecord:(CKRecord *)record {
+    
+    // objectId
+    self.objectId = [record objectForKey:OBJECT_ID_KEY];
+    
+    // placement
+    self.placement = [record objectForKey:PLACEMENT_KEY];
+    
+    // recordId
+    self.recordId = [record recordID];
+    
+    // extra aspects of a Thought
+    self.text = [record objectForKey:TEXT_KEY];
+    self.location = [record objectForKey:LOCATION_KEY];
+    self.extraText = [record objectForKey:EXTRA_TEXT_KEY];
+    self.tags = [record objectForKey:TAGS_KEY];
+    
+    // relevant dates
+    self.reminderDate = [record objectForKey:REMINDER_DATE_KEY];
+    self.creationDate = record.creationDate;
+    
+}
+
 #pragma mark - Delete Self from Parent
 
 -(void) removeFromParent {
-    
-    // only attempt to remove from parent if a parent exists
-    if (_parentCollection) {
-        
-        // an array of this photo's peers
-        NSArray *sisters = _parentCollection.thoughts;
-        
-        // only attempt to remove if there are peer photos
-        if (sisters) {
-            
-            NSMutableArray *mutableSisters = [NSMutableArray arrayWithArray:sisters];
-            for (Thought *peer in sisters) {
-                
-                // disconnect self in the _parentThought.photos array
-                if ([peer.objectId isEqualToString:_objectId]) {
-                    [mutableSisters removeObject:peer];
-                }
-                
-            }
-            _parentCollection.thoughts = [NSArray arrayWithArray:mutableSisters];
+    for (Thought *thought in self.parentCollection.thoughts) {
+        if ([thought.objectId isEqualToString:self.objectId]) {
+            [self.parentCollection removeThoughtsObject:thought];
         }
     }
-    
 }
 
 @end

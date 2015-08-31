@@ -10,6 +10,8 @@
 
 @implementation Saver
 
+#pragma mark - Save Complete Objects
+
 -(CKModifyRecordsOperation *) saveObjects: (NSArray<id<FunObject>> *) arrayOfObjects
       withPerRecordProgressBlock: (void(^)(CKRecord *record, double progress)) perRecordProgressBlock
     withPerRecordCompletionBlock: (void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
@@ -37,6 +39,8 @@
     return operationSaveObjects;
 }
 
+#pragma mark - Save Partial Objects
+
 -(CKModifyRecordsOperation *) saveObject:(id<FunObject>)object withChanges:(NSDictionary *)dictionaryOfChanges withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nonnull void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
     
     // create a record that only contains the values that were changed (as detailed in dictionaryOfChanges)
@@ -55,6 +59,8 @@
     return operationSaveObject;
     
 }
+
+#pragma mark - Utilities
 
 -(NSArray<id<FunObject>> *) flattenThoughtsAndPhotos: (NSArray<Thought *> *) arrayOfThoughts {
     

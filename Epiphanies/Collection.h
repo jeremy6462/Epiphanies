@@ -1,37 +1,42 @@
 //
 //  Collection.h
-//  EpiphaniesScratch
+//  Epiphanies
 //
-//  Created by Jeremy Kelleher on 7/15/15.
-//  Copyright (c) 2015 JKProductions. All rights reserved.
+//  Created by Jeremy Kelleher on 8/27/15.
+//  Copyright © 2015 JKProductions. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 #import "Frameworks.h"
 #import "ForFundamentals.h"
-#import "Thought.h"
+
 @class Thought;
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface Collection : NSManagedObject <FunObject, Orderable>
 
-/*Saved on Database*/   @property (nonnull, nonatomic, retain) NSString *objectId;
-
-                        @property (nonnull, nonatomic, retain) CKRecordID *recordId; // keep this reference in order to know which record to delete
-
-/*Saved on Database*/   @property (nonnull, nonatomic, retain) NSString *name;
-                        @property (nullable, nonatomic, retain) NSArray<Thought *> *thoughts;
-/*Saved on Database*/   @property (nullable, nonatomic, retain) NSNumber *placement; // the placement of this Collection within the user's list of collections
+#pragma mark - Initalizer
 
 /*!
- @abstract initializes a new Collection with a given Name
+ @abstract Initializes a new Collection with a given name in the given context
  @discussion objectId, recordId, placement, and thoughts will generic values
+ @param context The NSManagedObjectContext to insert the new Collection into
+ @param name The name of the Collection to be
+
  */
--(nullable instancetype) initWithName: (nonnull NSString *) name;
++ (nullable instancetype) newCollectionInManagedObjectContext:(nonnull NSManagedObjectContext *) context name:(nullable NSString *)name;
+
 /*!
+ @abstract creates a new Collection in the context
  @discussion this method returns a Collection object according to the CKRecord provided, however because an array of Thought objects is not passed (an one will not come with the record), the thoughts property must be filled after this initialization
+ @param context The NSManagedObjectContext to insert the new Collection into
+ @param the record to base the collection off of
  */
--(nullable instancetype) initWithRecord: (nonnull CKRecord *) record;
++ (nullable instancetype) newManagedObjectInContext: (nonnull NSManagedObjectContext *) context basedOnCKRecord: (nonnull CKRecord *) record;
+
+#pragma mark - Record Returner
 
 /*!
  @abstract takes all property values that will be saved to the database and adds them as attributes to a record for this object
@@ -46,9 +51,22 @@
  */
 -(nonnull CKRecord *) asRecordWithChanges: (nonnull NSDictionary *) dictionaryOfChanges; // TODO - fix generic of dictionary with protocol acceptor
 
+#pragma mark - Update
+
+/*!
+ @abstract updates properties based on the properties fetched from CloudKit
+ */
+-(void) updateBasedOnCKRecord: (nonnull CKRecord *) record;
+
+#pragma mark - Utilities
+
 /*!
  @return a random name for a new collection
  */
 +(nonnull NSString *) randomCollectionName;
 
 @end
+
+NS_ASSUME_NONNULL_END
+
+#import "Collection+CoreDataProperties.h"

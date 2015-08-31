@@ -9,9 +9,7 @@
 #ifndef EpiphaniesScratch_FundementalObjectHeaders_h
 #define EpiphaniesScratch_FundementalObjectHeaders_h
 
-#import <UIKit/UIKit.h>
-#import <CoreFoundation/CoreFoundation.h>
-#import <CoreLocation/CoreLocation.h>
+#import "Frameworks.h"
 
 #import "IdentifierCreator.h"
 #import "CloudKitErrorHandler.h"

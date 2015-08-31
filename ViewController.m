@@ -27,6 +27,7 @@
 }
 
 - (IBAction)load:(id)sender {
+    
     [_model reloadWithCompletion:^(NSArray<Collection *> *populatedCollections, NSError *error) {
         if (error) {
             NSLog(@"error: %@", error.localizedDescription);
@@ -40,24 +41,25 @@
     
     NSArray *objects = [self createFakeRecords];
     
-    [_model saveObjectsToCloudKit:objects withPerRecordProgressBlock:nil withPerRecordCompletionBlock:nil withCompletionBlock:^(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError) {
+    [_model saveObjects:objects withPerRecordProgressBlock:nil withPerRecordCompletionBlock:nil withCompletionBlock:^(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError) {
         if (operationError) {
            NSLog(@"error saving: %@", operationError.description); 
         }
     }];
+
 }
 
 - (NSArray<id<FunObject>> *) createFakeRecords {
     
     // initial objects
-    Collection *collection = [[Collection alloc] initWithName:@"testCollection"];
-    Thought *thought = [[Thought alloc] init];
-    Photo *photo = [[Photo alloc] initWithImage:[UIImage imageNamed:@"Bulb Icon"]];
+    Collection *collection = [Collection newCollectionInManagedObjectContext:_model.context name:@"testCollection"];
+    Thought *thought = [Thought newThoughtInManagedObjectContext:_model.context collection:nil];
+    Photo *photo = [Photo newPhotoInManagedObjectContext:_model.context image:[UIImage imageNamed:@"Bulb Icon"] parentThought:nil];
     
     // make the connection references between the objects
-    collection.thoughts  = [NSArray arrayWithObject:thought];
+    [collection addThoughtsObject:thought];
     thought.parentCollection = collection;
-    thought.photos = [NSArray arrayWithObject:photo];
+    [thought addPhotosObject:photo];
     photo.parentThought = thought;
     
     // complicate the thought
@@ -65,6 +67,7 @@
     thought.location = [[CLLocation alloc] initWithLatitude:42.3333 longitude:-71.333];
     thought.extraText = @"some descritpion text";
     thought.tags = @[@"funny", @"love"];
+    thought.reminderDate = [NSDate date];
     
     return [NSArray arrayWithObjects:collection, thought, photo, nil];
 }

@@ -14,6 +14,7 @@
 #import "UIKit/UIKit.h"
 #import <CoreFoundation/CoreFoundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import <CoreData/CoreData.h>
 
 #define ZONE_NAME @"User_Zone"
 #define ZONE_SAVED @"zone-saved"

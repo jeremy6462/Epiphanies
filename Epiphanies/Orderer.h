@@ -14,6 +14,6 @@
 /*!
  @abstract changes the value of the placement property for each object in orderedObjects to match thier relative position in the orderedObjects array
  */
-+(nonnull NSArray<id<Orderable>> *)orderObjectsBasedOnPlacementInArray:(nonnull NSArray<id<Orderable>> *) orderedObjects;
++(nonnull NSArray<id<Orderable>> *)correctPlacementBasedOnOrderInArray:(nonnull NSArray<id<Orderable>> *) orderedObjects;
 
 @end

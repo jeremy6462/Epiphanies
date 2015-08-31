@@ -17,6 +17,11 @@
 
 // ATTENTION - On object initialization, the recordId property is built based on the custom zoneId. Because of this, all records should save (upon creation in asRecord) into the correct custom zone for this user
 
+// to simplify block syntax
+typedef void (^PerRecordProgressBlock) (CKRecord *record, double progress);
+typedef void (^PerRecordCompletionBlock) (CKRecord * __nullable record, NSError * __nullable error);
+typedef void (^ModifyRecordsCompletionBlock) (NSArray <CKRecord *> * __nullable savedRecords, NSArray <CKRecordID *> * __nullable deletedRecordIDs, NSError * __nullable operationError);
+
 /*!
  @abstract use to save any fun object to CloudKit
  @param arrayOfObjects that only holds Fundamental Objects (have an asRecord method). Each object is converted into a record using it's asRecord method and added to an array of objects that will be saved through the CKOperation
@@ -26,9 +31,9 @@
  @return a CKOperation that (when executed - added to a queue) will save an arrayOfObjects to CloudKit
  */
 -(nonnull CKModifyRecordsOperation *) saveObjects: (nonnull NSArray<id<FunObject>> *) arrayOfObjects
-      withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
-    withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
-             withCompletionBlock: (nonnull void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
+      withPerRecordProgressBlock: (nullable PerRecordProgressBlock) perRecordProgressBlock
+    withPerRecordCompletionBlock: (nullable PerRecordCompletionBlock) perRecordCompletionBlock
+             withCompletionBlock: (nonnull ModifyRecordsCompletionBlock) modifyRecordsCompletionBlock;
 
 /*!
  @abstract use to save only specific changes to a record
@@ -40,9 +45,9 @@
  @return a CKOperation that (when executed - added to a queue) will save object to CloudKit
  */
 -(nonnull CKModifyRecordsOperation *) saveObject: (id<FunObject>) object withChanges: (NSDictionary *) dictionaryOfChanges
-                      withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
-                    withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error))perRecordCompletionBlock
-                             withCompletionBlock: (nonnull void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError))modifyRecordsCompletionBlock;
+                      withPerRecordProgressBlock: (nullable PerRecordProgressBlock) perRecordProgressBlock
+                    withPerRecordCompletionBlock: (nullable PerRecordCompletionBlock) perRecordCompletionBlock
+                             withCompletionBlock: (nonnull ModifyRecordsCompletionBlock) modifyRecordsCompletionBlock;
 
 /*!
  @discussion Thoughts have an array of Photo objects and therefore a a relational-hierarchy. We want to save all Photos related to a Thought and so we flatten each Thought so that each Photo object is represented in the array to save. Input, just Thought objects. Output, those original Thoughts and thier related Photos alongside them

@@ -40,52 +40,46 @@
 
 - (void) handleCloudKitNotification: (CKNotification *) cloudKitNotification {
     
-    // if it was CKQueryNotification, process the record that has been changed
     if (cloudKitNotification.notificationType == CKNotificationTypeQuery) {
-        CKQueryNotification *ckQueryNotification = (CKQueryNotification *)cloudKitNotification;
-        CKRecordID *fetchedRecordId = [ckQueryNotification recordID];
-        if (ckQueryNotification.recordFields) {
-            NSString *recordType = ckQueryNotification.recordFields[TYPE_KEY];
-        }
-        
-        /*
-         1. Find the object in persistant storage with recordId
-         2. If a record exists, fetch it's new values, then replace the old object with the newly fetched object
-         3. If the record does not exist on the persistant storage on device:
-         a. Fetch the new record and find it's parent similar to the reload
-         b. Create the object using it's parent and fetched CKRecord and add the object in place
-         */
         
         // fetch any possibly missed notifications
         CKFetchNotificationChangesOperation *operationFetchMissing = [[CKFetchNotificationChangesOperation alloc] init];
         operationFetchMissing.notificationChangedBlock = ^void(CKNotification *notification) {
             if (notification.notificationType == CKNotificationTypeQuery) {
-                CKRecordID *recordID = [(CKQueryNotification *)notification recordID];
-                // same steps as above
+                CKQueryNotification *ckQueryNotification = (CKQueryNotification *)cloudKitNotification;
+                CKRecordID *fetchedRecordId = [ckQueryNotification recordID];
+                if (ckQueryNotification.recordFields) {
+                    NSString *recordType = ckQueryNotification.recordFields[TYPE_KEY];
+                    [[self model] refreshObjectWithRecordId:fetchedRecordId];
+                }
+
             }
         };
         
         // handle the operation's completion or early return based on a serverChangeToken
         operationFetchMissing.fetchNotificationChangesCompletionBlock =^void(CKServerChangeToken *serverChangeToken, NSError *operationError) {
-            //            if (operationError) {
-            //                NSLog(@"fetchNotificationsCompletionBlock's error in didRecieveRemoteNotification: %@", operationError.description);
-            //            } else {
-            //
-            //                // if there is more on the server to fetch
-            //                if (operationFetchMissing.moreComing) { // TODO - figure out how to reference the current operation and utilize it's moreComing and not operationFetchMissing
-            //
-            //                    // create a new operation that will fetch the rest of the contents
-            //                    CKFetchNotificationChangesOperation *operationFetchAfterChangeToken = [[CKFetchNotificationChangesOperation alloc] initWithPreviousServerChangeToken:serverChangeToken];
-            //
-            //                    // fetch the extra notifications
-            //                    operationFetchAfterChangeToken.notificationChangedBlock = operationFetchMissing.notificationChangedBlock;
-            //
-            //                    // handle the completion of this operation
-            //                    operationFetchAfterChangeToken.fetchNotificationChangesCompletionBlock = operationFetchMissing.fetchNotificationChangesCompletionBlock;
-            //
-            //                }
-            //            }
+            if (operationError) {
+                NSLog(@"error fetching notifications: %@", operationError);
+            } else {
+                // TODO - figure out a way to mark notifications as read
+                CKMarkNotificationsReadOperation *operationMarkRead = [[CKMarkNotificationsReadOperation alloc] initWithNotificationIDsToMarkRead:@[]];
+                operationMarkRead.qualityOfService = NSOperationQualityOfServiceBackground;
+                operationMarkRead.markNotificationsReadCompletionBlock = ^void(NSArray <CKNotificationID *> * _Nullable notificationIDsMarkedRead, NSError * _Nullable markOperationError) {
+                    NSLog(@"error marking notifciations as read: %@", markOperationError);
+                };
+            }
         };
+        
+        operationFetchMissing.qualityOfService = NSOperationQualityOfServiceBackground;
+        [[self model] executeContainerOperation:operationFetchMissing];
+        
+        // process the fetched record - occuring afer so the fetch of extra notifications could happen in the background
+        CKQueryNotification *ckQueryNotification = (CKQueryNotification *)cloudKitNotification;
+        CKRecordID *fetchedRecordId = [ckQueryNotification recordID];
+        if (ckQueryNotification.recordFields) {
+            NSString *recordType = ckQueryNotification.recordFields[TYPE_KEY];
+            [[self model] refreshObjectWithRecordId:fetchedRecordId];
+        }
     }
 }
 
@@ -117,13 +111,21 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    Collection *myMO = (Collection *) [NSEntityDescription insertNewObjectForEntityForName:@"Collection" inManagedObjectContext:_managedObjectContext];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     // Saves changes in the application's managed object context before the application terminates.
     [self saveContext];
+}
+
+#pragma mark - Model
+
+-(Model *) model {
+    if (!_model) {
+        _model = [[Model alloc] init];
+    }
+    return _model;
 }
 
 #pragma mark - Core Data stack
