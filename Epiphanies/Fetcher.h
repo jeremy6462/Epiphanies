@@ -26,17 +26,36 @@ typedef void(^FacadeBlock)(NSArray<CKRecord *> *records, NSError *error);
  @param sortDescriptors Objects will be sorted based on the order specified. Nullable because no sort descriptors is requried. If nil, will return in order of placement key
  @return An array of objects fetched from the database. Because we're only storing FundObjects in the database, those should be the only objects returned. If nil, there was an error fetching and this was printed to the console with the prefix "core data fetch error".
  */
--(nullable NSArray<id<FunObject>> *) fetchRecordsFromCoreDataContext: (nonnull NSManagedObjectContext *) context
-                                                                type: (nonnull NSString *) recordType
-                                                           predicate: (nonnull NSPredicate *) predicate
-                                                    sortDescriptiors: (nullable NSArray <NSSortDescriptor *> *) sortDescriptors;
++ (nullable NSArray<id<FunObject>> *) fetchRecordsFromCoreDataContext: (nonnull NSManagedObjectContext *) context type: (nonnull NSString *) recordType predicate: (nonnull NSPredicate *) predicate sortDescriptiors: (nullable NSArray <NSSortDescriptor *> *) sortDescriptors;
+
+/*
+ @abstract fetches a record to update a core data object
+ @discussion once record is fetched, calls refreshManagedObjectBasedOnRecord:
+ */
++ (void) fetchCKRecordAndUpdateCoreData:(nonnull CKRecordID *)recordId fromDatabase: (nonnull CKDatabase *) database  inContext: (nonnull NSManagedObjectContext *) context;
+
+/*!
+ @abstract based on an updated record, refereshes the associated managed object
+ */
++ (nullable id<FunObject>) refreshManagedObjectBasedOnRecord: (nonnull CKRecord *) record inContext: (nonnull NSManagedObjectContext *) context;
+
+/*!
+ @abstract finds the parent for a given child
+ @discussion it is the child's responsibility to find the parent and parents will not find their children
+ */
++ (void) findParentAndUpdateRelationship: (nonnull id<Child>) child parentId: (nonnull CKRecordID *) parentId inContext: (nonnull NSManagedObjectContext *) context;
 
 #pragma mark - Cloud Kit
 
 /*!
+ @abstract calls the Cloud Kit convinience API for fetching a record
+ */
++ (void) fetchRecordWithRecordId: (nonnull CKRecordID *) recordId fromDatabase: (CKDatabase *) database withCompletionHandler: (void(^)(CKRecord *record, NSError *error)) block;
+
+/*!
  @return CKQueryOperation object that can be executed to fetch objects based on a given predicate
  */
--(CKQueryOperation *) operationFetchRecordsOfType: (NSString *) recordType predicate: (NSPredicate *) predicate
++ (CKQueryOperation *) operationFetchRecordsOfType: (NSString *) recordType predicate: (NSPredicate *) predicate
                   withRecordFetchedBlock: (void(^)(CKRecord *record))recordFetchedBlock
                 withQueryCompletionBlock: (void(^)(CKQueryCursor * __nullable cursor, NSError * __nullable operationError))queryCompletionBlock;
 
@@ -47,7 +66,7 @@ typedef void(^FacadeBlock)(NSArray<CKRecord *> *records, NSError *error);
  @param sortDescriptors The sort descritptors to that describe the sorting of returned records. If nil, sorts on placement
  @param block The completion block that will be executed. Contains the records that were fetched and an error that could have occured during fetching
  */
--(void) fetchRecordsFromCloudKitOfType: (nonnull NSString *) recordType
++ (void) fetchRecordsFromCloudKitOfType: (nonnull NSString *) recordType
                              predicate: (nonnull NSPredicate *) predicate
                       sortDescriptiors: (nullable NSArray <NSSortDescriptor *> *) sortDescriptors
                    withCompletionBlock: (nonnull FacadeBlock)block;
@@ -58,6 +77,6 @@ typedef void(^FacadeBlock)(NSArray<CKRecord *> *records, NSError *error);
  @param recordFetchedBlock The block called when each record is fetched. Use the same block from the originating call or pool the new records into an array containing the previous records so all records are in the same place
  @param queryCompletionBlock The block called at the end of fetching, if there is an error, or if there is another cursor. If there is a cursor, call this method again with the same completion block so that fetches keep recusively happening until there is no curson returend
  */
--(void) handleQueryWithCursor: (nonnull CKQueryCursor *) cursor recordFetchedBlock: (RecordFetchBlock) recordFetchedBlock queryCompletionBlock: (QueryCompletionBlock) queryCompletionBlock;
++ (void) handleQueryWithCursor: (nonnull CKQueryCursor *) cursor recordFetchedBlock: (RecordFetchBlock) recordFetchedBlock queryCompletionBlock: (QueryCompletionBlock) queryCompletionBlock;
 
 @end

@@ -1,4 +1,4 @@
-//
+ //
 //  Saver.m
 //  Epiphanies
 //
@@ -10,12 +10,24 @@
 
 @implementation Saver
 
-#pragma mark - Save Complete Objects
+#pragma mark - Core Data
 
--(CKModifyRecordsOperation *) saveObjects: (NSArray<id<FunObject>> *) arrayOfObjects
-      withPerRecordProgressBlock: (void(^)(CKRecord *record, double progress)) perRecordProgressBlock
-    withPerRecordCompletionBlock: (void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
-             withCompletionBlock: (void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock {
++ (nullable NSError *) saveContext: (nonnull NSManagedObjectContext *) context {
+    NSError *error = nil;
+    if ([context hasChanges]) {
+        [context save:&error];
+    }
+    return error;
+}
+
+#pragma mark - Cloud Kit
+
+// Save complete objects
+
++ (nonnull CKModifyRecordsOperation *) saveObjects: (nonnull NSArray<id<FunObject>> *) arrayOfObjects
+                       withPerRecordProgressBlock: (nullable PerRecordProgressBlock) perRecordProgressBlock
+                     withPerRecordCompletionBlock: (nullable PerRecordCompletionBlock) perRecordCompletionBlock
+                              withCompletionBlock: (nonnull ModifyRecordsCompletionBlock) modifyRecordsCompletionBlock {
     
     // an array to hold all of the records to save
     NSMutableArray<CKRecord *> *arrayOfRecords = [[NSMutableArray alloc] init];
@@ -39,9 +51,12 @@
     return operationSaveObjects;
 }
 
-#pragma mark - Save Partial Objects
+// Save partial objects
 
--(CKModifyRecordsOperation *) saveObject:(id<FunObject>)object withChanges:(NSDictionary *)dictionaryOfChanges withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nonnull void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
++ (nonnull CKModifyRecordsOperation *) saveObject: (id<FunObject>) object withChanges: (NSDictionary *) dictionaryOfChanges
+                      withPerRecordProgressBlock: (nullable PerRecordProgressBlock) perRecordProgressBlock
+                    withPerRecordCompletionBlock: (nullable PerRecordCompletionBlock) perRecordCompletionBlock
+                             withCompletionBlock: (nonnull ModifyRecordsCompletionBlock) modifyRecordsCompletionBlock {
     
     // create a record that only contains the values that were changed (as detailed in dictionaryOfChanges)
     CKRecord *recordToSave = [object asRecordWithChanges:dictionaryOfChanges];
@@ -62,7 +77,7 @@
 
 #pragma mark - Utilities
 
--(NSArray<id<FunObject>> *) flattenThoughtsAndPhotos: (NSArray<Thought *> *) arrayOfThoughts {
++ (NSArray<id<FunObject>> *) flattenThoughtsAndPhotos: (NSArray<Thought *> *) arrayOfThoughts {
     
     // an array to hold the original thoughts and photos seperated
     NSMutableArray<id<FunObject>> *objectsToReturn = [[NSMutableArray alloc] init];

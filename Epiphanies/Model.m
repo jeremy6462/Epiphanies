@@ -20,10 +20,6 @@
         _container = [CKContainer defaultContainer];
         _database = [_container privateCloudDatabase];
         
-        _fetcher = [[Fetcher alloc] init];
-        _saver = [[Saver alloc] init];
-        _deleter = [[Deleter alloc] init];
-        
         [self createZoneAssignZoneID];
         
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -65,55 +61,55 @@
  withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
           withCompletionBlock: (nullable void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock {
     
-    CKModifyRecordsOperation *operationSaveRecords = [_saver saveObjects:collections withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
+    CKModifyRecordsOperation *operationSaveRecords = [Saver saveObjects:collections withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
     
     [_database addOperation:operationSaveRecords];
     
-    [self saveCoreDataContext];
+    [Saver saveContext:_context];
     
 }
 
 -(void) saveThoughts:(nonnull NSArray<Thought *> *)thoughts withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nullable void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
     
-    NSArray<id<FunObject>> *thoughtsAndPhotos = [_saver flattenThoughtsAndPhotos:thoughts];
+    NSArray<id<FunObject>> *thoughtsAndPhotos = [Saver flattenThoughtsAndPhotos:thoughts];
     
-    CKModifyRecordsOperation *operationSaveRecords = [_saver saveObjects:thoughtsAndPhotos withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
+    CKModifyRecordsOperation *operationSaveRecords = [Saver saveObjects:thoughtsAndPhotos withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
     
     [_database addOperation:operationSaveRecords];
     
-    [self saveCoreDataContext];
+    [Saver saveContext:_context];
     
 }
 
 -(void) savePhotos:(nonnull NSArray<Photo *> *)photos withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nullable void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
     
-    CKModifyRecordsOperation *operationSaveRecords = [_saver saveObjects:photos withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
+    CKModifyRecordsOperation *operationSaveRecords = [Saver saveObjects:photos withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
     
     [_database addOperation:operationSaveRecords];
     
-    [self saveCoreDataContext];
+    [Saver saveContext:_context];
     
 }
 
 // TESTED
 -(void)saveObjects:(nonnull NSArray<id<FunObject>> *)objects withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nullable void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
     
-    CKModifyRecordsOperation *operationSaveRecords = [_saver saveObjects:objects withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
+    CKModifyRecordsOperation *operationSaveRecords = [Saver saveObjects:objects withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
     
     [_database addOperation:operationSaveRecords];
     
-    [self saveCoreDataContext];
+    [Saver saveContext:_context];
 }
 
 #pragma mark - Portion of Record Saver
 
 -(void) saveObject:(nonnull id<FunObject>)object withChanges:(nonnull NSDictionary *)dictionaryOfChanges withPerRecordProgressBlock:(nullable void (^)(CKRecord *, double))perRecordProgressBlock withPerRecordCompletionBlock:(nullable void (^)(CKRecord * _Nullable, NSError * _Nullable))perRecordCompletionBlock withCompletionBlock:(nullable void (^)(NSArray *, NSArray *, NSError *))modifyRecordsCompletionBlock {
     
-    CKModifyRecordsOperation *operationSavePartialRecord = [_saver saveObject:object withChanges:dictionaryOfChanges withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
+    CKModifyRecordsOperation *operationSavePartialRecord = [Saver saveObject:object withChanges:dictionaryOfChanges withPerRecordProgressBlock:perRecordProgressBlock withPerRecordCompletionBlock:perRecordCompletionBlock withCompletionBlock:modifyRecordsCompletionBlock];
     
     [_database addOperation:operationSavePartialRecord];
     
-    [self saveCoreDataContext];
+    [Saver saveContext:_context];
 }
 
 #pragma mark - Order of Record Savers
@@ -143,7 +139,7 @@
     
     [_database addOperation:operationSaveObjects];
 
-    [self saveCoreDataContext];
+    [Saver saveContext:_context];
     
 }
 
@@ -162,7 +158,7 @@
     
     // the block executed after each collection is fetched
     void (^collectionRecordFetchedBlock)(CKRecord *record) = ^void(CKRecord *record) {
-        Collection *collection = (Collection *)[self refreshObjectBasedOnRecord:record];
+        Collection *collection = (Collection *)[self refreshManagedObjectBasedOnRecord:record];
         [collectionsFetched addObject:collection];
     };
     
@@ -173,8 +169,7 @@
         CKReference *parentCollectionReference = [record objectForKey:PARENT_COLLECTION_KEY];
         CKRecordID *parentCollectionId = parentCollectionReference.recordID;
         
-        Thought *thought = (Thought *)[self refreshObjectBasedOnRecord:record];
-        [self findParentAndUpdateRelationship:thought parentId:parentCollectionId];
+        Thought *thought = (Thought *)[self refreshManagedObjectBasedOnRecord:record];
         
 //        // find the Collection in the collectionsFetched array that has that recordId
 //        for (Collection *collection in collectionsFetched) { // b/c of operation dependancies and block variables, collectionsFetched still has contents!!!!
@@ -195,8 +190,7 @@
         CKReference *parentThoughtReference = [record objectForKey:PARENT_THOUGHT_KEY];
         CKRecordID *parentThoughtId = parentThoughtReference.recordID;
         
-        Photo *photo = (Photo *)[self refreshObjectBasedOnRecord:record];
-        [self findParentAndUpdateRelationship:photo parentId:parentThoughtId];
+        Photo *photo = (Photo *)[self refreshManagedObjectBasedOnRecord:record];
         
 //        // find the Thought in the thoughtsFetched array that has that recordId
 //        for (Thought *thought in thoughtsFetched) {
@@ -228,13 +222,13 @@
     
     // operations to populate the objectFetched arrays
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"TRUEPREDICATE"];
-    CKQueryOperation *operationFetchCollections = [_fetcher operationFetchRecordsOfType:COLLECTION_RECORD_TYPE predicate:predicate
+    CKQueryOperation *operationFetchCollections = [Fetcher operationFetchRecordsOfType:COLLECTION_RECORD_TYPE predicate:predicate
                                                         withRecordFetchedBlock:collectionRecordFetchedBlock
                                                       withQueryCompletionBlock:queryCompletionBlock];
-    CKQueryOperation *operationFetchThoughts = [_fetcher operationFetchRecordsOfType:THOUGHT_RECORD_TYPE predicate:predicate
+    CKQueryOperation *operationFetchThoughts = [Fetcher operationFetchRecordsOfType:THOUGHT_RECORD_TYPE predicate:predicate
                                                      withRecordFetchedBlock:thoughtRecordFetchedBlock
                                                    withQueryCompletionBlock:queryCompletionBlock];
-    CKQueryOperation *operationFetchPhotos = [_fetcher operationFetchRecordsOfType:PHOTO_RECORD_TYPE predicate:predicate
+    CKQueryOperation *operationFetchPhotos = [Fetcher operationFetchRecordsOfType:PHOTO_RECORD_TYPE predicate:predicate
                                                    withRecordFetchedBlock:photoRecordFetchedBlock
                                                  withQueryCompletionBlock:finallyBlock];
     
@@ -248,140 +242,29 @@
     [_database addOperation:operationFetchPhotos];
 }
 
-// TESTED
--(void) refreshObjectWithRecordId:(nonnull CKRecordID *)recordId {
-    
-    // fetch the updated record from cloud kit
-    [_database fetchRecordWithID:recordId completionHandler:^(CKRecord * _Nullable record, NSError * _Nullable error) {
-        if (error) {
-            NSLog(@"error fetching from cloud kit: %@", error.description);
-        } else {
-            if (record) {
-                [self refreshObjectBasedOnRecord:record];
-            } else {
-                NSLog(@"No records were found");
-            }
-        }
-    }];
+-(void) fetchCKRecordAndUpdateCoreData:(nonnull CKRecordID *)recordId {
+    [Fetcher fetchCKRecordAndUpdateCoreData:recordId fromDatabase:_database inContext:_context];
 }
 
--(id<FunObject>) refreshObjectBasedOnRecord: (nonnull CKRecord *) record {
-    
-    // fetch the old record from core data
-    NSString *type = record.recordType;
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId == %@",record[OBJECT_ID_KEY]];
-    NSArray *fetchedObjects = [_fetcher fetchRecordsFromCoreDataContext:_context type:type predicate:predicate sortDescriptiors:nil];
-    
-    // if there was no error
-    if (fetchedObjects != nil) {
-        
-        id<FunObject> objectToReturn;
-        
-        // if an object was found, udpate the existing object with the new information
-        if ([fetchedObjects count]) {
-            
-            [fetchedObjects[0] updateBasedOnCKRecord:record];
-            objectToReturn = fetchedObjects[0];
-            
-        } else { // no object was found that matches this record id. Add an object that reperesents this record to core data
-            
-            if ([type isEqualToString:COLLECTION_RECORD_TYPE]) {
-                objectToReturn = [Collection newManagedObjectInContext:_context basedOnCKRecord:record];
-            } else if ([type isEqualToString:THOUGHT_RECORD_TYPE]) {
-                objectToReturn = [Thought newManagedObjectInContext:_context basedOnCKRecord:record];
-            } else if ([type isEqualToString:PHOTO_RECORD_TYPE]) {
-                objectToReturn = [Photo newManagedObjectInContext:_context basedOnCKRecord:record];
-            } else {
-                NSLog(@"Incorrect type");
-            }
-            
-        }
-        
-        // update the relationship between the child and it's possible parent
-        if ([record objectForKey:PARENT_COLLECTION_KEY]) { // record is a thought
-            
-            // get this thought's parent recordId
-            CKReference *parentCollectionReference = [record objectForKey:PARENT_COLLECTION_KEY];
-            CKRecordID *parentCollectionId = parentCollectionReference.recordID;
-
-            // update parent relationship
-            [self findParentAndUpdateRelationship:(id<Child>)objectToReturn parentId:parentCollectionId];
-            
-        } else if ([record objectForKey:PARENT_THOUGHT_KEY]) { // record is a Photo
-            
-            // get this photo's parent recordId
-            CKReference *parentThoughtReference = [record objectForKey:PARENT_THOUGHT_KEY];
-            CKRecordID *parentThoughtId = parentThoughtReference.recordID;
-            
-            // update parent relationship
-            [self findParentAndUpdateRelationship:(id<Child>)objectToReturn parentId:parentThoughtId];
-
-        }
-        
-        [self saveCoreDataContext];
-        return objectToReturn;
-    } else {
-        NSLog(@"error fetching objects from core data");
-        return nil;
-    }
-
-}
-
--(void) findParentAndUpdateRelationship: (id<Child>) child parentId: (CKRecordID *) parentId {
-    
-    // get the recordType of the parent
-    NSString *parentType;
-    if ([child isMemberOfClass:[Thought class]]) {
-        parentType = COLLECTION_RECORD_TYPE;
-    } else { // photo object
-        parentType = THOUGHT_RECORD_TYPE;
-    }
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"recordName == %@", parentId.recordName];
-    NSArray *objects = [_fetcher fetchRecordsFromCoreDataContext:_context type:parentType predicate:predicate sortDescriptiors:nil];
-    
-    // update the relationship between the child and the found parent
-    if ([parentType isEqualToString:COLLECTION_RECORD_TYPE]) {
-        
-        Thought *childThought = (Thought *) child;
-        Collection *parentCollection = (Collection *) objects[0];
-        childThought.parentCollection = parentCollection;
-        [parentCollection addThoughtsObject:childThought];
-        
-    } else {
-        
-        Photo *childPhoto = (Photo *) child;
-        Thought *parentThought = (Thought *) objects[0];
-        childPhoto.parentThought = parentThought;
-        [parentThought addPhotosObject:childPhoto];
-        
-    }
+-(id<FunObject>) refreshManagedObjectBasedOnRecord: (nonnull CKRecord *) record {
+    return [Fetcher refreshManagedObjectBasedOnRecord:record inContext:_context];
 }
 
 #pragma mark - Deletion
 
 -(void) deleteObjectFromCloudKit: (id<FunObject>) object completionHandler:(void(^)(NSError *error))block {
     
-    // if the object is a child, remove it from it's parent's array of children
-    if ([object respondsToSelector:@selector(removeFromParent)]) {
-        id<Child> child = (id<Child>) object;
-        [child removeFromParent];
-    }
-    
-    // delete the object from the database - because of the way CKReferences are set up, the child objects in the database will be deleted as well
-    [_deleter deleteRecord:object.recordId onDatabase:_database withCompletionHandler:^(CKRecordID *deletedId, NSError *error) {
+    [Deleter deleteObjectFromCloudKit:object onDatabase:_database withCompletionHandler:^(CKRecordID *deletedId, NSError *error) {
         block(error);
     }];
 }
 
 -(void) deleteObjectFromCoreData: (id<FunObject>) object {
-    [_context deleteObject:object];
+    [Deleter deleteObject:object context:_context];
 }
 
 -(void) deleteObjectFromCoreDataWithRecordId: (nonnull CKRecordID *) recordId withType: (nonnull NSString *) type {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"recordName == %@", recordId.recordName];
-    NSArray *objects = [_fetcher fetchRecordsFromCoreDataContext:_context type:type predicate:predicate sortDescriptiors:nil];
-    [self deleteObjectFromCoreData:objects[0]];
+    [Deleter deleteObjectWithRecordId:recordId context:_context type:type];
 }
 
 #pragma mark - Utilities

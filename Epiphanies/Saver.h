@@ -13,6 +13,12 @@
 
 @interface Saver : NSObject
 
+#pragma mark - Core Data
+
++ (nullable NSError *) saveContext: (nonnull NSManagedObjectContext *) context;
+
+#pragma mark - Cloud Kit
+
 // ATTENTION - Once edits happen to one collection, they will be saved and then more edits can occur. Don't need to flatten Collections and save their thoughts because collection chages happen irrespecitivly of notes
 
 // ATTENTION - On object initialization, the recordId property is built based on the custom zoneId. Because of this, all records should save (upon creation in asRecord) into the correct custom zone for this user
@@ -30,7 +36,7 @@ typedef void (^ModifyRecordsCompletionBlock) (NSArray <CKRecord *> * __nullable 
  @param modifyRecordsCompletionBlock a block that will be run after the entire operation is completed
  @return a CKOperation that (when executed - added to a queue) will save an arrayOfObjects to CloudKit
  */
--(nonnull CKModifyRecordsOperation *) saveObjects: (nonnull NSArray<id<FunObject>> *) arrayOfObjects
++ (nonnull CKModifyRecordsOperation *) saveObjects: (nonnull NSArray<id<FunObject>> *) arrayOfObjects
       withPerRecordProgressBlock: (nullable PerRecordProgressBlock) perRecordProgressBlock
     withPerRecordCompletionBlock: (nullable PerRecordCompletionBlock) perRecordCompletionBlock
              withCompletionBlock: (nonnull ModifyRecordsCompletionBlock) modifyRecordsCompletionBlock;
@@ -44,17 +50,19 @@ typedef void (^ModifyRecordsCompletionBlock) (NSArray <CKRecord *> * __nullable 
  @param modifyRecordsCompletionBlock a block that will be run after the entire operation is completed
  @return a CKOperation that (when executed - added to a queue) will save object to CloudKit
  */
--(nonnull CKModifyRecordsOperation *) saveObject: (id<FunObject>) object withChanges: (NSDictionary *) dictionaryOfChanges
++ (nonnull CKModifyRecordsOperation *) saveObject: (id<FunObject>) object withChanges: (NSDictionary *) dictionaryOfChanges
                       withPerRecordProgressBlock: (nullable PerRecordProgressBlock) perRecordProgressBlock
                     withPerRecordCompletionBlock: (nullable PerRecordCompletionBlock) perRecordCompletionBlock
                              withCompletionBlock: (nonnull ModifyRecordsCompletionBlock) modifyRecordsCompletionBlock;
+
+#pragma mark - Cloud Kit
 
 /*!
  @discussion Thoughts have an array of Photo objects and therefore a a relational-hierarchy. We want to save all Photos related to a Thought and so we flatten each Thought so that each Photo object is represented in the array to save. Input, just Thought objects. Output, those original Thoughts and thier related Photos alongside them
  @param arrayOfThoughts is an array of soley Thought objects with their related photos
  @return an array of objects to save to CloudKit that were originally trapped in the hierarchy of a Thought
  */
--(nonnull NSArray<id<FunObject>> *) flattenThoughtsAndPhotos: (nonnull NSArray<Thought *> *) arrayOfThoughts;
++ (nonnull NSArray<id<FunObject>> *) flattenThoughtsAndPhotos: (nonnull NSArray<Thought *> *) arrayOfThoughts;
 
 @end
 

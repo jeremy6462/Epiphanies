@@ -12,5 +12,6 @@
 @interface ViewController : UIViewController
 
 @property (nonnull, strong, nonatomic) Model *model;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 
 @end

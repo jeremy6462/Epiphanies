@@ -35,6 +35,21 @@
             NSLog(@"%@", populatedCollections);
         }
     }];
+    
+    NSArray *collections = [Fetcher fetchRecordsFromCoreDataContext:_model.context type:COLLECTION_RECORD_TYPE predicate:[NSPredicate predicateWithFormat:@"TRUEPREDICATE"] sortDescriptiors:nil];
+    
+    for (Collection *collection in collections) {
+        NSLog(@"Collection name: %@", collection.name);
+        NSSet *thoughts = collection.thoughts;
+        for (Thought *thought in thoughts) {
+            NSLog(@"Thought text: %@", thought.text);
+            NSSet *photos = thought.photos;
+            for (Photo *photo in photos) {
+                _imageView.image = [UIImage imageWithData:photo.image];
+            }
+        }
+    }
+    
 }
 
 - (IBAction)save:(id)sender {

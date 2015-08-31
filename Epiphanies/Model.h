@@ -19,10 +19,6 @@
 @property (nonnull, nonatomic, strong) CKDatabase *database;
 @property (nullable, nonatomic, strong) CKRecordZoneID *zoneId;
 
-@property (nonnull, nonatomic, strong) Fetcher *fetcher;
-@property (nonnull, nonatomic, strong) Saver *saver;
-@property (nonnull, nonatomic, strong) Deleter *deleter;
-
 #pragma mark - Initializer
 
 // TODO - Singleton didn't work because I was importing the Model inside the model object classes and there was a loop?
@@ -125,33 +121,17 @@ withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NS
  */
 - (void) reloadWithCompletion:(void(^)(NSArray<Collection *> *populatedCollections, NSError *error))block;
 
-
 /*!
- @abstract - fetches a single record (used when a CKQueryNotification comes in) 
- @param recordFetchedBlock handle the utilization of the record in this block 
- @param queryCompletionBlock handle errors with this block
- TODO - should we have one convience completion handler or the per record completion handler? Populate array and pass back
- */
--(void) fetchRecordWithId: (nonnull CKRecordID *) recordId withRecordType: (nonnull NSString *) type
-   withRecordFetchedBlock: (void(^)(CKRecord *record))recordFetchedBlock
- withQueryCompletionBlock: (void(^)(CKQueryCursor * __nullable cursor, NSError * __nullable operationError))queryCompletionBlock;
-
-/*!
- @abstract fetches a record from cloud kit based on the provided recordId and type. Then refreshes the associated model object in core data based on the information provided in the fetched record. If no model object is found, a new model object is created and added to the context, based on the record provided.
+ @abstract fetches a record from cloud kit based on the provided recordId. Then (calls refreshManagedObjectBasedOnRecord: ) refreshes the associated model object in core data based on the information provided in the fetched record. If no model object is found, a new model object is created and added to the context, based on the record provided.
  @discussion used in recieving a new notification
  */
--(void) refreshObjectWithRecordId:(nonnull CKRecordID *)recordId;
+-(void) fetchCKRecordAndUpdateCoreData:(nonnull CKRecordID *)recordId;
 
 /*!
  @abstract refreshes the associated model object in core data based on the information provided in the fetched record. If no model object is found, a new model object is created and added to the context, based on the record provided.
  */
--(id<FunObject>) refreshObjectBasedOnRecord: (nonnull CKRecord *) record;
+-(id<FunObject>) refreshManagedObjectBasedOnRecord: (nonnull CKRecord *) record;
 
-/*!
- @abstract finds the parent for a given child
- @discussion it is the child's responsibility to find the parent and parents will not find their children
- */
--(void) findParentAndUpdateRelationship: (nonnull id<Child>) child parentId: (nonnull CKRecordID *) parentId;
 
 #pragma mark - Deleting
 

@@ -38,6 +38,7 @@
     
 }
 
+// TODO - notification about deletion
 - (void) handleCloudKitNotification: (CKNotification *) cloudKitNotification {
     
     if (cloudKitNotification.notificationType == CKNotificationTypeQuery) {
@@ -49,8 +50,7 @@
                 CKQueryNotification *ckQueryNotification = (CKQueryNotification *)cloudKitNotification;
                 CKRecordID *fetchedRecordId = [ckQueryNotification recordID];
                 if (ckQueryNotification.recordFields) {
-                    NSString *recordType = ckQueryNotification.recordFields[TYPE_KEY];
-                    [[self model] refreshObjectWithRecordId:fetchedRecordId];
+                    [[self model] fetchCKRecordAndUpdateCoreData:fetchedRecordId];
                 }
 
             }
@@ -77,8 +77,7 @@
         CKQueryNotification *ckQueryNotification = (CKQueryNotification *)cloudKitNotification;
         CKRecordID *fetchedRecordId = [ckQueryNotification recordID];
         if (ckQueryNotification.recordFields) {
-            NSString *recordType = ckQueryNotification.recordFields[TYPE_KEY];
-            [[self model] refreshObjectWithRecordId:fetchedRecordId];
+            [[self model] fetchCKRecordAndUpdateCoreData:fetchedRecordId];
         }
     }
 }

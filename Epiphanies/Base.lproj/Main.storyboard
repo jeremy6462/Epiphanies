@@ -31,9 +31,15 @@
                                     <action selector="save:" destination="jmG-Hl-lTU" eventType="touchUpInside" id="DdW-h3-egr"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tt9-ax-oTm">
+                                <rect key="frame" x="113" y="39" width="240" height="196"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <outlet property="imageView" destination="tt9-ax-oTm" id="g1L-ne-9cS"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MX8-23-LDJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
