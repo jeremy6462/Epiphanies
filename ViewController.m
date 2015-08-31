@@ -26,29 +26,21 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)delete:(id)sender {
+    NSArray *collections = [Fetcher fetchRecordsFromCoreDataContext:_model.context type:COLLECTION_RECORD_TYPE predicate:[NSPredicate predicateWithFormat:@"TRUEPREDICATE"] sortDescriptiors:nil];
+    
+    [_model deleteFromBothCloudKitAndCoreData:collections[0]];
+}
+
 - (IBAction)load:(id)sender {
     
     [_model reloadWithCompletion:^(NSArray<Collection *> *populatedCollections, NSError *error) {
         if (error) {
             NSLog(@"error: %@", error.localizedDescription);
         } else {
-            NSLog(@"%@", populatedCollections);
+            
         }
     }];
-    
-    NSArray *collections = [Fetcher fetchRecordsFromCoreDataContext:_model.context type:COLLECTION_RECORD_TYPE predicate:[NSPredicate predicateWithFormat:@"TRUEPREDICATE"] sortDescriptiors:nil];
-    
-    for (Collection *collection in collections) {
-        NSLog(@"Collection name: %@", collection.name);
-        NSSet *thoughts = collection.thoughts;
-        for (Thought *thought in thoughts) {
-            NSLog(@"Thought text: %@", thought.text);
-            NSSet *photos = thought.photos;
-            for (Photo *photo in photos) {
-                _imageView.image = [UIImage imageWithData:photo.image];
-            }
-        }
-    }
     
 }
 

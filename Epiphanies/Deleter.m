@@ -8,6 +8,7 @@
 
 #import "Deleter.h"
 #import "Fetcher.h"
+#import "Saver.h"
 
 @implementation Deleter
 
@@ -42,6 +43,7 @@
 
 + (void) deleteObject:(nonnull id<FunObject>)object context:(nonnull NSManagedObjectContext *)context {
     [context deleteObject:object];
+    [Saver saveContext:context];
 }
 
 + (void) deleteObjectWithRecordId:(nonnull CKRecordID *) recordId context :(nonnull NSManagedObjectContext *)context type:(nonnull NSString *)recordType {

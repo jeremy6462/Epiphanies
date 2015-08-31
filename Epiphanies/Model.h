@@ -135,6 +135,8 @@ withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NS
 
 #pragma mark - Deleting
 
+-(void) deleteFromBothCloudKitAndCoreData: (nonnull id<FunObject>) object;
+
 /*!
  @abstract deletes an objcet from CloudKit's database
  @param object the object that will be deleted from cloud kit
