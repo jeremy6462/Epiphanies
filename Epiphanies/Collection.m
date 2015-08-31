@@ -51,6 +51,7 @@
         
         // recordId
         collectionToReturn.recordId = record.recordID;
+        NSLog(@"%@",collectionToReturn.recordId);
         
         // name
         collectionToReturn.name = [record objectForKey:NAME_KEY];
@@ -137,6 +138,17 @@
     NSArray *names = [NSArray arrayWithObjects:@"Default Collection", @"Stray Thoughts", @"Extras", @"Loose Threads", @"Runaway Train", @"Lost in Translation",nil];
     int ran = arc4random_uniform((int)names.count);
     return names[ran];
+}
+
+-(void) setRecordId:(id)recordId {
+    
+    // avoid endless-loop
+    [self setPrimitiveValue:recordId forKey:RECORD_ID_KEY];
+    
+    // set the recordName accordingly
+    CKRecordID *castedRecord = (CKRecordID *) recordId;
+    [self setRecordName:castedRecord.recordName];
+    
 }
 
 

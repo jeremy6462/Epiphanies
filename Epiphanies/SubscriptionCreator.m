@@ -30,6 +30,7 @@
         CKNotificationInfo *notification = [CKNotificationInfo new];
         notification.shouldSendContentAvailable = YES;
         
+        //TODO - not sure if we need you anymore. If anything, objectId
         notification.desiredKeys = @[TYPE_KEY]; // include the type of record that was pushed so that we can determine how to query for it
         
         // add the notification to the subscriptions

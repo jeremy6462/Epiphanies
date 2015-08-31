@@ -337,7 +337,7 @@
         parentType = THOUGHT_RECORD_TYPE;
     }
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%@ == %@", RECORD_ID_KEY, parentId];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"recordName == %@", parentId.recordName];
     NSArray *objects = [_fetcher fetchRecordsFromCoreDataContext:_context type:parentType predicate:predicate sortDescriptiors:nil];
     
     // update the relationship between the child and the found parent
@@ -379,7 +379,7 @@
 }
 
 -(void) deleteObjectFromCoreDataWithRecordId: (nonnull CKRecordID *) recordId withType: (nonnull NSString *) type {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%@ == %@", RECORD_ID_KEY, recordId];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"recordName == %@", recordId.recordName];
     NSArray *objects = [_fetcher fetchRecordsFromCoreDataContext:_context type:type predicate:predicate sortDescriptiors:nil];
     [self deleteObjectFromCoreData:objects[0]];
 }

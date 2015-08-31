@@ -206,5 +206,17 @@
     return imageToReturn;
 }
 
+#pragma mark - Utilities
+
+-(void) setRecordId:(id)recordId {
+    
+    [self setPrimitiveValue:recordId forKey:RECORD_ID_KEY];
+    
+    // set the recordName accordingly
+    CKRecordID *castedRecord = (CKRecordID *) recordId;
+    [self setRecordName:castedRecord.recordName];
+    
+}
+
 
 @end
