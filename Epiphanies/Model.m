@@ -98,7 +98,7 @@
     
     [_database addOperation:operationSaveRecords];
     
-    [Saver saveContext:_context];
+//    [Saver saveContext:_context];
 }
 
 #pragma mark - Portion of Record Saver
@@ -170,17 +170,6 @@
         CKRecordID *parentCollectionId = parentCollectionReference.recordID;
         
         Thought *thought = (Thought *)[self refreshManagedObjectBasedOnRecord:record];
-        
-//        // find the Collection in the collectionsFetched array that has that recordId
-//        for (Collection *collection in collectionsFetched) { // b/c of operation dependancies and block variables, collectionsFetched still has contents!!!!
-//            CKRecordID *collectionRecordId = collection.recordId;
-//            if ([collectionRecordId isEqual:parentCollectionId]) {
-//                Thought *thought = (Thought *)[self refreshObjectBasedOnRecord:record];
-//                [thoughtsFetched addObject:thought];
-//                [collection addThoughtsObject:thought];
-//                break;
-//            }
-//        }
     };
     
     // the block executed after each Photo is fetched -- due to dependancy, called after the thought operation has completed
@@ -191,18 +180,6 @@
         CKRecordID *parentThoughtId = parentThoughtReference.recordID;
         
         Photo *photo = (Photo *)[self refreshManagedObjectBasedOnRecord:record];
-        
-//        // find the Thought in the thoughtsFetched array that has that recordId
-//        for (Thought *thought in thoughtsFetched) {
-//            CKRecordID *thoughtRecordId = thought.recordId;
-//            if ([thoughtRecordId isEqual:parentThoughtId]) {
-//                photo.parentThought = thought;
-//                [thought addPhotosObject:photo];  // populate the thought.photos array with the current photo (save a step by not having to go back up the tree)
-//                break;
-//            }
-//            // TODO - handle if no parent was found
-//        }
-        
     };
     
     // the block executed after the Collection & Thought operations has completed

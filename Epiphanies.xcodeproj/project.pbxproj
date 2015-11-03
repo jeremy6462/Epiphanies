@@ -33,6 +33,10 @@
 		7384DBAF1B702E2200108BDC /* SubscriptionCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DBAD1B702E2200108BDC /* SubscriptionCreator.m */; };
 		7384DBB31B716D1100108BDC /* Deleter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DBB21B716D1100108BDC /* Deleter.m */; };
 		7384DBB41B716D1100108BDC /* Deleter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DBB21B716D1100108BDC /* Deleter.m */; };
+		738A94B11BA73C9800BAE2A4 /* AKPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 738A94B01BA73C9800BAE2A4 /* AKPickerView.m */; settings = {ASSET_TAGS = (); }; };
+		738A94B21BA73C9800BAE2A4 /* AKPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 738A94B01BA73C9800BAE2A4 /* AKPickerView.m */; settings = {ASSET_TAGS = (); }; };
+		738A94B71BA7435200BAE2A4 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 738A94B61BA7435200BAE2A4 /* MainViewController.m */; settings = {ASSET_TAGS = (); }; };
+		738A94B81BA7435200BAE2A4 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 738A94B61BA7435200BAE2A4 /* MainViewController.m */; settings = {ASSET_TAGS = (); }; };
 		73D999071B61B159001A7D8A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 73D999061B61B159001A7D8A /* main.m */; };
 		73D9990A1B61B159001A7D8A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 73D999091B61B159001A7D8A /* AppDelegate.m */; };
 		73D9990D1B61B159001A7D8A /* Epiphanies.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 73D9990B1B61B159001A7D8A /* Epiphanies.xcdatamodeld */; };
@@ -96,6 +100,10 @@
 		7384DBB11B716D1100108BDC /* Deleter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deleter.h; sourceTree = "<group>"; };
 		7384DBB21B716D1100108BDC /* Deleter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Deleter.m; sourceTree = "<group>"; };
 		7384DBB51B71ADF400108BDC /* Child.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Child.h; sourceTree = "<group>"; };
+		738A94AF1BA73C9800BAE2A4 /* AKPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKPickerView.h; sourceTree = "<group>"; };
+		738A94B01BA73C9800BAE2A4 /* AKPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKPickerView.m; sourceTree = "<group>"; };
+		738A94B51BA7435200BAE2A4 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		738A94B61BA7435200BAE2A4 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		73D999011B61B159001A7D8A /* Epiphanies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Epiphanies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		73D999051B61B159001A7D8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		73D999061B61B159001A7D8A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -322,6 +330,33 @@
 			name = "Subscritpion Creator";
 			sourceTree = "<group>";
 		};
+		738A94B31BA7424700BAE2A4 /* AKPicker */ = {
+			isa = PBXGroup;
+			children = (
+				738A94AF1BA73C9800BAE2A4 /* AKPickerView.h */,
+				738A94B01BA73C9800BAE2A4 /* AKPickerView.m */,
+			);
+			name = AKPicker;
+			sourceTree = "<group>";
+		};
+		738A94B41BA7426100BAE2A4 /* Old View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				736C87431B882E5F00D90E05 /* ViewController.h */,
+				736C87441B882E5F00D90E05 /* ViewController.m */,
+			);
+			name = "Old View Controller";
+			sourceTree = "<group>";
+		};
+		738A94B91BA7436800BAE2A4 /* Main View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				738A94B51BA7435200BAE2A4 /* MainViewController.h */,
+				738A94B61BA7435200BAE2A4 /* MainViewController.m */,
+			);
+			name = "Main View Controller";
+			sourceTree = "<group>";
+		};
 		73D998F81B61B159001A7D8A = {
 			isa = PBXGroup;
 			children = (
@@ -348,8 +383,9 @@
 				7384DBA01B6EC63900108BDC /* App Delegate */,
 				7384DB9F1B6EC61100108BDC /* Headers */,
 				7384DB8C1B6EC2EE00108BDC /* Model Classes */,
-				736C87431B882E5F00D90E05 /* ViewController.h */,
-				736C87441B882E5F00D90E05 /* ViewController.m */,
+				738A94B31BA7424700BAE2A4 /* AKPicker */,
+				738A94B41BA7426100BAE2A4 /* Old View Controller */,
+				738A94B91BA7436800BAE2A4 /* Main View Controller */,
 				73D999111B61B159001A7D8A /* Main.storyboard */,
 				73D999141B61B159001A7D8A /* Images.xcassets */,
 				73D999161B61B159001A7D8A /* LaunchScreen.xib */,
@@ -498,9 +534,11 @@
 				7370FF9D1B741CB100513908 /* NSString+NSString_AddLinkPrefix.m in Sources */,
 				731737821B8EC59100F9D607 /* Collection.m in Sources */,
 				731737831B8EC59100F9D607 /* Photo+CoreDataProperties.m in Sources */,
+				738A94B11BA73C9800BAE2A4 /* AKPickerView.m in Sources */,
 				7370FFA21B76FCA100513908 /* Orderer.m in Sources */,
 				731737841B8EC59100F9D607 /* Photo.m in Sources */,
 				7384DBA91B701DB600108BDC /* ZoneCreator.m in Sources */,
+				738A94B71BA7435200BAE2A4 /* MainViewController.m in Sources */,
 				731737801B8EC59100F9D607 /* Thought.m in Sources */,
 				7384DB6D1B6EC25F00108BDC /* Model.m in Sources */,
 				7384DBA41B6ED2BB00108BDC /* Saver.m in Sources */,
@@ -524,6 +562,8 @@
 				7384DB861B6EC2AD00108BDC /* CloudKitErrorHandler.m in Sources */,
 				7370FFA31B76FCA100513908 /* Orderer.m in Sources */,
 				7384DBB41B716D1100108BDC /* Deleter.m in Sources */,
+				738A94B21BA73C9800BAE2A4 /* AKPickerView.m in Sources */,
+				738A94B81BA7435200BAE2A4 /* MainViewController.m in Sources */,
 				7384DBA51B6ED2BB00108BDC /* Saver.m in Sources */,
 				7384DBAF1B702E2200108BDC /* SubscriptionCreator.m in Sources */,
 				7384DB821B6EC2A400108BDC /* IdentifierCreator.m in Sources */,
