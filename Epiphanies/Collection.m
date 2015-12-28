@@ -142,7 +142,7 @@
 
 -(void) setRecordId:(id)recordId {
     
-    // avoid endless-loop
+    // avoid endless-loop with setRecordID
     [self setPrimitiveValue:recordId forKey:RECORD_ID_KEY];
     
     // set the recordName accordingly

@@ -7,12 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7317377F1B8EC59100F9D607 /* Thought+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 731737741B8EC59100F9D607 /* Thought+CoreDataProperties.m */; settings = {ASSET_TAGS = (); }; };
-		731737801B8EC59100F9D607 /* Thought.m in Sources */ = {isa = PBXBuildFile; fileRef = 731737761B8EC59100F9D607 /* Thought.m */; settings = {ASSET_TAGS = (); }; };
-		731737811B8EC59100F9D607 /* Collection+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 731737781B8EC59100F9D607 /* Collection+CoreDataProperties.m */; settings = {ASSET_TAGS = (); }; };
-		731737821B8EC59100F9D607 /* Collection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7317377A1B8EC59100F9D607 /* Collection.m */; settings = {ASSET_TAGS = (); }; };
-		731737831B8EC59100F9D607 /* Photo+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 7317377C1B8EC59100F9D607 /* Photo+CoreDataProperties.m */; settings = {ASSET_TAGS = (); }; };
-		731737841B8EC59100F9D607 /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = 7317377E1B8EC59100F9D607 /* Photo.m */; settings = {ASSET_TAGS = (); }; };
+		7310F0C91C30FCC4004345A3 /* FetchedResultsControllerDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 7310F0C81C30FCC4004345A3 /* FetchedResultsControllerDataSource.m */; };
+		7317377F1B8EC59100F9D607 /* Thought+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 731737741B8EC59100F9D607 /* Thought+CoreDataProperties.m */; };
+		731737801B8EC59100F9D607 /* Thought.m in Sources */ = {isa = PBXBuildFile; fileRef = 731737761B8EC59100F9D607 /* Thought.m */; };
+		731737811B8EC59100F9D607 /* Collection+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 731737781B8EC59100F9D607 /* Collection+CoreDataProperties.m */; };
+		731737821B8EC59100F9D607 /* Collection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7317377A1B8EC59100F9D607 /* Collection.m */; };
+		731737831B8EC59100F9D607 /* Photo+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 7317377C1B8EC59100F9D607 /* Photo+CoreDataProperties.m */; };
+		731737841B8EC59100F9D607 /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = 7317377E1B8EC59100F9D607 /* Photo.m */; };
 		736C87451B882E5F00D90E05 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 736C87441B882E5F00D90E05 /* ViewController.m */; };
 		7370FF9D1B741CB100513908 /* NSString+NSString_AddLinkPrefix.m in Sources */ = {isa = PBXBuildFile; fileRef = 7370FF9C1B741CB100513908 /* NSString+NSString_AddLinkPrefix.m */; };
 		7370FF9E1B741CB100513908 /* NSString+NSString_AddLinkPrefix.m in Sources */ = {isa = PBXBuildFile; fileRef = 7370FF9C1B741CB100513908 /* NSString+NSString_AddLinkPrefix.m */; };
@@ -33,10 +34,10 @@
 		7384DBAF1B702E2200108BDC /* SubscriptionCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DBAD1B702E2200108BDC /* SubscriptionCreator.m */; };
 		7384DBB31B716D1100108BDC /* Deleter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DBB21B716D1100108BDC /* Deleter.m */; };
 		7384DBB41B716D1100108BDC /* Deleter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7384DBB21B716D1100108BDC /* Deleter.m */; };
-		738A94B11BA73C9800BAE2A4 /* AKPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 738A94B01BA73C9800BAE2A4 /* AKPickerView.m */; settings = {ASSET_TAGS = (); }; };
-		738A94B21BA73C9800BAE2A4 /* AKPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 738A94B01BA73C9800BAE2A4 /* AKPickerView.m */; settings = {ASSET_TAGS = (); }; };
-		738A94B71BA7435200BAE2A4 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 738A94B61BA7435200BAE2A4 /* MainViewController.m */; settings = {ASSET_TAGS = (); }; };
-		738A94B81BA7435200BAE2A4 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 738A94B61BA7435200BAE2A4 /* MainViewController.m */; settings = {ASSET_TAGS = (); }; };
+		738A94B11BA73C9800BAE2A4 /* AKPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 738A94B01BA73C9800BAE2A4 /* AKPickerView.m */; };
+		738A94B21BA73C9800BAE2A4 /* AKPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 738A94B01BA73C9800BAE2A4 /* AKPickerView.m */; };
+		738A94B71BA7435200BAE2A4 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 738A94B61BA7435200BAE2A4 /* MainViewController.m */; };
+		738A94B81BA7435200BAE2A4 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 738A94B61BA7435200BAE2A4 /* MainViewController.m */; };
 		73D999071B61B159001A7D8A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 73D999061B61B159001A7D8A /* main.m */; };
 		73D9990A1B61B159001A7D8A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 73D999091B61B159001A7D8A /* AppDelegate.m */; };
 		73D9990D1B61B159001A7D8A /* Epiphanies.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 73D9990B1B61B159001A7D8A /* Epiphanies.xcdatamodeld */; };
@@ -58,6 +59,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7310F0C71C30FCC4004345A3 /* FetchedResultsControllerDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FetchedResultsControllerDataSource.h; sourceTree = "<group>"; };
+		7310F0C81C30FCC4004345A3 /* FetchedResultsControllerDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FetchedResultsControllerDataSource.m; sourceTree = "<group>"; };
 		731737731B8EC59100F9D607 /* Thought+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Thought+CoreDataProperties.h"; sourceTree = "<group>"; };
 		731737741B8EC59100F9D607 /* Thought+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Thought+CoreDataProperties.m"; sourceTree = "<group>"; };
 		731737751B8EC59100F9D607 /* Thought.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Thought.h; sourceTree = "<group>"; };
@@ -353,6 +356,8 @@
 			children = (
 				738A94B51BA7435200BAE2A4 /* MainViewController.h */,
 				738A94B61BA7435200BAE2A4 /* MainViewController.m */,
+				7310F0C71C30FCC4004345A3 /* FetchedResultsControllerDataSource.h */,
+				7310F0C81C30FCC4004345A3 /* FetchedResultsControllerDataSource.m */,
 			);
 			name = "Main View Controller";
 			sourceTree = "<group>";
@@ -465,7 +470,7 @@
 		73D998F91B61B159001A7D8A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = JKProductions;
 				TargetAttributes = {
 					73D999001B61B159001A7D8A = {
@@ -540,6 +545,7 @@
 				7384DBA91B701DB600108BDC /* ZoneCreator.m in Sources */,
 				738A94B71BA7435200BAE2A4 /* MainViewController.m in Sources */,
 				731737801B8EC59100F9D607 /* Thought.m in Sources */,
+				7310F0C91C30FCC4004345A3 /* FetchedResultsControllerDataSource.m in Sources */,
 				7384DB6D1B6EC25F00108BDC /* Model.m in Sources */,
 				7384DBA41B6ED2BB00108BDC /* Saver.m in Sources */,
 				7384DBB31B716D1100108BDC /* Deleter.m in Sources */,
@@ -622,6 +628,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -690,6 +697,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Epiphanies/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.JKProductions.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -704,6 +712,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Epiphanies/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.JKProductions.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -723,6 +732,7 @@
 				);
 				INFOPLIST_FILE = EpiphaniesTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.JKProductions.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Epiphanies.app/Epiphanies";
 			};
@@ -738,6 +748,7 @@
 				);
 				INFOPLIST_FILE = EpiphaniesTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.JKProductions.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Epiphanies.app/Epiphanies";
 			};

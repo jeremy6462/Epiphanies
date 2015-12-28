@@ -8,13 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import "Model.h"
+#import "FetchedResultsControllerDataSource.h"
 
-@interface MainViewController : UIViewController <NSFetchedResultsControllerDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface MainViewController : UIViewController <UITableViewDelegate, FetchedResultsControllerDataSourceDelegate>
 
 @property (strong, nonatomic) Model *model;
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (strong, nonatomic) FetchedResultsControllerDataSource *fetchedResultsControllerDataSource;
 
-@property (weak, nonatomic) IBOutlet UITableView *thoughtsTableView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end

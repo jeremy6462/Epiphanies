@@ -26,7 +26,7 @@
 -(nonnull CKRecord *) asRecord;
 
 /*!
- @param dictionaryOfChanges is a dictionary where keys are record property keys (stored in ForFundamentals.h) and values are the values to change to. If the value is Remove (the RemovePropertyKey defined above) then remove that property
+ @param dictionaryOfChanges is a dictionary where keys are record property keys (described in ForFundamentals.h) and values are the values to change to. If the value is Remove (the RemovePropertyKey defined above) then remove that property
  */
 -(nonnull CKRecord *) asRecordWithChanges:(nonnull NSDictionary *)dictionaryOfChanges;
 

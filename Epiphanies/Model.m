@@ -13,8 +13,19 @@
 
 #pragma mark - Initializer
 
-- (instancetype)init
++ (Model *)sharedInstance
 {
+    static Model *sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[Model alloc] init];
+    });
+    return sharedInstance;
+    
+}
+
+- (instancetype) init {
+    
     self = [super init];
     if (self) {
         _container = [CKContainer defaultContainer];
@@ -31,13 +42,13 @@
 
 #pragma mark - Zone Saver
 
-// TESTED
 - (void) createZoneAssignZoneID {
     [ZoneCreator createCustomZoneForDatabase:_database withCompletionHandler:^(NSArray *zoneSaves, NSArray *zoneDeletes, NSError *errorZone) {
         if (zoneSaves == nil && zoneDeletes == nil && errorZone == nil) { // zone already created
             return;
         } else if (errorZone) {
-            NSLog(@"Better error handling than this %@", errorZone.description);
+            NSLog(@"Better error handling than this %@", errorZone);
+            
         }
         else {
             CKRecordZone *zoneCreated = zoneSaves[0];
@@ -229,6 +240,7 @@
 
 #pragma mark - Deletion
 
+// TODO - is this the best chaining? should it be the other way around? - I think not, but deserves further deliberation
 -(void) deleteFromBothCloudKitAndCoreData: (nonnull id<FunObject>) object {
     [self deleteObjectFromCloudKit:object completionHandler:^(NSError * _Nullable error) {
         if (error) {

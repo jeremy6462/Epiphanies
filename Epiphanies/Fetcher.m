@@ -156,7 +156,7 @@
             Thought *childThought = (Thought *) child;
             Collection *parentCollection = (Collection *) objects[0];
             childThought.parentCollection = parentCollection;
-            [parentCollection addThoughtsObject:childThought];
+            [parentCollection addThoughtsObject:childThought]; // TODO - lets not unconditionally add the thought. What if it's already there?
             
         } else {
             

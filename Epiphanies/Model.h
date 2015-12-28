@@ -21,12 +21,11 @@
 
 #pragma mark - Initializer
 
-// TODO - Singleton didn't work because I was importing the Model inside the model object classes and there was a loop?
-
 /*!
  @abstract returns and instance of the Model class with properties initialized as well
  */
-- (nullable instancetype)init;
+
++ (nonnull Model *)sharedInstance;
 
 #pragma mark - Zone Saver
 
@@ -112,6 +111,10 @@
 withPerRecordProgressBlock: (nullable void(^)(CKRecord *record, double progress)) perRecordProgressBlock
 withPerRecordCompletionBlock: (nullable void(^)(CKRecord * __nullable record, NSError * __nullable error)) perRecordCompletionBlock
        withCompletionBlock: (nullable void(^)(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError)) modifyRecordsCompletionBlock;
+
+#pragma mark - Core Data Save
+
+-(void) saveCoreDataContext;
 
 
 #pragma mark - Fetching
