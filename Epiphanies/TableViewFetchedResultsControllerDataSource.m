@@ -1,14 +1,14 @@
 //
-//  FetchedResultsControllerDataSource.m
+//  TableViewFetchedResultsControllerDataSource.m
 //  Epiphanies
 //
-//  Created by Jeremy Kelleher on 12/28/15.
+//  Created by Jeremy Kelleher on 12/29/15.
 //  Copyright © 2015 JKProductions. All rights reserved.
 //
 
-#import "FetchedResultsControllerDataSource.h"
+#import "TableViewFetchedResultsControllerDataSource.h"
 
-@implementation FetchedResultsControllerDataSource
+@implementation TableViewFetchedResultsControllerDataSource
 
 - (id)initWithTableView:(UITableView*)tableView
 {
@@ -46,9 +46,8 @@
     }
     Thought *thought = [_fetchedResultsController objectAtIndexPath:indexPath];
     [self.delegate configureCell:cell withObject:thought];
-
+    
     return cell;
 }
-
 
 @end

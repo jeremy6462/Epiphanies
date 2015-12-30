@@ -10,40 +10,106 @@
 
 @implementation MainViewController
 
-@synthesize fetchedResultsController = _fetchedResultsController;
+//@synthesize fetchedResultsController = _fetchedResultsController;
 
 -(void) viewDidLoad {
     _model = [Model sharedInstance];
     
-    self.fetchedResultsControllerDataSource = [[FetchedResultsControllerDataSource alloc] initWithTableView:self.tableView];
-    self.fetchedResultsControllerDataSource.fetchedResultsController = [self fetchedResultsController];
-    self.fetchedResultsControllerDataSource.reuseIdentifier = @"Cell";
-    self.fetchedResultsControllerDataSource.delegate = self;
+    [self initalizeCollectionPickerView];
+    [self initalizeThoughtsFetchedResultsControllerDataSource];
     
     self.tableView.delegate = self;
 }
 
-- (NSFetchedResultsController *)fetchedResultsController {
+#pragma mark - Picker View
+
+- (void) initalizeCollectionPickerView {
+    self.pickerView.delegate = self;
+    [self initalizeCollectionFetchedResultsControllerDataSource];
+    self.pickerView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleTitle2];
+    self.pickerView.highlightedFont = [UIFont preferredFontForTextStyle:UIFontTextStyleTitle2];
+    self.pickerView.textColor = [UIColor grayColor];
+    self.pickerView.highlightedTextColor = [UIColor blackColor];
+    self.pickerView.interitemSpacing = 10;
+    self.pickerView.fisheyeFactor = 0.0001;
+    self.pickerView.pickerViewStyle = AKPickerViewStyle3D;
+    [self.pickerView reloadData];
+}
+
+- (void) pickerView:(AKPickerView *)pickerView didSelectItem:(NSInteger)item {
+    Collection *collectionSelected = [self.collectionsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForItem:item inSection:0]];
+    self.thoughtsFetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"%K.%K == %@", PARENT_COLLECTION_KEY, OBJECT_ID_KEY, collectionSelected.objectId];
+    [self.thoughtsFetchedResultsController performFetch:NULL];
+    [self.tableView reloadData];
+}
+
+#pragma mark - Thoughts Fetched Results Controller
+
+- (void) initalizeThoughtsFetchedResultsControllerDataSource {
+    self.thoughtsFetchedResultsControllerDataSource = [[TableViewFetchedResultsControllerDataSource alloc] initWithTableView:self.tableView];
+    self.thoughtsFetchedResultsControllerDataSource.fetchedResultsController = self.thoughtsFetchedResultsController;
+    self.thoughtsFetchedResultsControllerDataSource.reuseIdentifier = @"Cell";
+    self.thoughtsFetchedResultsControllerDataSource.delegate = self;
+}
+
+- (NSFetchedResultsController *)thoughtsFetchedResultsController {
     
-    if (_fetchedResultsController != nil) {
-        return _fetchedResultsController;
+    if (_thoughtsFetchedResultsController != nil) {
+        return _thoughtsFetchedResultsController;
     }
     NSManagedObjectContext *context = _model.context;
-    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:THOUGHT_RECORD_TYPE];
+    
+    /*
+     Could use for searching for children of the current Collection:
+     - thought.parent.objectId - predicateWithFormat:@"%@.%@ == %@", PARENT_COLLECTION_KEY, OBJECT_ID_KEY, collectionSelected.objectId];
+     - get rid of thoughtFRC and just use the selected collection's list of thoughts (cons: doesn't update w/ new info)
+     - predicateW/Block taking each thought and checking if it's contained in the parent's thoughts
+     - LIKE or IN keywords
+     */
+    Collection *collectionSelected = [self.collectionsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForItem:self.pickerView.selectedItem inSection:0]];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"%K.%K == %@", PARENT_COLLECTION_KEY, OBJECT_ID_KEY, collectionSelected.objectId];
+    
+    
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:TEXT_KEY ascending:YES];
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
     [fetchRequest setSortDescriptors:sortDescriptors];
     [fetchRequest setFetchBatchSize:20]; // TODO - change in production
     
-    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:nil cacheName:nil];
+    _thoughtsFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:nil cacheName:nil];
     
-    return _fetchedResultsController;
+    return _thoughtsFetchedResultsController;
     
 }
 
 - (void)configureCell:(nullable UITableViewCell*)cell withObject:(nullable Thought *)object {
     cell.textLabel.text = object.text;
+}
+
+#pragma mark - Collection Fetched Results Controller
+
+- (void) initalizeCollectionFetchedResultsControllerDataSource {
+    self.collectionsFetchedResultsControllerDataSource = [[AKPickerViewFRCDataSource alloc] initWithAKPickerView:self.pickerView];
+    self.collectionsFetchedResultsControllerDataSource.fetchedResultsController = self.collectionsFetchedResultsController;
+}
+
+- (NSFetchedResultsController *)collectionsFetchedResultsController {
+    
+    if (_collectionsFetchedResultsController != nil) {
+        return _collectionsFetchedResultsController;
+    }
+    NSManagedObjectContext *context = _model.context;
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:COLLECTION_RECORD_TYPE];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:PLACEMENT_KEY ascending:YES];
+    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+    [fetchRequest setSortDescriptors:sortDescriptors];
+    [fetchRequest setFetchBatchSize:20]; // TODO - change in production
+    
+    _collectionsFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:nil cacheName:nil];
+    
+    return _collectionsFetchedResultsController;
+    
 }
 
 

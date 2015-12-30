@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7310F0C91C30FCC4004345A3 /* FetchedResultsControllerDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 7310F0C81C30FCC4004345A3 /* FetchedResultsControllerDataSource.m */; };
 		7317377F1B8EC59100F9D607 /* Thought+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 731737741B8EC59100F9D607 /* Thought+CoreDataProperties.m */; };
 		731737801B8EC59100F9D607 /* Thought.m in Sources */ = {isa = PBXBuildFile; fileRef = 731737761B8EC59100F9D607 /* Thought.m */; };
 		731737811B8EC59100F9D607 /* Collection+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 731737781B8EC59100F9D607 /* Collection+CoreDataProperties.m */; };
@@ -46,6 +45,8 @@
 		73D999181B61B159001A7D8A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 73D999161B61B159001A7D8A /* LaunchScreen.xib */; };
 		73D999241B61B159001A7D8A /* EpiphaniesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 73D999231B61B159001A7D8A /* EpiphaniesTests.m */; };
 		73D9992F1B61B299001A7D8A /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73D9992E1B61B299001A7D8A /* CloudKit.framework */; };
+		73DF67A21C32E2A200F0D435 /* AKPickerViewFRCDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 73DF67A11C32E2A200F0D435 /* AKPickerViewFRCDataSource.m */; };
+		73DF67A51C32E6F600F0D435 /* TableViewFetchedResultsControllerDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 73DF67A41C32E6F600F0D435 /* TableViewFetchedResultsControllerDataSource.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,8 +60,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7310F0C71C30FCC4004345A3 /* FetchedResultsControllerDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FetchedResultsControllerDataSource.h; sourceTree = "<group>"; };
-		7310F0C81C30FCC4004345A3 /* FetchedResultsControllerDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FetchedResultsControllerDataSource.m; sourceTree = "<group>"; };
 		731737731B8EC59100F9D607 /* Thought+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Thought+CoreDataProperties.h"; sourceTree = "<group>"; };
 		731737741B8EC59100F9D607 /* Thought+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Thought+CoreDataProperties.m"; sourceTree = "<group>"; };
 		731737751B8EC59100F9D607 /* Thought.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Thought.h; sourceTree = "<group>"; };
@@ -121,6 +120,10 @@
 		73D999231B61B159001A7D8A /* EpiphaniesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EpiphaniesTests.m; sourceTree = "<group>"; };
 		73D9992D1B61B295001A7D8A /* Epiphanies.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Epiphanies.entitlements; sourceTree = "<group>"; };
 		73D9992E1B61B299001A7D8A /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		73DF67A01C32E2A200F0D435 /* AKPickerViewFRCDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKPickerViewFRCDataSource.h; sourceTree = "<group>"; };
+		73DF67A11C32E2A200F0D435 /* AKPickerViewFRCDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKPickerViewFRCDataSource.m; sourceTree = "<group>"; };
+		73DF67A31C32E6F600F0D435 /* TableViewFetchedResultsControllerDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewFetchedResultsControllerDataSource.h; sourceTree = "<group>"; };
+		73DF67A41C32E6F600F0D435 /* TableViewFetchedResultsControllerDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewFetchedResultsControllerDataSource.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -356,8 +359,10 @@
 			children = (
 				738A94B51BA7435200BAE2A4 /* MainViewController.h */,
 				738A94B61BA7435200BAE2A4 /* MainViewController.m */,
-				7310F0C71C30FCC4004345A3 /* FetchedResultsControllerDataSource.h */,
-				7310F0C81C30FCC4004345A3 /* FetchedResultsControllerDataSource.m */,
+				73DF67A01C32E2A200F0D435 /* AKPickerViewFRCDataSource.h */,
+				73DF67A11C32E2A200F0D435 /* AKPickerViewFRCDataSource.m */,
+				73DF67A31C32E6F600F0D435 /* TableViewFetchedResultsControllerDataSource.h */,
+				73DF67A41C32E6F600F0D435 /* TableViewFetchedResultsControllerDataSource.m */,
 			);
 			name = "Main View Controller";
 			sourceTree = "<group>";
@@ -533,6 +538,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				736C87451B882E5F00D90E05 /* ViewController.m in Sources */,
+				73DF67A21C32E2A200F0D435 /* AKPickerViewFRCDataSource.m in Sources */,
 				73D9990A1B61B159001A7D8A /* AppDelegate.m in Sources */,
 				7384DB851B6EC2AD00108BDC /* CloudKitErrorHandler.m in Sources */,
 				73D9990D1B61B159001A7D8A /* Epiphanies.xcdatamodeld in Sources */,
@@ -541,11 +547,11 @@
 				731737831B8EC59100F9D607 /* Photo+CoreDataProperties.m in Sources */,
 				738A94B11BA73C9800BAE2A4 /* AKPickerView.m in Sources */,
 				7370FFA21B76FCA100513908 /* Orderer.m in Sources */,
+				73DF67A51C32E6F600F0D435 /* TableViewFetchedResultsControllerDataSource.m in Sources */,
 				731737841B8EC59100F9D607 /* Photo.m in Sources */,
 				7384DBA91B701DB600108BDC /* ZoneCreator.m in Sources */,
 				738A94B71BA7435200BAE2A4 /* MainViewController.m in Sources */,
 				731737801B8EC59100F9D607 /* Thought.m in Sources */,
-				7310F0C91C30FCC4004345A3 /* FetchedResultsControllerDataSource.m in Sources */,
 				7384DB6D1B6EC25F00108BDC /* Model.m in Sources */,
 				7384DBA41B6ED2BB00108BDC /* Saver.m in Sources */,
 				7384DBB31B716D1100108BDC /* Deleter.m in Sources */,

@@ -8,15 +8,21 @@
 
 #import <UIKit/UIKit.h>
 #import "Model.h"
-#import "FetchedResultsControllerDataSource.h"
+#import "TableViewFetchedResultsControllerDataSource.h"
+#import "AKPickerView.h"
+#import "AKPickerViewFRCDataSource.h"
 
-@interface MainViewController : UIViewController <UITableViewDelegate, FetchedResultsControllerDataSourceDelegate>
+@interface MainViewController : UIViewController <UITableViewDelegate, TableViewFetchedResultsControllerDataSourceDelegate, AKPickerViewDelegate>
 
 @property (strong, nonatomic) Model *model;
 
-@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-@property (strong, nonatomic) FetchedResultsControllerDataSource *fetchedResultsControllerDataSource;
+@property (strong, nonatomic) NSFetchedResultsController *thoughtsFetchedResultsController;
+@property (strong, nonatomic) TableViewFetchedResultsControllerDataSource *thoughtsFetchedResultsControllerDataSource;
+
+@property (strong, nonatomic) NSFetchedResultsController *collectionsFetchedResultsController;
+@property (strong, nonatomic) AKPickerViewFRCDataSource *collectionsFetchedResultsControllerDataSource;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet AKPickerView *pickerView;
 
 @end
