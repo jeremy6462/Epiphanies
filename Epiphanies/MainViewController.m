@@ -10,8 +10,6 @@
 
 @implementation MainViewController
 
-//@synthesize fetchedResultsController = _fetchedResultsController;
-
 -(void) viewDidLoad {
     _model = [Model sharedInstance];
     
@@ -25,16 +23,20 @@
 
 - (void) initalizeCollectionPickerView {
     self.pickerView.delegate = self;
-    [self initalizeCollectionFetchedResultsControllerDataSource];
     self.pickerView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleTitle2];
-    self.pickerView.highlightedFont = [UIFont preferredFontForTextStyle:UIFontTextStyleTitle2];
+    self.pickerView.highlightedFont = [UIFont preferredFontForTextStyle:UIFontTextStyleTitle1];
     self.pickerView.textColor = [UIColor grayColor];
     self.pickerView.highlightedTextColor = [UIColor blackColor];
     self.pickerView.interitemSpacing = 10;
     self.pickerView.fisheyeFactor = 0.0001;
     self.pickerView.pickerViewStyle = AKPickerViewStyle3D;
+    
+    [self initalizeCollectionFetchedResultsControllerDataSource];
+    
     [self.pickerView reloadData];
 }
+
+// rename collections by double tapping or tapping and holding on a collection name in picker
 
 - (void) pickerView:(AKPickerView *)pickerView didSelectItem:(NSInteger)item {
     Collection *collectionSelected = [self.collectionsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForItem:item inSection:0]];
@@ -60,21 +62,24 @@
     NSManagedObjectContext *context = _model.context;
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:THOUGHT_RECORD_TYPE];
     
-    /*
-     Could use for searching for children of the current Collection:
-     - thought.parent.objectId - predicateWithFormat:@"%@.%@ == %@", PARENT_COLLECTION_KEY, OBJECT_ID_KEY, collectionSelected.objectId];
-     - get rid of thoughtFRC and just use the selected collection's list of thoughts (cons: doesn't update w/ new info)
-     - predicateW/Block taking each thought and checking if it's contained in the parent's thoughts
-     - LIKE or IN keywords
-     */
-    Collection *collectionSelected = [self.collectionsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForItem:self.pickerView.selectedItem inSection:0]];
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"%K.%K == %@", PARENT_COLLECTION_KEY, OBJECT_ID_KEY, collectionSelected.objectId];
+    [self initalizeCollectionPickerView]; // make sure this is called
+    Collection *collectionSelected;
+    if (self.collectionsFetchedResultsController.fetchedObjects.count == 0) {
+        collectionSelected = [Collection newCollectionInManagedObjectContext:_model.context name:@"Light Bulbs"];
+        [self.model saveCollections:[NSArray arrayWithObject:collectionSelected] withPerRecordProgressBlock:nil withPerRecordCompletionBlock:nil withCompletionBlock:nil];
+        [_model saveCoreDataContext];
+        [self.collectionsFetchedResultsController performFetch:NULL];
+        [self.pickerView reloadData];
+    } else /*there are fetched collections*/ {
+        collectionSelected = [self.collectionsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForItem:self.pickerView.selectedItem inSection:0]];
+    }
     
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"%K.%K == %@", PARENT_COLLECTION_KEY, OBJECT_ID_KEY, collectionSelected.objectId];
     
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:TEXT_KEY ascending:YES];
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
     [fetchRequest setSortDescriptors:sortDescriptors];
-    [fetchRequest setFetchBatchSize:20]; // TODO - change in production
+    [fetchRequest setFetchBatchSize:20];
     
     _thoughtsFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:nil cacheName:nil];
     
@@ -84,6 +89,10 @@
 
 - (void)configureCell:(nullable UITableViewCell*)cell withObject:(nullable Thought *)object {
     cell.textLabel.text = object.text;
+}
+
+- (void) deleteObject:(Thought *)object {
+    NSLog(@"Delete Object");
 }
 
 #pragma mark - Collection Fetched Results Controller
@@ -104,7 +113,7 @@
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:PLACEMENT_KEY ascending:YES];
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
     [fetchRequest setSortDescriptors:sortDescriptors];
-    [fetchRequest setFetchBatchSize:20]; // TODO - change in production
+    [fetchRequest setFetchBatchSize:20];
     
     _collectionsFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:nil cacheName:nil];
     
@@ -113,100 +122,61 @@
 }
 
 
-//- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-//    // The fetch controller is about to start sending change notifications, so prepare the table view for updates.
-//    [_thoughtsTableView beginUpdates];
-//}
-//
-//
-//- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
-//    
-//    UITableView *tableView = _thoughtsTableView;
-//    
-//    switch(type) {
-//            
-//        case NSFetchedResultsChangeInsert:
-//            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//            
-//        case NSFetchedResultsChangeDelete:
-//            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//            
-//        case NSFetchedResultsChangeUpdate:
-//            [self configureCell:[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
-//            break;
-//            
-//        case NSFetchedResultsChangeMove:
-//            [tableView deleteRowsAtIndexPaths:[NSArray
-//                                               arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-//            [tableView insertRowsAtIndexPaths:[NSArray
-//                                               arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//    }
-//}
-//
-//
-//- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id )sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
-//    
-//    switch(type) {
-//            
-//        case NSFetchedResultsChangeInsert:
-//            [_thoughtsTableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//            
-//        case NSFetchedResultsChangeDelete:
-//            [_thoughtsTableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//            
-//        default:
-//            break;
-//    }
-//}
-//
-//
-//- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-//    // The fetch controller has sent all current change notifications, so tell the table view to process all updates.
-//    [_thoughtsTableView endUpdates];
-//}
 
-// Adding records code...
+# pragma mark - CRUD
 
-
-
-- (IBAction)delete:(id)sender {
-    NSArray *collections = [Fetcher fetchRecordsFromCoreDataContext:_model.context type:COLLECTION_RECORD_TYPE predicate:[NSPredicate predicateWithFormat:@"TRUEPREDICATE"] sortDescriptiors:nil];
+- (IBAction)addThought:(id)sender {
+    // handle saving the context and deleting the note if X is pressed
+    Collection* currentCollection = [self.collectionsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForItem:self.pickerView.selectedItem inSection:0]];
+    Thought *newThought = [Thought newThoughtInManagedObjectContext:_model.context collection:currentCollection];
     
-    [_model deleteFromBothCloudKitAndCoreData:collections[0]];
-}
-
-- (IBAction)load:(id)sender {
+    UIAlertController *alertController = [UIAlertController
+                                          alertControllerWithTitle:@"New Idea"
+                                          message:@"Enter your new idea here"
+                                          preferredStyle:UIAlertControllerStyleAlert];
     
-    [_model reloadWithCompletion:^(NSArray<Collection *> *populatedCollections, NSError *error) {
-        if (error) {
-            NSLog(@"error: %@", error.localizedDescription);
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField)
+     {
+         textField.placeholder = newThought.text;
+     }];
+    
+    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Save" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        NSString *textFromUser = ((UITextField *)alertController.textFields.firstObject).text;
+        if (textFromUser) {
+            newThought.text = textFromUser;
+            [_model saveCoreDataContext];
+            [_model saveThoughts:[NSArray arrayWithObject:newThought] withPerRecordProgressBlock:nil withPerRecordCompletionBlock:nil withCompletionBlock:nil];
         } else {
-            [self.model saveCoreDataContext];
-            for (Collection *collection in populatedCollections) {
-                NSLog(@"%@", collection.name);
-                NSLog(@"%@", collection.thoughts.anyObject.text);
-            }
+            [_model deleteObjectFromCoreData:newThought];
         }
     }];
     
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [_model deleteObjectFromCoreData:newThought];
+    }];
+    
+    [alertController addAction:ok];
+    [alertController addAction:cancel];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
-- (IBAction)save:(id)sender {
-    
-    NSArray *objects = [self createFakeRecords];
-    
-    [_model saveObjects:objects withPerRecordProgressBlock:nil withPerRecordCompletionBlock:nil withCompletionBlock:^(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError) {
-        if (operationError) {
-            NSLog(@"error saving: %@", operationError.description);
-        }
-    }];
-    
+
+
+
+# pragma mark - Bulk Update
+- (void) updateCollectionPicker {
+    [self.collectionsFetchedResultsController performFetch:nil];
+    [self.pickerView reloadData];
 }
+
+
+
+
+
+
+
+
 
 - (NSArray<id<FunObject>> *) createFakeRecords {
     
@@ -232,11 +202,8 @@
         thought.reminderDate = [NSDate date];
         
     }
-
+    
     return [NSArray arrayWithArray:objectsToSave];
 }
-
-
-
 
 @end

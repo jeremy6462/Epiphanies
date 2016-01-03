@@ -17,7 +17,7 @@
 
 @end
 
-@interface TableViewFetchedResultsControllerDataSource : NSObject
+@interface TableViewFetchedResultsControllerDataSource : NSObject <UITableViewDataSource, NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSFetchedResultsController* fetchedResultsController;

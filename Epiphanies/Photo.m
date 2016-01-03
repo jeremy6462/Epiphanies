@@ -218,5 +218,16 @@
     
 }
 
+- (void)prepareForDeletion
+{
+    NSSet* siblings = self.parentThought.photos;
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"%K > %@", PLACEMENT_KEY, self.placement];
+    NSSet* siblingsAfterSelf = [siblings filteredSetUsingPredicate:predicate];
+    [siblingsAfterSelf enumerateObjectsUsingBlock:^(Photo* sibling, BOOL* stop)
+     {
+         sibling.placement = [NSNumber numberWithInt:sibling.placement.intValue - 1];
+     }];
+}
+
 
 @end

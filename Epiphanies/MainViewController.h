@@ -11,8 +11,12 @@
 #import "TableViewFetchedResultsControllerDataSource.h"
 #import "AKPickerView.h"
 #import "AKPickerViewFRCDataSource.h"
+#import "PopupViewController1.h"
+#import <STPopup/STPopup.h>
 
-@interface MainViewController : UIViewController <UITableViewDelegate, TableViewFetchedResultsControllerDataSourceDelegate, AKPickerViewDelegate>
+
+
+@interface MainViewController : UIViewController <UITableViewDelegate, TableViewFetchedResultsControllerDataSourceDelegate, NSFetchedResultsControllerDelegate, AKPickerViewDelegate>
 
 @property (strong, nonatomic) Model *model;
 
