@@ -13,11 +13,14 @@
 #pragma mark - Core Data
 
 + (nullable NSError *) saveContext: (nonnull NSManagedObjectContext *) context {
-    NSError *error = nil;
-    if ([context hasChanges]) {
-        [context save:&error];
-    }
-    return error;
+        __block NSError *error = nil;
+        if ([context hasChanges]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [context save:&error];
+            });
+        }
+        return error;
+    
 }
 
 #pragma mark - Cloud Kit

@@ -10,13 +10,21 @@
 
 @implementation MainViewController
 
+#pragma mark - View Controller
+
 -(void) viewDidLoad {
     _model = [Model sharedInstance];
     
     [self initalizeCollectionPickerView];
     [self initalizeThoughtsFetchedResultsControllerDataSource];
     
+    self.reorder = [[Reorderer alloc] init];
+    self.reorder.delegate = self;
+    
     self.tableView.delegate = self;
+    
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGestureRecognized:)];
+    [self.tableView addGestureRecognizer:longPress];
 }
 
 #pragma mark - Picker View
@@ -31,6 +39,10 @@
     self.pickerView.fisheyeFactor = 0.0001;
     self.pickerView.pickerViewStyle = AKPickerViewStyle3D;
     
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapOnCollectionRecognized:)];
+    doubleTap.numberOfTapsRequired = 2;
+    [self.pickerView addGestureRecognizer:doubleTap];
+    
     [self initalizeCollectionFetchedResultsControllerDataSource];
     
     [self.pickerView reloadData];
@@ -43,6 +55,11 @@
     self.thoughtsFetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"%K.%K == %@", PARENT_COLLECTION_KEY, OBJECT_ID_KEY, collectionSelected.objectId];
     [self.thoughtsFetchedResultsController performFetch:NULL];
     [self.tableView reloadData];
+}
+
+- (void) updateCollectionPicker {
+    [self.collectionsFetchedResultsController performFetch:nil];
+    [self.pickerView reloadData];
 }
 
 #pragma mark - Thoughts Fetched Results Controller
@@ -76,7 +93,7 @@
     
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"%K.%K == %@", PARENT_COLLECTION_KEY, OBJECT_ID_KEY, collectionSelected.objectId];
     
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:TEXT_KEY ascending:YES];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:PLACEMENT_KEY ascending:NO]; // high #'s @ top for adding
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
     [fetchRequest setSortDescriptors:sortDescriptors];
     [fetchRequest setFetchBatchSize:20];
@@ -92,7 +109,8 @@
 }
 
 - (void) deleteObject:(Thought *)object {
-    NSLog(@"Delete Object");
+    [Thought updatePlacementForDeletionOfThought:object inThoughts:self.thoughtsFetchedResultsController.fetchedObjects];
+    [_model deleteFromBothCloudKitAndCoreData:object]; // saves context
 }
 
 #pragma mark - Collection Fetched Results Controller
@@ -110,7 +128,7 @@
     NSManagedObjectContext *context = _model.context;
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:COLLECTION_RECORD_TYPE];
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:PLACEMENT_KEY ascending:YES];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:PLACEMENT_KEY ascending:NO];
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
     [fetchRequest setSortDescriptors:sortDescriptors];
     [fetchRequest setFetchBatchSize:20];
@@ -121,61 +139,93 @@
     
 }
 
-
-
-# pragma mark - CRUD
+#pragma mark - Add
 
 - (IBAction)addThought:(id)sender {
-    // handle saving the context and deleting the note if X is pressed
+    int numThoughtsInCurrentCollection = (int) self.thoughtsFetchedResultsController.fetchedObjects.count;
     Collection* currentCollection = [self.collectionsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForItem:self.pickerView.selectedItem inSection:0]];
     Thought *newThought = [Thought newThoughtInManagedObjectContext:_model.context collection:currentCollection];
+    newThought.placement = [NSNumber numberWithInteger:numThoughtsInCurrentCollection];
+    [self presentViewController:[self allowUserToUpdateThought:newThought] animated:YES completion:nil];
+}
+
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    Thought *selectedThought = [self.thoughtsFetchedResultsController objectAtIndexPath:indexPath];
+    [self presentViewController:[self allowUserToUpdateThought:selectedThought] animated:YES completion:nil];
+
+}
+
+
+- (UIAlertController *) allowUserToUpdateThought: (Thought *) thought {
     
     UIAlertController *alertController = [UIAlertController
-                                          alertControllerWithTitle:@"New Idea"
-                                          message:@"Enter your new idea here"
+                                          alertControllerWithTitle:@"Idea"
+                                          message:@"Enter text for the idea here"
                                           preferredStyle:UIAlertControllerStyleAlert];
     
     [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField)
      {
-         textField.placeholder = newThought.text;
+         textField.placeholder = thought.text;
      }];
     
     UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Save" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSString *textFromUser = ((UITextField *)alertController.textFields.firstObject).text;
         if (textFromUser) {
-            newThought.text = textFromUser;
-            [_model saveCoreDataContext];
-            [_model saveThoughts:[NSArray arrayWithObject:newThought] withPerRecordProgressBlock:nil withPerRecordCompletionBlock:nil withCompletionBlock:nil];
+            if (thought.text == nil) { // new thought
+                thought.text = textFromUser;
+                [_model saveCoreDataContext];
+                [_model saveThoughts:[NSArray arrayWithObject:thought] withPerRecordProgressBlock:nil withPerRecordCompletionBlock:nil withCompletionBlock:nil];
+            } else {
+                [_model saveObject:thought withChanges:@{TEXT_KEY : textFromUser} withPerRecordProgressBlock:nil withPerRecordCompletionBlock:nil withCompletionBlock:nil];
+                [_model saveCoreDataContext];
+            }
+            
         } else {
-            [_model deleteObjectFromCoreData:newThought];
+            if (thought.text == nil) {
+               [_model deleteFromBothCloudKitAndCoreData:thought];
+            }
         }
     }];
     
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        [_model deleteObjectFromCoreData:newThought];
+        if (!thought.text){
+            [_model deleteFromBothCloudKitAndCoreData:thought];
+        }
     }];
     
     [alertController addAction:ok];
     [alertController addAction:cancel];
     
-    [self presentViewController:alertController animated:YES completion:nil];
+    return alertController;
 }
 
+#pragma mark - Segues
 
-
-
-# pragma mark - Bulk Update
-- (void) updateCollectionPicker {
-    [self.collectionsFetchedResultsController performFetch:nil];
-    [self.pickerView reloadData];
+- (IBAction)doubleTapOnCollectionRecognized:(id)sender {
+    
 }
 
+#pragma mark - Reorderer Delegate
 
+-(IBAction)longPressGestureRecognized:(id)sender {
+    [self.reorder longPressGestureRecognized:sender onTableView:self.tableView];
+}
 
+-(void)updatePlacementWithSource:(NSIndexPath *)sourceIndexPath destination:(NSIndexPath *)destinationIndexPath {
+    Thought *objectMoving = [self.thoughtsFetchedResultsController objectAtIndexPath:sourceIndexPath];
+    Thought *objectBeingMoved = [self.thoughtsFetchedResultsController objectAtIndexPath:destinationIndexPath];
+    NSLog(@"objectMoving = %@ & %@", objectMoving.text, objectMoving.placement);
+    NSLog(@"objectBeingMoved = %@ %@", objectBeingMoved.text, objectBeingMoved.placement);
+    NSNumber* sourcePlacement = objectMoving.placement;
+    NSNumber* destinationPlacement = objectBeingMoved.placement;
+    objectMoving.placement = destinationPlacement;
+    objectBeingMoved.placement = sourcePlacement;
+    NSLog(@"objectMoving = %@ & %@", objectMoving.text, objectMoving.placement);
+    NSLog(@"objectBeingMoved = %@ %@", objectBeingMoved.text, objectBeingMoved.placement);
+}
 
-
-
-
+#pragma mark - Helper
 
 
 - (NSArray<id<FunObject>> *) createFakeRecords {
@@ -200,8 +250,11 @@
         thought.extraText = @"some descritpion text";
         thought.tags = @[@"funny", @"love"];
         thought.reminderDate = [NSDate date];
+        thought.placement = [NSNumber numberWithInt:19-i];
         
     }
+    
+    [_model saveCoreDataContext];
     
     return [NSArray arrayWithArray:objectsToSave];
 }

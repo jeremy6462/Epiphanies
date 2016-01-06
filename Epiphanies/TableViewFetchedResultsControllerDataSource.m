@@ -66,9 +66,8 @@
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
     // The fetch controller is about to start sending change notifications, so prepare the table view for updates.
         [_tableView beginUpdates];
-    
-    
 }
+
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
     
@@ -125,3 +124,15 @@
 }
 
 @end
+
+// For setting the placement of all thoughts according to their found sort
+//    NSArray<Thought *> *objectsFetched = (NSArray<Thought *> *)fetchedResultsController.fetchedObjects;
+//    for (int i = 0; i < [objectsFetched count]; i++) {
+//        objectsFetched[i].placement = [NSNumber numberWithInt:i];
+//        NSLog(@"%@ = %@", objectsFetched[i].text, objectsFetched[i].placement);
+//    }
+//    [[Model sharedInstance] saveCoreDataContext];
+//    [[Model sharedInstance] saveObjects:objectsFetched withPerRecordProgressBlock:nil withPerRecordCompletionBlock:nil withCompletionBlock:^(NSArray *savedRecords, NSArray *deletedRecordIDs, NSError *operationError) {
+//        if (!operationError) { NSLog(@"Horray!");}
+//        else { NSLog(@"Shit %@", operationError.description);}
+//    }];

@@ -181,13 +181,13 @@
 
 #pragma mark - Delete Self from Parent
 
--(void) removeFromParent {
-    for (Thought *thought in self.parentCollection.thoughts) {
-        if ([thought.objectId isEqualToString:self.objectId]) {
-            [self.parentCollection removeThoughtsObject:thought];
-        }
-    }
-}
+//-(void) removeFromParent {
+//    for (Thought *thought in self.parentCollection.thoughts) {
+//        if ([thought.objectId isEqualToString:self.objectId]) {
+//            [self.parentCollection removeThoughtsObject:thought];
+//        }
+//    }
+//}
 
 #pragma mark - Utilities
 
@@ -199,6 +199,18 @@
     CKRecordID *castedRecord = (CKRecordID *) recordId;
     [self setRecordName:castedRecord.recordName];
     
+}
+
++ (void) updatePlacementForDeletionOfThought: (Thought *) objectToDelete inThoughts: (NSArray<Thought *>*) thoughts {
+    int indexOfObjectToDelete = (int) [thoughts indexOfObject:objectToDelete];
+    if (indexOfObjectToDelete == NSNotFound) {
+        return;
+    }
+    for (int i = 0; i < indexOfObjectToDelete; i++) {
+        thoughts[i].placement = [NSNumber numberWithInt:[thoughts[i].placement intValue] - 1];
+        NSLog(@"%@ %@", thoughts[i].text, thoughts[i].placement);
+        // TODO - save to CloudKit
+    }
 }
 
 - (void)prepareForDeletion

@@ -13,10 +13,11 @@
 #import "AKPickerViewFRCDataSource.h"
 #import "PopupViewController1.h"
 #import <STPopup/STPopup.h>
+#import "Reorderer.h"
 
 
 
-@interface MainViewController : UIViewController <UITableViewDelegate, TableViewFetchedResultsControllerDataSourceDelegate, NSFetchedResultsControllerDelegate, AKPickerViewDelegate>
+@interface MainViewController : UIViewController <UITableViewDelegate, TableViewFetchedResultsControllerDataSourceDelegate, NSFetchedResultsControllerDelegate, AKPickerViewDelegate, ReordererDelegate>
 
 @property (strong, nonatomic) Model *model;
 
@@ -25,6 +26,8 @@
 
 @property (strong, nonatomic) NSFetchedResultsController *collectionsFetchedResultsController;
 @property (strong, nonatomic) AKPickerViewFRCDataSource *collectionsFetchedResultsControllerDataSource;
+
+@property (strong, nonatomic) Reorderer *reorder;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet AKPickerView *pickerView;

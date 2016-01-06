@@ -245,10 +245,9 @@
     [self deleteObjectFromCloudKit:object completionHandler:^(NSError * _Nullable error) {
         if (error) {
             NSLog(@"Error deleting: %@", error.description);
-        } else {
-            [self deleteObjectFromCoreData:object];
         }
     }];
+    [self deleteObjectFromCoreData:object];
 }
 
 -(void) deleteObjectFromCloudKit: (id<FunObject>) object completionHandler:(void(^)(NSError *error))block {

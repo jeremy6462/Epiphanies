@@ -151,5 +151,16 @@
     
 }
 
++ (void) updatePlacementForDeletionOfThought: (Collection *) objectToDelete inThoughts: (NSArray<Collection *>*) collections {
+    int indexOfObjectToDelete = (int) [collections indexOfObject:objectToDelete];
+    if (indexOfObjectToDelete == NSNotFound) {
+        return;
+    }
+    for (int i = 0; i < indexOfObjectToDelete; i++) {
+        collections[i].placement = [NSNumber numberWithInt:[collections[i].placement intValue] - 1];
+        // TODO - save to CloudKit
+    }
+}
+
 
 @end

@@ -78,6 +78,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(void) removeFromParent;
 
+
+#pragma mark - Utilities 
+
+/*!
+ @abstract - moves surrounding impacted thought's placement values accordingly based on the future deletion of the objectToDelete
+ */
++ (void) updatePlacementForDeletionOfThought: (Thought *) objectToDelete inThoughts: (NSArray<Thought *>*) thoughts;
 @end
 
 NS_ASSUME_NONNULL_END
