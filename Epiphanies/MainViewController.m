@@ -18,13 +18,10 @@
     [self initalizeCollectionPickerView];
     [self initalizeThoughtsFetchedResultsControllerDataSource];
     
-    self.reorder = [[Reorderer alloc] init];
-    self.reorder.delegate = self;
+    self.reorderer = [[Reorderer alloc] init];
+    self.reorderer.delegate = self;
     
     self.tableView.delegate = self;
-    
-    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGestureRecognized:)];
-    [self.tableView addGestureRecognizer:longPress];
 }
 
 #pragma mark - Picker View
@@ -38,10 +35,6 @@
     self.pickerView.interitemSpacing = 10;
     self.pickerView.fisheyeFactor = 0.0001;
     self.pickerView.pickerViewStyle = AKPickerViewStyle3D;
-    
-    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapOnCollectionRecognized:)];
-    doubleTap.numberOfTapsRequired = 2;
-    [self.pickerView addGestureRecognizer:doubleTap];
     
     [self initalizeCollectionFetchedResultsControllerDataSource];
     
@@ -67,7 +60,7 @@
 - (void) initalizeThoughtsFetchedResultsControllerDataSource {
     self.thoughtsFetchedResultsControllerDataSource = [[TableViewFetchedResultsControllerDataSource alloc] initWithTableView:self.tableView];
     self.thoughtsFetchedResultsControllerDataSource.fetchedResultsController = self.thoughtsFetchedResultsController;
-    self.thoughtsFetchedResultsControllerDataSource.reuseIdentifier = @"Cell";
+    self.thoughtsFetchedResultsControllerDataSource.reuseIdentifier = @"ThoughtCell";
     self.thoughtsFetchedResultsControllerDataSource.delegate = self;
 }
 
@@ -202,27 +195,28 @@
 
 #pragma mark - Segues
 
-- (IBAction)doubleTapOnCollectionRecognized:(id)sender {
-    
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"editCollections"]) {
+        NSLog(@"segue");
+    }
 }
 
 #pragma mark - Reorderer Delegate
 
 -(IBAction)longPressGestureRecognized:(id)sender {
-    [self.reorder longPressGestureRecognized:sender onTableView:self.tableView];
+    [self.reorderer longPressGestureRecognized:sender onTableView:self.tableView];
 }
 
 -(void)updatePlacementWithSource:(NSIndexPath *)sourceIndexPath destination:(NSIndexPath *)destinationIndexPath {
+    
     Thought *objectMoving = [self.thoughtsFetchedResultsController objectAtIndexPath:sourceIndexPath];
     Thought *objectBeingMoved = [self.thoughtsFetchedResultsController objectAtIndexPath:destinationIndexPath];
-    NSLog(@"objectMoving = %@ & %@", objectMoving.text, objectMoving.placement);
-    NSLog(@"objectBeingMoved = %@ %@", objectBeingMoved.text, objectBeingMoved.placement);
+    
     NSNumber* sourcePlacement = objectMoving.placement;
     NSNumber* destinationPlacement = objectBeingMoved.placement;
+    
     objectMoving.placement = destinationPlacement;
     objectBeingMoved.placement = sourcePlacement;
-    NSLog(@"objectMoving = %@ & %@", objectMoving.text, objectMoving.placement);
-    NSLog(@"objectBeingMoved = %@ %@", objectBeingMoved.text, objectBeingMoved.placement);
 }
 
 #pragma mark - Helper

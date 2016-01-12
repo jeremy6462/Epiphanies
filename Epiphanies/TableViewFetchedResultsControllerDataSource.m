@@ -44,8 +44,8 @@
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier: self.reuseIdentifier];
     }
-    Thought *thought = [_fetchedResultsController objectAtIndexPath:indexPath];
-    [self.delegate configureCell:cell withObject:thought];
+    id<FunObject> object = (id<FunObject>)[_fetchedResultsController objectAtIndexPath:indexPath];
+    [self.delegate configureCell:cell withObject:object];
     
     return cell;
 }

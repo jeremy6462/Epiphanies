@@ -58,6 +58,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(void) updateBasedOnCKRecord: (nonnull CKRecord *) record;
 
+/**
+ *  Updates placement of surrounding sibling collections based on the placement value of the collection being deleted
+ *
+ *  @param objectToDelete Collection being deleted. The placement value of this object determines which objects in collections will be moved in placement
+ *  @param collections    the collections list whose placement values may need to be moved
+ */
++ (void) updatePlacementForDeletionOfCollection: (Collection *) objectToDelete inCollections: (NSArray<Collection *>*) collections;
+
 #pragma mark - Utilities
 
 /*!

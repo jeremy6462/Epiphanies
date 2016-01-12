@@ -27,13 +27,18 @@
                                     <rect key="frame" x="0.0" y="64" width="600" height="57"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <gestureRecognizers/>
+                                    <connections>
+                                        <outletCollection property="gestureRecognizers" destination="Rkl-Mi-IQu" appends="YES" id="AAT-hv-yZn"/>
+                                        <outletCollection property="gestureRecognizers" destination="Tof-az-S02" appends="YES" id="yU4-TW-Dti"/>
+                                    </connections>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="Cell" selectionStyle="default" indentationWidth="10" id="T4U-pK-Lke">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="Cell" selectionStyle="default" indentationWidth="10" reuseIdentifier="ThoughtCell" id="T4U-pK-Lke">
                                         <rect key="frame" x="0.0" y="149" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="T4U-pK-Lke" id="cQN-pB-btD">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -61,8 +66,75 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wi4-Lo-vMo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="Rkl-Mi-IQu" userLabel="Long Press on Cell - Reorder">
+                    <connections>
+                        <action selector="longPressGestureRecognized:" destination="PSd-Pw-3W1" id="rHK-iN-R0d"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer numberOfTapsRequired="2" id="Tof-az-S02" userLabel="Double Tap on Picker - Edit Collections">
+                    <connections>
+                        <segue destination="hdq-Ps-4r2" kind="show" id="cD1-rh-gr4"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1129" y="-2481"/>
+        </scene>
+        <!--Collections View Controller-->
+        <scene sceneID="y85-q2-YWt">
+            <objects>
+                <tableViewController id="hdq-Ps-4r2" customClass="CollectionsViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="qrh-w9-3uD">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <navigationBar key="tableHeaderView" contentMode="scaleToFill" id="kFQ-vX-KMb">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <items>
+                                <navigationItem title="Title" id="k3s-Ar-Jgt">
+                                    <barButtonItem key="rightBarButtonItem" systemItem="add" id="afz-EJ-sQe">
+                                        <connections>
+                                            <action selector="addCollection:" destination="hdq-Ps-4r2" id="Dcj-bf-H0L"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </navigationItem>
+                            </items>
+                        </navigationBar>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CollectionCell" id="1DX-kc-I4M" customClass="CollectionCell">
+                                <rect key="frame" x="0.0" y="72" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1DX-kc-I4M" id="jlW-PG-vBf">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter new Collection here" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="6be-XN-Tl3">
+                                            <rect key="frame" x="8" y="-6" width="584" height="49"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="done"/>
+                                        </textField>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="6be-XN-Tl3" secondAttribute="bottom" id="HAt-gc-fG5"/>
+                                        <constraint firstItem="6be-XN-Tl3" firstAttribute="trailing" secondItem="jlW-PG-vBf" secondAttribute="trailingMargin" id="aQF-hp-stU"/>
+                                        <constraint firstItem="6be-XN-Tl3" firstAttribute="top" secondItem="jlW-PG-vBf" secondAttribute="topMargin" constant="-14" id="czQ-kZ-uX4"/>
+                                        <constraint firstItem="6be-XN-Tl3" firstAttribute="leading" secondItem="jlW-PG-vBf" secondAttribute="leadingMargin" id="nHW-il-Pcu"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="textField" destination="6be-XN-Tl3" id="qiK-Zo-7t4"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="hdq-Ps-4r2" id="f0c-gD-HhR"/>
+                            <outlet property="delegate" destination="hdq-Ps-4r2" id="15b-iP-ECM"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6R6-VS-gZ3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1876" y="-2481"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="YqY-Qv-glQ">
@@ -207,7 +279,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GcA-wm-8Qg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="367" y="-1868"/>
+            <point key="canvasLocation" x="317" y="-1854"/>
         </scene>
     </scenes>
 </document>

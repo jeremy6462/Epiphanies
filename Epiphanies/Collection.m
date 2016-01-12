@@ -151,7 +151,7 @@
     
 }
 
-+ (void) updatePlacementForDeletionOfThought: (Collection *) objectToDelete inThoughts: (NSArray<Collection *>*) collections {
++ (void) updatePlacementForDeletionOfCollection: (Collection *) objectToDelete inCollections: (NSArray<Collection *>*) collections {
     int indexOfObjectToDelete = (int) [collections indexOfObject:objectToDelete];
     if (indexOfObjectToDelete == NSNotFound) {
         return;

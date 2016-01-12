@@ -27,7 +27,7 @@
 @property (strong, nonatomic) NSFetchedResultsController *collectionsFetchedResultsController;
 @property (strong, nonatomic) AKPickerViewFRCDataSource *collectionsFetchedResultsControllerDataSource;
 
-@property (strong, nonatomic) Reorderer *reorder;
+@property (strong, nonatomic) Reorderer *reorderer;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet AKPickerView *pickerView;
