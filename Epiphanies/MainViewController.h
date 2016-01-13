@@ -12,12 +12,13 @@
 #import "AKPickerView.h"
 #import "AKPickerViewFRCDataSource.h"
 #import "PopupViewController1.h"
-#import <STPopup/STPopup.h>
 #import "Reorderer.h"
+#import "Updater.h"
+#import "CollectionsViewController.h"
 
 
 
-@interface MainViewController : UIViewController <UITableViewDelegate, TableViewFetchedResultsControllerDataSourceDelegate, NSFetchedResultsControllerDelegate, AKPickerViewDelegate, ReordererDelegate>
+@interface MainViewController : UIViewController <UITableViewDelegate, TableViewFetchedResultsControllerDataSourceDelegate, NSFetchedResultsControllerDelegate, AKPickerViewDelegate, ReordererDelegate, CollectionViewControllerDelegate>
 
 @property (strong, nonatomic) Model *model;
 

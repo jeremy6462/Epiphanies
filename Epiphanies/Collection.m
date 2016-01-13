@@ -37,6 +37,25 @@
     return collectionToReturn;
 }
 
++ (nullable instancetype) newCollectionInManagedObjectContext:(NSManagedObjectContext *)context placement: (nonnull NSNumber *) placement {
+    Collection *collectionToReturn = [Collection createManagedObject:context];
+    if (collectionToReturn) {
+        
+        // objectId
+        collectionToReturn.objectId = [IdentifierCreator createId];
+        
+        // placement
+        collectionToReturn.placement = placement;
+        
+        // recordId
+        // fabricate the record zone for it's id (it will match the record zone already created TODO - maybe we should just refact the record zone creator to call some method that will make the record zone if it hasn't already been made and return the id
+        CKRecordZone *zone = [[CKRecordZone alloc] initWithZoneName:ZONE_NAME];
+        CKRecord *record = [[CKRecord alloc] initWithRecordType:COLLECTION_RECORD_TYPE zoneID:zone.zoneID];
+        collectionToReturn.recordId = record.recordID;
+    }
+    return collectionToReturn;
+}
+
 + (nullable instancetype) newManagedObjectInContext: (nonnull NSManagedObjectContext *) context basedOnCKRecord: (nonnull CKRecord *) record {
     
     // create a Collection object in the context

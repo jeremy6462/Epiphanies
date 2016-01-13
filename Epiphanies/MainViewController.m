@@ -24,6 +24,14 @@
     self.tableView.delegate = self;
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+    
+    if (self.collectionsFetchedResultsController.fetchedObjects.count == 0) {
+        Collection *defaultCollection = [self createDefaultCollection];
+        [self updateThougthsFRCWithCollection:defaultCollection];
+    }
+}
+
 #pragma mark - Picker View
 
 - (void) initalizeCollectionPickerView {
@@ -41,17 +49,13 @@
     [self.pickerView reloadData];
 }
 
-// rename collections by double tapping or tapping and holding on a collection name in picker
-
 - (void) pickerView:(AKPickerView *)pickerView didSelectItem:(NSInteger)item {
     Collection *collectionSelected = [self.collectionsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForItem:item inSection:0]];
-    self.thoughtsFetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"%K.%K == %@", PARENT_COLLECTION_KEY, OBJECT_ID_KEY, collectionSelected.objectId];
-    [self.thoughtsFetchedResultsController performFetch:NULL];
-    [self.tableView reloadData];
+    [self updateThougthsFRCWithCollection:collectionSelected];
 }
 
-- (void) updateCollectionPicker {
-    [self.collectionsFetchedResultsController performFetch:nil];
+- (void) collectionsUpdatedDuringEditing {
+    [self.collectionsFetchedResultsController performFetch:NULL];
     [self.pickerView reloadData];
 }
 
@@ -75,11 +79,7 @@
     [self initalizeCollectionPickerView]; // make sure this is called
     Collection *collectionSelected;
     if (self.collectionsFetchedResultsController.fetchedObjects.count == 0) {
-        collectionSelected = [Collection newCollectionInManagedObjectContext:_model.context name:@"Light Bulbs"];
-        [self.model saveCollections:[NSArray arrayWithObject:collectionSelected] withPerRecordProgressBlock:nil withPerRecordCompletionBlock:nil withCompletionBlock:nil];
-        [_model saveCoreDataContext];
-        [self.collectionsFetchedResultsController performFetch:NULL];
-        [self.pickerView reloadData];
+        collectionSelected = [self createDefaultCollection];
     } else /*there are fetched collections*/ {
         collectionSelected = [self.collectionsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForItem:self.pickerView.selectedItem inSection:0]];
     }
@@ -135,70 +135,16 @@
 #pragma mark - Add
 
 - (IBAction)addThought:(id)sender {
-    int numThoughtsInCurrentCollection = (int) self.thoughtsFetchedResultsController.fetchedObjects.count;
+    NSNumber* numThoughtsInCurrentCollection = [NSNumber numberWithInt:self.thoughtsFetchedResultsController.fetchedObjects.count];
     Collection* currentCollection = [self.collectionsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForItem:self.pickerView.selectedItem inSection:0]];
-    Thought *newThought = [Thought newThoughtInManagedObjectContext:_model.context collection:currentCollection];
-    newThought.placement = [NSNumber numberWithInteger:numThoughtsInCurrentCollection];
-    [self presentViewController:[self allowUserToUpdateThought:newThought] animated:YES completion:nil];
+    [self presentViewController:[[Updater new] handleThoughtAdditionWithParent:currentCollection placement:numThoughtsInCurrentCollection]animated:YES completion:nil];
 }
 
+#pragma mark - Update
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Thought *selectedThought = [self.thoughtsFetchedResultsController objectAtIndexPath:indexPath];
-    [self presentViewController:[self allowUserToUpdateThought:selectedThought] animated:YES completion:nil];
-
-}
-
-
-- (UIAlertController *) allowUserToUpdateThought: (Thought *) thought {
-    
-    UIAlertController *alertController = [UIAlertController
-                                          alertControllerWithTitle:@"Idea"
-                                          message:@"Enter text for the idea here"
-                                          preferredStyle:UIAlertControllerStyleAlert];
-    
-    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField)
-     {
-         textField.placeholder = thought.text;
-     }];
-    
-    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Save" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        NSString *textFromUser = ((UITextField *)alertController.textFields.firstObject).text;
-        if (textFromUser) {
-            if (thought.text == nil) { // new thought
-                thought.text = textFromUser;
-                [_model saveCoreDataContext];
-                [_model saveThoughts:[NSArray arrayWithObject:thought] withPerRecordProgressBlock:nil withPerRecordCompletionBlock:nil withCompletionBlock:nil];
-            } else {
-                [_model saveObject:thought withChanges:@{TEXT_KEY : textFromUser} withPerRecordProgressBlock:nil withPerRecordCompletionBlock:nil withCompletionBlock:nil];
-                [_model saveCoreDataContext];
-            }
-            
-        } else {
-            if (thought.text == nil) {
-               [_model deleteFromBothCloudKitAndCoreData:thought];
-            }
-        }
-    }];
-    
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        if (!thought.text){
-            [_model deleteFromBothCloudKitAndCoreData:thought];
-        }
-    }];
-    
-    [alertController addAction:ok];
-    [alertController addAction:cancel];
-    
-    return alertController;
-}
-
-#pragma mark - Segues
-
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"editCollections"]) {
-        NSLog(@"segue");
-    }
+    [self presentViewController:[[Updater new] handleUpdatingThought:selectedThought] animated:YES completion:nil];
 }
 
 #pragma mark - Reorderer Delegate
@@ -219,8 +165,16 @@
     objectBeingMoved.placement = sourcePlacement;
 }
 
-#pragma mark - Helper
+#pragma mark - Segues
 
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"editCollections"]) {
+        CollectionsViewController *vc = (CollectionsViewController *) segue.destinationViewController;
+        vc.delegate = self;
+    }
+}
+
+#pragma mark - Helper
 
 - (NSArray<id<FunObject>> *) createFakeRecords {
     
@@ -253,4 +207,18 @@
     return [NSArray arrayWithArray:objectsToSave];
 }
 
+- (Collection *) createDefaultCollection {
+    Collection* collectionSelected = [Collection newCollectionInManagedObjectContext:_model.context name:@"Light Bulbs"];
+    [self.model saveCollections:[NSArray arrayWithObject:collectionSelected] withPerRecordProgressBlock:nil withPerRecordCompletionBlock:nil withCompletionBlock:nil];
+    [_model saveCoreDataContext];
+    [self.collectionsFetchedResultsController performFetch:NULL];
+    [self.pickerView reloadData];
+    return collectionSelected;
+}
+
+- (void) updateThougthsFRCWithCollection: (Collection *) collectionSelected {
+    self.thoughtsFetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"%K.%K == %@", PARENT_COLLECTION_KEY, OBJECT_ID_KEY, collectionSelected.objectId];
+    [self.thoughtsFetchedResultsController performFetch:NULL];
+    [self.tableView reloadData];
+}
 @end

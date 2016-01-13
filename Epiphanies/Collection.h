@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (nullable instancetype) newCollectionInManagedObjectContext:(nonnull NSManagedObjectContext *) context name:(nullable NSString *)name;
 
++ (nullable instancetype) newCollectionInManagedObjectContext:(NSManagedObjectContext *)context placement: (nonnull NSNumber *) placement;
+
 /*!
  @abstract creates a new Collection in the context
  @discussion this method returns a Collection object according to the CKRecord provided, however because an array of Thought objects is not passed (an one will not come with the record), the thoughts property must be filled after this initialization

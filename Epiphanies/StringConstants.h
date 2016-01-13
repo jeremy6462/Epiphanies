@@ -34,4 +34,7 @@
 #define PARENT_THOUGHT_KEY @"parentThought"
 #define IMAGE_KEY @"image"
 
+// Notifications
+#define EP_NewCollectionCellReadyForTextFieldEditing @"EPNewCollectionCellReadyForTextFieldEditing"
+
 #endif /* StringConstants_h */

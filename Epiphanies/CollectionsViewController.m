@@ -13,6 +13,7 @@
 #pragma mark - View Controller
 
 -(void) viewDidLoad {
+    
     self.model = [Model sharedInstance];
     
     [self initalizeCollectionFetchedResultsControllerDataSource];
@@ -21,6 +22,13 @@
     self.reorderer.delegate = self;
     
     self.tableView.delegate = self;
+    
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addCollection:)];
+    [self.navigationItem setRightBarButtonItem:addButton];
+}
+
+-(void) viewDidDisappear:(BOOL)animated {
+    [self.delegate collectionsUpdatedDuringEditing];
 }
 
 #pragma mark - Collection Fetched Results Controller
@@ -56,18 +64,22 @@
 
 - (void) deleteObject:(Collection *)object {
     [Collection updatePlacementForDeletionOfCollection:object inCollections:self.collectionsFetchedResultsController.fetchedObjects];
-    [_model deleteFromBothCloudKitAndCoreData:object]; // saves context
+    [_model deleteFromBothCloudKitAndCoreData:object];
 }
 
 #pragma mark - Add
 
+// should be connected through code to an added UIBarButtonItem
 - (IBAction)addCollection:(id)sender {
-    int numCollections = (int) self.collectionsFetchedResultsController.fetchedObjects.count;
-    Collection *newCollection = [Collection newCollectionInManagedObjectContext:self.model.context name:nil];
-    newCollection.placement = [NSNumber numberWithInteger:numCollections];
-    CollectionCell *cell = (CollectionCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    cell.collection = newCollection; // get rid of it 
-    [cell.textField becomeFirstResponder];
+    NSNumber* numCollections = [NSNumber numberWithInt: (int) self.collectionsFetchedResultsController.fetchedObjects.count];
+    [self presentViewController: [[Updater new] handleCollectionAdditionWithPlacement:numCollections] animated:YES completion:nil];
+}
+
+#pragma mark - Update
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    Collection *selectedCollection = [self.collectionsFetchedResultsController objectAtIndexPath:indexPath];
+    [self presentViewController:[[Updater new] handleUpdatingCollection:selectedCollection] animated:YES completion:nil];
 }
 
 #pragma mark - Reorderer Delegate
