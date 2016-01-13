@@ -39,9 +39,6 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                         <gestureRecognizers/>
-                                        <connections>
-                                            <outletCollection property="gestureRecognizers" destination="mj5-R6-Y1A" appends="YES" id="MRU-tk-LRo"/>
-                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -72,11 +69,6 @@
                         <segue destination="hdq-Ps-4r2" kind="showDetail" identifier="editCollections" action="showViewController:sender:" id="WFb-DW-0RJ"/>
                     </connections>
                 </tapGestureRecognizer>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="mj5-R6-Y1A" userLabel="Tap and Hold on Cell">
-                    <connections>
-                        <action selector="longPressGestureRecognized:" destination="PSd-Pw-3W1" id="iaX-eU-5Hh"/>
-                    </connections>
-                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1129" y="-2481"/>
         </scene>
@@ -98,9 +90,6 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <gestureRecognizers/>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="qFE-Y0-uD2" appends="YES" id="WE7-XV-meK"/>
-                                </connections>
                             </tableViewCell>
                         </prototypes>
                     </tableView>
@@ -108,11 +97,6 @@
                         <outlet property="tableView" destination="qrh-w9-3uD" id="hx5-pv-nIQ"/>
                     </connections>
                 </tableViewController>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="qFE-Y0-uD2">
-                    <connections>
-                        <action selector="longPressGestureRecognized:" destination="hdq-Ps-4r2" id="y3x-BX-Drd"/>
-                    </connections>
-                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1913" y="-2481"/>
         </scene>

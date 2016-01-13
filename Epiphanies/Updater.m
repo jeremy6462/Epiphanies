@@ -52,7 +52,7 @@
     
     UIAlertAction *ok = [UIAlertAction actionWithTitle:confirmButtonText style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSString *textFromUser = ((UITextField *)alertController.textFields.firstObject).text;
-        if (textFromUser) {
+        if (![textFromUser isEqualToString:@""]) {
             if (dealingWithCollections) {
                 ((Collection *) object).name = textFromUser;
             } else {
@@ -78,11 +78,18 @@
 - (UIAlertController *) presentUIForUpdatingObject: (id<FunObject>) object {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:titleText message:messageText preferredStyle:UIAlertControllerStyleAlert];
     
-    [alertController addTextFieldWithConfigurationHandler:nil];
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        if (dealingWithCollections) {
+            textField.placeholder = ((Collection *) object).name;
+        } else {
+           textField.placeholder = ((Thought *) object).text;
+        }
+
+    }];
     
     UIAlertAction *ok = [UIAlertAction actionWithTitle:confirmButtonText style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSString *textFromUser = ((UITextField *)alertController.textFields.firstObject).text;
-        if (textFromUser) {
+        if (![textFromUser isEqualToString:@""]) {
             if (dealingWithCollections) {
                 ((Collection *) object).name = textFromUser;
             } else {
@@ -92,6 +99,7 @@
             [[Model sharedInstance] saveObjects:[NSArray arrayWithObject:object] withPerRecordProgressBlock:nil withPerRecordCompletionBlock:nil withCompletionBlock:nil];
         } else {
             // present view controller saying collections must have a name
+            
         }
     }];
     

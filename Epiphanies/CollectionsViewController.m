@@ -25,6 +25,9 @@
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addCollection:)];
     [self.navigationItem setRightBarButtonItem:addButton];
+    
+    UILongPressGestureRecognizer *reorderGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGestureRecognized:)];
+    [self.tableView addGestureRecognizer:reorderGesture];
 }
 
 -(void) viewDidDisappear:(BOOL)animated {
@@ -80,6 +83,7 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Collection *selectedCollection = [self.collectionsFetchedResultsController objectAtIndexPath:indexPath];
     [self presentViewController:[[Updater new] handleUpdatingCollection:selectedCollection] animated:YES completion:nil];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - Reorderer Delegate

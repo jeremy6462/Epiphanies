@@ -22,6 +22,9 @@
     self.reorderer.delegate = self;
     
     self.tableView.delegate = self;
+    
+    UILongPressGestureRecognizer *reorderGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGestureRecognized:)];
+    [self.tableView addGestureRecognizer:reorderGesture];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -57,6 +60,8 @@
 - (void) collectionsUpdatedDuringEditing {
     [self.collectionsFetchedResultsController performFetch:NULL];
     [self.pickerView reloadData];
+    Collection *collectionSelected = [self.collectionsFetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForItem:self.pickerView.selectedItem inSection:0]];
+    [self updateThougthsFRCWithCollection:collectionSelected];
 }
 
 #pragma mark - Thoughts Fetched Results Controller
@@ -121,7 +126,7 @@
     NSManagedObjectContext *context = _model.context;
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:COLLECTION_RECORD_TYPE];
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:PLACEMENT_KEY ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:PLACEMENT_KEY ascending:YES];
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
     [fetchRequest setSortDescriptors:sortDescriptors];
     [fetchRequest setFetchBatchSize:20];
@@ -145,6 +150,7 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Thought *selectedThought = [self.thoughtsFetchedResultsController objectAtIndexPath:indexPath];
     [self presentViewController:[[Updater new] handleUpdatingThought:selectedThought] animated:YES completion:nil];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - Reorderer Delegate
