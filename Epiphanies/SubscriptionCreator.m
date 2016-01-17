@@ -39,8 +39,16 @@
         photoSubscription.notificationInfo = notification;
         
         // save the subscriptions to the database TODO - better error handling system for multiple subscriptions
-        [database saveSubscription:collectionSubscription completionHandler:^(CKSubscription *subscription, NSError *error) {}];
-        [database saveSubscription:thoughtSubscription completionHandler:^(CKSubscription *subscription, NSError *error) {}];
+        [database saveSubscription:collectionSubscription completionHandler:^(CKSubscription *subscription, NSError *error) {
+            if (error) {
+                block(NO, error);
+            }
+        }];
+        [database saveSubscription:thoughtSubscription completionHandler:^(CKSubscription *subscription, NSError *error) {
+            if (error) {
+                block(NO, error);
+            }
+        }];
         [database saveSubscription:photoSubscription completionHandler:^(CKSubscription *subscription, NSError *error) {
             if (error) {
                 block(NO, error);

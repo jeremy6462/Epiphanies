@@ -4,6 +4,7 @@
         <attribute name="name" attributeType="String" syncable="YES"/>
         <attribute name="objectId" attributeType="String" syncable="YES"/>
         <attribute name="placement" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="recordData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="recordId" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="recordName" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <relationship name="thoughts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Thought" inverseName="parentCollection" inverseEntity="Thought" syncable="YES"/>
@@ -12,6 +13,7 @@
         <attribute name="image" attributeType="Binary" syncable="YES"/>
         <attribute name="objectId" attributeType="String" spotlightIndexingEnabled="YES" syncable="YES"/>
         <attribute name="placement" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="recordData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="recordId" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="recordName" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <relationship name="parentThought" maxCount="1" deletionRule="Nullify" destinationEntity="Thought" inverseName="photos" inverseEntity="Thought" syncable="YES"/>
@@ -22,6 +24,7 @@
         <attribute name="location" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="objectId" attributeType="String" syncable="YES"/>
         <attribute name="placement" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="recordData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="recordId" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="recordName" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="reminderDate" optional="YES" attributeType="Date" syncable="YES"/>
@@ -31,8 +34,8 @@
         <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="parentThought" inverseEntity="Photo" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Collection" positionX="-540" positionY="260" width="128" height="133"/>
-        <element name="Photo" positionX="-173" positionY="270" width="128" height="135"/>
-        <element name="Thought" positionX="-362" positionY="302" width="128" height="225"/>
+        <element name="Collection" positionX="-540" positionY="260" width="128" height="150"/>
+        <element name="Photo" positionX="-173" positionY="270" width="128" height="150"/>
+        <element name="Thought" positionX="-362" positionY="302" width="128" height="240"/>
     </elements>
 </model>

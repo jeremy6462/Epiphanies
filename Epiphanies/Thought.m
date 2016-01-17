@@ -26,11 +26,12 @@
         // placement
         thoughtToReturn.placement = [NSNumber numberWithInt:0];
         
-        // recordId
+        // recordId and recordData
         // fabricate the record zone for it's id (it will match the record zone already created TODO - maybe we should just refact the record zone creator to call some method that will make the record zone if it hasn't already been made and return the id
         CKRecordZone *zone = [[CKRecordZone alloc] initWithZoneName:ZONE_NAME];
         CKRecord *record = [[CKRecord alloc] initWithRecordType:THOUGHT_RECORD_TYPE zoneID:zone.zoneID];
         thoughtToReturn.recordId = record.recordID;
+        thoughtToReturn.recordData = [[RecordArchiveHandler new] archive:record]; // TODO - could cause problems with saving for the first time and conflicting record data. Maybe just set this on compeletion of save?
         
         // parentCollection
         thoughtToReturn.parentCollection = collection;
@@ -56,8 +57,9 @@
         // placement
         thoughtToReturn.placement = [record objectForKey:PLACEMENT_KEY];
         
-        // recordId
+        // recordId and recordData
         thoughtToReturn.recordId = [record recordID];
+        thoughtToReturn.recordData = [[RecordArchiveHandler new] archive:record];
         
         // extra aspects of a Thought
         thoughtToReturn.text = [record objectForKey:TEXT_KEY];
@@ -94,11 +96,12 @@
     
     // get a reference to self's record object. if there is none, create one
     CKRecord *record;
-    if (self.recordId) {
-        record = [[CKRecord alloc] initWithRecordType:THOUGHT_RECORD_TYPE recordID:self.recordId];
+    if (self.recordData) {
+        record = [[RecordArchiveHandler new] unarchive:self.recordData];
     } else {
         record = [[CKRecord alloc] initWithRecordType:THOUGHT_RECORD_TYPE];
         self.recordId = record.recordID;
+        self.recordData = [[RecordArchiveHandler new] archive:record];
     }
     
     // set all of the fields of the record = to the the current fields of self
@@ -123,13 +126,15 @@
 
 -(CKRecord *) asRecordWithChanges:(NSDictionary *)dictionaryOfChanges {
     
-    // get a reference to self's record object. if there is none, create one
+    
+    // get a reference to self's record object. if there is none, create one TODO - create one method to handle this record reference
     CKRecord *record;
-    if (self.recordId) {
-        record = [[CKRecord alloc] initWithRecordType:THOUGHT_RECORD_TYPE recordID:self.recordId];
+    if (self.recordData) {
+        record = [[RecordArchiveHandler new] unarchive:self.recordData];
     } else {
         record = [[CKRecord alloc] initWithRecordType:THOUGHT_RECORD_TYPE];
         self.recordId = record.recordID;
+        self.recordData = [[RecordArchiveHandler new] archive:record];
     }
     
     /*
@@ -164,8 +169,9 @@
     // placement
     self.placement = [record objectForKey:PLACEMENT_KEY];
     
-    // recordId
+    // recordId and recordData
     self.recordId = [record recordID];
+    self.recordData = [[RecordArchiveHandler new] archive:record];
     
     // extra aspects of a Thought
     self.text = [record objectForKey:TEXT_KEY];
@@ -198,7 +204,6 @@
     // set the recordName accordingly
     CKRecordID *castedRecord = (CKRecordID *) recordId;
     [self setRecordName:castedRecord.recordName];
-    
 }
 
 + (void) updatePlacementForDeletionOfThought: (Thought *) objectToDelete inThoughts: (NSArray<Thought *>*) thoughts {

@@ -47,7 +47,7 @@
 }
 
 + (void) deleteObjectWithRecordId:(nonnull CKRecordID *) recordId context :(nonnull NSManagedObjectContext *)context type:(nonnull NSString *)recordType {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"recordName == %@", recordId.recordName];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@",RECORD_NAME_KEY, recordId.recordName];
     NSArray *objects = [Fetcher fetchRecordsFromCoreDataContext:context type:recordType predicate:predicate sortDescriptiors:nil];
     if ([objects count]) {
         [Deleter deleteObject:objects[0] context:context];

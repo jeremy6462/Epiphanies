@@ -146,7 +146,7 @@
         parentType = THOUGHT_RECORD_TYPE;
     }
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"recordName == %@", parentId.recordName];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", RECORD_NAME_KEY, parentId.recordName];
     NSArray *objects = [Fetcher fetchRecordsFromCoreDataContext:context type:parentType predicate:predicate sortDescriptiors:nil];
     
     if ([objects count]) {

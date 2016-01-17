@@ -13,6 +13,7 @@
 #import "StringConstants.h"
 
 #import "IdentifierCreator.h"
+#import "RecordArchiveHandler.h"
 #import "FunObject.h"
 #import "Orderable.h"
 #import "Child.h"

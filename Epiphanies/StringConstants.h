@@ -18,6 +18,8 @@
 #define TYPE_KEY @"type"
 #define OBJECT_ID_KEY @"objectId"
 #define RECORD_ID_KEY @"recordId"
+#define RECORD_DATA_KEY @"recordData"
+#define RECORD_NAME_KEY @"recordName"
 #define PLACEMENT_KEY @"placement"
 #define NAME_KEY @"name"
 #define THOUGHTS_KEY @"thoughts"

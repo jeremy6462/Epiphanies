@@ -2,8 +2,8 @@
 //  Thought+CoreDataProperties.h
 //  Epiphanies
 //
-//  Created by Jeremy Kelleher on 8/31/15.
-//  Copyright © 2015 JKProductions. All rights reserved.
+//  Created by Jeremy Kelleher on 1/17/16.
+//  Copyright © 2016 JKProductions. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
 //  to delete and recreate this implementation file for your updated model.
@@ -21,10 +21,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *objectId;
 @property (nullable, nonatomic, retain) NSNumber *placement;
 @property (nullable, nonatomic, retain) id recordId;
+@property (nullable, nonatomic, retain) NSString *recordName;
+@property (nullable, nonatomic, retain) NSDate *reminderDate;
 @property (nullable, nonatomic, retain) id tags;
 @property (nullable, nonatomic, retain) NSString *text;
-@property (nullable, nonatomic, retain) NSDate *reminderDate;
-@property (nullable, nonatomic, retain) NSString *recordName;
+@property (nullable, nonatomic, retain) NSData *recordData;
 @property (nullable, nonatomic, retain) Collection *parentCollection;
 @property (nullable, nonatomic, retain) NSSet<Photo *> *photos;
 

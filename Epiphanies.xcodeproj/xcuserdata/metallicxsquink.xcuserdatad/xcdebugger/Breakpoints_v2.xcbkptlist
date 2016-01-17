@@ -10,38 +10,6 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Epiphanies/AppDelegate.m"
-            timestampString = "462057981.823573"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "35"
-            endingLineNumber = "35"
-            landmarkName = "-application:didReceiveRemoteNotification:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Epiphanies/AppDelegate.m"
-            timestampString = "462740888.25919"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "117"
-            endingLineNumber = "117"
-            landmarkName = "-applicationWillTerminate:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Epiphanies/AppDelegate.m"
             timestampString = "462683074.792064"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"

@@ -19,7 +19,9 @@
         
         CKModifyRecordZonesOperation *zoneSave = [[CKModifyRecordZonesOperation alloc] initWithRecordZonesToSave:@[zone]recordZoneIDsToDelete:nil];
         zoneSave.modifyRecordZonesCompletionBlock = ^(NSArray *zoneSaves, NSArray *zoneDeletes, NSError *error) {
-            [ZoneCreator storeZoneId: zone.zoneID];
+            if (!error && [zoneSaves count]) {
+                 [ZoneCreator storeZoneId: zone.zoneID];
+            }
             block (zoneSaves, zoneDeletes, error);
         };
         [database addOperation:zoneSave];

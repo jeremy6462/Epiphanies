@@ -19,65 +19,60 @@
 #pragma mark - Notifications
 
 -(void)application:(nonnull UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(nonnull NSData *)deviceToken {
-    NSLog(@"device token: %@", deviceToken.description);
+    NSLog(@"didRegisterForRemoteNotifications device token: %@", deviceToken.description);
 }
 
 -(void)application:(nonnull UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(nonnull NSError *)error {
-    /*
-     ATTENTION - commenting out line because the simulator can't handle remote notifications. To test this, use a connected device
-//    NSLog(@"Error registering for Remote Notifications: %@", error.description);
-     */
+    NSLog(@"Error registering for Remote Notifications: %@", error.description); // simulator can't handle remote notificaitons
 }
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+- (void) application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     
-    // get a CKNotification out of the notification object
     CKNotification *cloudKitNotification = [CKNotification notificationFromRemoteNotificationDictionary:userInfo];
-    
     [self handleCloudKitNotification:cloudKitNotification];
-    
+    // TODO - call the completion handler??
 }
 
-// TODO - notification about deletion
 - (void) handleCloudKitNotification: (CKNotification *) cloudKitNotification {
     
     if (cloudKitNotification.notificationType == CKNotificationTypeQuery) {
         
-        // fetch any possibly missed notifications
-        CKFetchNotificationChangesOperation *operationFetchMissing = [[CKFetchNotificationChangesOperation alloc] init];
+        // first, fetch any possibly missed notifications. Not processing the cloudKitNotification just yet b/c want to fetch for possibly missed notifications first.
+        CKFetchNotificationChangesOperation *operationFetchMissing = [CKFetchNotificationChangesOperation new];
+        
         operationFetchMissing.notificationChangedBlock = ^void(CKNotification *notification) {
             if (notification.notificationType == CKNotificationTypeQuery) {
                 CKQueryNotification *ckQueryNotification = (CKQueryNotification *)cloudKitNotification;
                 CKRecordID *fetchedRecordId = [ckQueryNotification recordID];
                 if (ckQueryNotification.recordFields) {
-                    [[self model] fetchCKRecordAndUpdateCoreData:fetchedRecordId];
+                    [[Model sharedInstance] fetchCKRecordAndUpdateCoreData:fetchedRecordId];
                 }
 
             }
         };
         
-        // handle the operation's completion or early return based on a serverChangeToken
+        // handle the operation's completion or early return based on a serverChangeToken - what??
         operationFetchMissing.fetchNotificationChangesCompletionBlock =^void(CKServerChangeToken *serverChangeToken, NSError *operationError) {
             if (operationError) {
-                NSLog(@"error fetching notifications: %@", operationError);
+                NSLog(@"error fetching notifications ERROR HANDLING HERE: %@", operationError);
             } else {
                 // TODO - figure out a way to mark notifications as read
                 CKMarkNotificationsReadOperation *operationMarkRead = [[CKMarkNotificationsReadOperation alloc] initWithNotificationIDsToMarkRead:@[]];
                 operationMarkRead.qualityOfService = NSOperationQualityOfServiceBackground;
                 operationMarkRead.markNotificationsReadCompletionBlock = ^void(NSArray <CKNotificationID *> * _Nullable notificationIDsMarkedRead, NSError * _Nullable markOperationError) {
-                    NSLog(@"error marking notifciations as read: %@", markOperationError);
+                    NSLog(@"error marking notifciations as read ERROR HANDLING HERE: %@", markOperationError);
                 };
             }
         };
         
         operationFetchMissing.qualityOfService = NSOperationQualityOfServiceBackground;
-        [[self model] executeContainerOperation:operationFetchMissing];
+        [[Model sharedInstance] executeContainerOperation:operationFetchMissing];
         
-        // process the fetched record - occuring afer so the fetch of extra notifications could happen in the background
+        // process the fetched record for the currently just accepted notificaton - occuring afer the operation setup so the fetch of extra notifications could happen in the background
         CKQueryNotification *ckQueryNotification = (CKQueryNotification *)cloudKitNotification;
         CKRecordID *fetchedRecordId = [ckQueryNotification recordID];
         if (ckQueryNotification.recordFields) {
-            [[self model] fetchCKRecordAndUpdateCoreData:fetchedRecordId];
+            [[Model sharedInstance] fetchCKRecordAndUpdateCoreData:fetchedRecordId];
         }
     }
 }
@@ -86,9 +81,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    // Register for push notifications TODO - don't ask for these? I don't need User notifications (should be silent from CK except for reminders)
-    UIUserNotificationSettings *notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
-    [application registerUserNotificationSettings:notificationSettings];
+    // Register for silent notifications
+    // TODO - handle reminder notifications as local notifications?
     [application registerForRemoteNotifications];
     
     return YES;
@@ -121,10 +115,7 @@
 #pragma mark - Model
 
 -(Model *) model {
-    if (!_model) {
-        _model = [[Model alloc] init];
-    }
-    return _model;
+    return [Model sharedInstance];
 }
 
 #pragma mark - Core Data stack
