@@ -30,6 +30,7 @@
         CKRecordZone *zone = [[CKRecordZone alloc] initWithZoneName:ZONE_NAME];
         CKRecord *record = [[CKRecord alloc] initWithRecordType:COLLECTION_RECORD_TYPE zoneID:zone.zoneID];
         collectionToReturn.recordId = record.recordID;
+        collectionToReturn.recordData = [[RecordArchiveHandler new] archive:record];
         
         // name
         collectionToReturn.name = (name != nil) ? name : [Collection randomCollectionName];
@@ -52,6 +53,7 @@
         CKRecordZone *zone = [[CKRecordZone alloc] initWithZoneName:ZONE_NAME];
         CKRecord *record = [[CKRecord alloc] initWithRecordType:COLLECTION_RECORD_TYPE zoneID:zone.zoneID];
         collectionToReturn.recordId = record.recordID;
+        collectionToReturn.recordData = [[RecordArchiveHandler new] archive:record];
     }
     return collectionToReturn;
 }
@@ -70,7 +72,7 @@
         
         // recordId
         collectionToReturn.recordId = record.recordID;
-        NSLog(@"%@",collectionToReturn.recordId);
+        collectionToReturn.recordData = [[RecordArchiveHandler new] archive:record];
         
         // name
         collectionToReturn.name = [record objectForKey:NAME_KEY];
@@ -90,11 +92,12 @@
     CKRecord *recordToReturn;
     
     // if there is a record id (ie. there is already a record of this object
-    if (self.recordId) {
-        recordToReturn = [[CKRecord alloc] initWithRecordType:COLLECTION_RECORD_TYPE recordID:self.recordId];
+    if (self.recordData) {
+        recordToReturn = [[RecordArchiveHandler new] unarchive:self.recordData];
     } else {
         recordToReturn = [[CKRecord alloc] initWithRecordType:COLLECTION_RECORD_TYPE];
         self.recordId = recordToReturn.recordID;
+        self.recordData = [[RecordArchiveHandler new] archive:recordToReturn];
     }
     
     [recordToReturn setObject:COLLECTION_RECORD_TYPE forKey:TYPE_KEY]; // used to get the type of this record back when a change occurs and a push notification is sent
@@ -111,10 +114,11 @@
     
     // if there is a record id (ie. there is already a record of this object
     if (self.recordId) {
-        record = [[CKRecord alloc] initWithRecordType:COLLECTION_RECORD_TYPE recordID:self.recordId];
+        record = [[RecordArchiveHandler new] unarchive:self.recordData];
     } else {
         record = [[CKRecord alloc] initWithRecordType:COLLECTION_RECORD_TYPE];
         self.recordId = record.recordID;
+        self.recordData = [[RecordArchiveHandler new] archive:record];
     }
     
     // loop through the keys in dictionaryOfChanges and build the record accordingly depending on the values stored behind those keys
@@ -143,6 +147,7 @@
     
     // recordId
     self.recordId = record.recordID;
+    self.recordData = [[RecordArchiveHandler new] archive:record];
     
     // name
     self.name = [record objectForKey:NAME_KEY];

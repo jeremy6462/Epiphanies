@@ -30,6 +30,7 @@
         CKRecordZone *zone = [[CKRecordZone alloc] initWithZoneName:ZONE_NAME];
         CKRecord *record = [[CKRecord alloc] initWithRecordType:PHOTO_RECORD_TYPE zoneID:zone.zoneID];
         photoToReturn.recordId = record.recordID;
+        photoToReturn.recordData = [[RecordArchiveHandler new] archive:record];
         // TODO - set up transient property to set for recordId for type safety?
         
         // parentThought
@@ -58,6 +59,7 @@
         
         // recordId
         photoToReturn.recordId = record.recordID;
+        photoToReturn.recordData = [[RecordArchiveHandler new] archive:record];
         
         // parentThought
         // image
@@ -92,11 +94,12 @@
     CKRecord *recordToReturn;
     
     // if there is a record id (ie. there is already a record of this object)
-    if (self.recordId) {
-        recordToReturn = [[CKRecord alloc] initWithRecordType:PHOTO_RECORD_TYPE recordID:self.recordId];
+    if (self.recordData) {
+        recordToReturn = [[RecordArchiveHandler new] unarchive:self.recordData];
     } else {
         recordToReturn = [[CKRecord alloc] initWithRecordType:PHOTO_RECORD_TYPE];
         self.recordId = recordToReturn.recordID;
+        self.recordData = [[RecordArchiveHandler new] archive:recordToReturn];
     }
     
     // objectId
@@ -123,11 +126,13 @@
     CKRecord *record;
     
     // if there is a record id (ie. there is already a record of this object
-    if (self.recordId) {
+    if (self.recordData) {
         record = [[CKRecord alloc] initWithRecordType:PHOTO_RECORD_TYPE recordID:self.recordId];
+        record = [[RecordArchiveHandler new] unarchive:self.recordData];
     } else {
         record = [[CKRecord alloc] initWithRecordType:PHOTO_RECORD_TYPE];
         self.recordId = record.recordID;
+        self.recordData = [[RecordArchiveHandler new] archive:record];
     }
     
     // loop through the keys in dictionaryOfChanges and build the record accordingly depending on the values stored behind those keys
@@ -154,6 +159,7 @@
     
     // recordId
     self.recordId = record.recordID;
+    self.recordData = [[RecordArchiveHandler new] archive:record];
     
     // parentThought
     // image
