@@ -25,6 +25,24 @@
     
     UILongPressGestureRecognizer *reorderGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGestureRecognized:)];
     [self.tableView addGestureRecognizer:reorderGesture];
+    
+//    [self.model reloadWithCompletion:^(NSArray<Collection *> *populatedCollections, NSError *error) {
+//        if (error) {
+//            NSLog(@"Error loading from iCloud: %@", error.description);
+//        } else {
+//            for (Collection* collection in populatedCollections) {
+//                NSLog(@"Collection: %@ \n Thoughts: ", collection.name);
+//                for (Thought* thought in collection.thoughts) {
+//                    NSLog(@"%@ %@", thought.placement, thought.text);
+//                }
+//            }
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                [self.model saveCoreDataContext];
+//                [self pickerView];
+//                [self.tableView reloadData];
+//            });
+//        }
+//    }];
 }
 
 - (void) viewWillAppear:(BOOL)animated {

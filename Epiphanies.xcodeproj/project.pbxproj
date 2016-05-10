@@ -51,6 +51,7 @@
 		73D9992F1B61B299001A7D8A /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73D9992E1B61B299001A7D8A /* CloudKit.framework */; };
 		73DF67A21C32E2A200F0D435 /* AKPickerViewFRCDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 73DF67A11C32E2A200F0D435 /* AKPickerViewFRCDataSource.m */; };
 		73DF67A51C32E6F600F0D435 /* TableViewFetchedResultsControllerDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 73DF67A41C32E6F600F0D435 /* TableViewFetchedResultsControllerDataSource.m */; };
+		73FBAB311CE1336200B6D72C /* NotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 73FBAB301CE1336200B6D72C /* NotificationHandler.m */; };
 		85903FD2BEC49CED995775DD /* Pods_Epiphanies.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C08C1BC036403092D104F5F /* Pods_Epiphanies.framework */; };
 /* End PBXBuildFile section */
 
@@ -139,6 +140,8 @@
 		73DF67A11C32E2A200F0D435 /* AKPickerViewFRCDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKPickerViewFRCDataSource.m; sourceTree = "<group>"; };
 		73DF67A31C32E6F600F0D435 /* TableViewFetchedResultsControllerDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewFetchedResultsControllerDataSource.h; sourceTree = "<group>"; };
 		73DF67A41C32E6F600F0D435 /* TableViewFetchedResultsControllerDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewFetchedResultsControllerDataSource.m; sourceTree = "<group>"; };
+		73FBAB2F1CE1336200B6D72C /* NotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationHandler.h; sourceTree = "<group>"; };
+		73FBAB301CE1336200B6D72C /* NotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationHandler.m; sourceTree = "<group>"; };
 		BC6A8A631255651063257006 /* Pods-Epiphanies.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Epiphanies.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Epiphanies/Pods-Epiphanies.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -401,6 +404,8 @@
 			children = (
 				73D999081B61B159001A7D8A /* AppDelegate.h */,
 				73D999091B61B159001A7D8A /* AppDelegate.m */,
+				73FBAB2F1CE1336200B6D72C /* NotificationHandler.h */,
+				73FBAB301CE1336200B6D72C /* NotificationHandler.m */,
 			);
 			name = "App Delegate";
 			sourceTree = "<group>";
@@ -677,6 +682,7 @@
 			files = (
 				73DF67A21C32E2A200F0D435 /* AKPickerViewFRCDataSource.m in Sources */,
 				73D9990A1B61B159001A7D8A /* AppDelegate.m in Sources */,
+				73FBAB311CE1336200B6D72C /* NotificationHandler.m in Sources */,
 				7384DB851B6EC2AD00108BDC /* CloudKitErrorHandler.m in Sources */,
 				73D9990D1B61B159001A7D8A /* Epiphanies.xcdatamodeld in Sources */,
 				734E86FB1C45C9D100170A85 /* Updater.m in Sources */,

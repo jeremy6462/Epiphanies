@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import "Model.h"
+#import "NotificationHandler.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

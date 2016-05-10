@@ -18,63 +18,16 @@
 
 #pragma mark - Notifications
 
--(void)application:(nonnull UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(nonnull NSData *)deviceToken {
-    NSLog(@"didRegisterForRemoteNotifications device token: %@", deviceToken.description);
-}
 
+// Unsuccessful Registering
 -(void)application:(nonnull UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(nonnull NSError *)error {
     NSLog(@"Error registering for Remote Notifications: %@", error.description); // simulator can't handle remote notificaitons
 }
 
-- (void) application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    
-    CKNotification *cloudKitNotification = [CKNotification notificationFromRemoteNotificationDictionary:userInfo];
-    [self handleCloudKitNotification:cloudKitNotification];
-    // TODO - call the completion handler??
-}
 
-- (void) handleCloudKitNotification: (CKNotification *) cloudKitNotification {
-    
-    if (cloudKitNotification.notificationType == CKNotificationTypeQuery) {
-        
-        // first, fetch any possibly missed notifications. Not processing the cloudKitNotification just yet b/c want to fetch for possibly missed notifications first.
-        CKFetchNotificationChangesOperation *operationFetchMissing = [CKFetchNotificationChangesOperation new];
-        
-        operationFetchMissing.notificationChangedBlock = ^void(CKNotification *notification) {
-            if (notification.notificationType == CKNotificationTypeQuery) {
-                CKQueryNotification *ckQueryNotification = (CKQueryNotification *)cloudKitNotification;
-                CKRecordID *fetchedRecordId = [ckQueryNotification recordID];
-                if (ckQueryNotification.recordFields) {
-                    [[Model sharedInstance] fetchCKRecordAndUpdateCoreData:fetchedRecordId];
-                }
-
-            }
-        };
-        
-        // handle the operation's completion or early return based on a serverChangeToken - what??
-        operationFetchMissing.fetchNotificationChangesCompletionBlock =^void(CKServerChangeToken *serverChangeToken, NSError *operationError) {
-            if (operationError) {
-                NSLog(@"error fetching notifications ERROR HANDLING HERE: %@", operationError);
-            } else {
-                // TODO - figure out a way to mark notifications as read
-                CKMarkNotificationsReadOperation *operationMarkRead = [[CKMarkNotificationsReadOperation alloc] initWithNotificationIDsToMarkRead:@[]];
-                operationMarkRead.qualityOfService = NSOperationQualityOfServiceBackground;
-                operationMarkRead.markNotificationsReadCompletionBlock = ^void(NSArray <CKNotificationID *> * _Nullable notificationIDsMarkedRead, NSError * _Nullable markOperationError) {
-                    NSLog(@"error marking notifciations as read ERROR HANDLING HERE: %@", markOperationError);
-                };
-            }
-        };
-        
-        operationFetchMissing.qualityOfService = NSOperationQualityOfServiceBackground;
-        [[Model sharedInstance] executeContainerOperation:operationFetchMissing];
-        
-        // process the fetched record for the currently just accepted notificaton - occuring afer the operation setup so the fetch of extra notifications could happen in the background
-        CKQueryNotification *ckQueryNotification = (CKQueryNotification *)cloudKitNotification;
-        CKRecordID *fetchedRecordId = [ckQueryNotification recordID];
-        if (ckQueryNotification.recordFields) {
-            [[Model sharedInstance] fetchCKRecordAndUpdateCoreData:fetchedRecordId];
-        }
-    }
+// maybe use the completionHandler method so that it doesn't call this method twice?
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
+    [NotificationHandler handleCloudKitNotification:[CKNotification notificationFromRemoteNotificationDictionary:userInfo]];
 }
 
 #pragma mark - Application Life Cycle
@@ -83,6 +36,9 @@
     
     // Register for silent notifications
     // TODO - handle reminder notifications as local notifications?
+    
+    UIUserNotificationSettings *notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert categories:nil];
+    [application registerUserNotificationSettings:notificationSettings];
     [application registerForRemoteNotifications];
     
     return YES;

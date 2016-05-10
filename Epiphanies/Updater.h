@@ -11,6 +11,8 @@
 
 @interface Updater : NSObject
 
+// REFACTOR - Change to subclass for thought and subclass for collections
+
 - (UIAlertController *) handleCollectionAdditionWithPlacement:(NSNumber *)placement;
 - (UIAlertController *) handleUpdatingCollection: (Collection *) collection;
 

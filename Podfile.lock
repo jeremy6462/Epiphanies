@@ -1,0 +1,10 @@
+PODS:
+  - STPopup (1.5.0)
+
+DEPENDENCIES:
+  - STPopup
+
+SPEC CHECKSUMS:
+  STPopup: 0c5bfe21b39ce422593f93d8f7f5df3d1bc6d1d3
+
+COCOAPODS: 0.39.0

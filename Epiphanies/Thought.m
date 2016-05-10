@@ -213,7 +213,6 @@
     }
     for (int i = 0; i < indexOfObjectToDelete; i++) {
         thoughts[i].placement = [NSNumber numberWithInt:[thoughts[i].placement intValue] - 1];
-        NSLog(@"%@ %@", thoughts[i].text, thoughts[i].placement);
         // TODO - save to CloudKit
     }
 }

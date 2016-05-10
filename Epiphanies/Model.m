@@ -54,10 +54,7 @@
             CKRecordZone *zoneCreated = zoneSaves[0];
             _zoneId = zoneCreated.zoneID;
             [SubscriptionCreator addSubscriptionsToDatabase:_database withCompletionHandler:^(BOOL success, NSError *errorSubscription) {
-                // if success == no and error = nil, the subscription was already saved for this device
-                if (!success && !errorSubscription) {
-                    NSLog(@"The subscription was already saved");
-                } else if (errorSubscription) {
+                if (errorSubscription) {
                     NSLog(@"better error handling than this subscription error: %@", errorSubscription.description);
                 }
             }];

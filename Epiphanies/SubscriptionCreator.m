@@ -55,7 +55,7 @@
             } else {
                 [self subscribeInDefaults];
                 dispatch_async(dispatch_get_main_queue(), ^(void){
-                    block(YES, nil);
+                    block(YES, nil); // TODO - I would like to add depenedancy managment in order to make sure that the photo subscription is the last one that saves. If there is no dependancy, I don't know when to run the block b/c we don't know which subscritpiton will finish saving first
                 });
             }
         }];
