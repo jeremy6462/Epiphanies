@@ -39,4 +39,6 @@
 // Notifications
 #define EP_NewCollectionCellReadyForTextFieldEditing @"EPNewCollectionCellReadyForTextFieldEditing"
 
+#define READY_TO_PROCESS_NOTIFICATIONS @"READY_TO_PROCESS_NOTIFICATIONS"
+
 #endif /* StringConstants_h */

@@ -26,8 +26,9 @@
 
 
 // maybe use the completionHandler method so that it doesn't call this method twice?
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler {
     [NotificationHandler handleCloudKitNotification:[CKNotification notificationFromRemoteNotificationDictionary:userInfo]];
+    completionHandler(UIBackgroundFetchResultNewData);
 }
 
 #pragma mark - Application Life Cycle
@@ -36,6 +37,10 @@
     
     // Register for silent notifications
     // TODO - handle reminder notifications as local notifications?
+    
+    if (![NotificationHandler readyToProcessNewNotifications]) {
+        [NotificationHandler enterAllNotificationsToDatabase];
+    }
     
     UIUserNotificationSettings *notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert categories:nil];
     [application registerUserNotificationSettings:notificationSettings];

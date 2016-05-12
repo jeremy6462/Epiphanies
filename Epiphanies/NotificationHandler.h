@@ -17,4 +17,12 @@
  */
 + (void) handleCloudKitNotification: (CKNotification *) cloudKitNotification;
 
+/*
+ @abstract fetches all notifications and mark them as handled in the database
+ @discussion this should be called once, the first time the application is run so that all the past notifications are entered into the database and marked as previously handled
+ */
++ (void) enterAllNotificationsToDatabase;
+
++ (BOOL) readyToProcessNewNotifications;
+
 @end
